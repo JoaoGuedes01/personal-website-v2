@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [guedes] # Non-existing branch
   workflow_dispatch:
 
 permissions:
