@@ -4,6 +4,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // ---------------------------------------------------------------------------
 // Deployment note:
 //   This is configured for a GitHub *user* page → https://joaoguedes01.github.io
@@ -16,6 +18,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://joaoguedes01.github.io",
+
   // base: "/personal_website", // ← uncomment only for a project-page deploy
 
   integrations: [mdx(), sitemap()],
@@ -38,4 +41,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });
