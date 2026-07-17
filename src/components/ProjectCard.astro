@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { href } from "../data/site";
+import Icon from "./Icon.astro";
+import { projectTypeIcon } from "../icons";
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+}
+const { entry } = Astro.props;
+const { title, summary, type, org, orgUrl, category, stack, year, repo, demo } = entry.data;
+const url = href(`/projects/${entry.id}`);
+---
+
+<article
+  class="card-lift group relative flex h-full flex-col rounded-box border border-base-300 bg-base-100 p-6"
+>
+  <div class="mb-3 flex items-center justify-between gap-2">
+    <p class="eyebrow flex items-center gap-1.5">
+      <Icon name={projectTypeIcon[type]} size={13} />
+      <span>{type}</span>
+      {
+        org && (
+          <>
+            <span class="text-base-content/30">·</span>
+            {orgUrl ? (
+              <a
+                href={orgUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="relative z-10 text-primary hover:underline"
+              >
+                {org}
+              </a>
+            ) : (
+              <span>{org}</span>
+            )}
+          </>
+        )
+      }
+    </p>
+    {year && <span class="text-xs text-base-content/40">{year}</span>}
+  </div>
+
+  <h3 class="font-display text-xl leading-snug">
+    <a href={url} class="after:absolute after:inset-0 group-hover:text-primary">{title}</a>
+  </h3>
+
+  <p class="mt-2 text-sm leading-relaxed text-base-content/70">{summary}</p>
+
+  <div class="mt-4 flex flex-wrap items-center gap-1.5">
+    <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{category}</span>
+    {
+      stack.map((s) => (
+        <span class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">
+          {s}
+        </span>
+      ))
+    }
+  </div>
+
+  {
+    (repo || demo) && (
+      <div class="relative z-10 mt-4 flex gap-4 text-xs">
+        {repo && (
+          <a href={repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+            Repository <Icon name="arrow-up-right" size={12} />
+          </a>
+        )}
+        {demo && (
+          <a href={demo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+            Live demo <Icon name="arrow-up-right" size={12} />
+          </a>
+        )}
+      </div>
+    )
+  }
+</article>

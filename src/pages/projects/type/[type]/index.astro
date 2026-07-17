@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import ProjectListView from "../../../../components/ProjectListView.astro";
+import { href } from "../../../../data/site";
+import { PROJECT_TYPES } from "../../../../data/taxonomy";
+import { paginate } from "../../../../utils/paginate";
+
+const sortProjects = (a: any, b: any) =>
+  (b.data.year ?? 0) - (a.data.year ?? 0) ||
+  a.data.order - b.data.order ||
+  a.data.title.localeCompare(b.data.title);
+
+export async function getStaticPaths() {
+  const all = (await getCollection("projects")).filter((p) => !p.data.draft);
+  return PROJECT_TYPES.filter((t) => all.some((p) => p.data.type === t.label)).map((t) => ({
+    params: { type: t.slug },
+    props: { type: t },
+  }));
+}
+
+const { type } = Astro.props;
+const all = (await getCollection("projects")).filter((p) => !p.data.draft).sort(sortProjects);
+const inType = all.filter((p) => p.data.type === type.label);
+const page = paginate(inType, 1);
+---
+
+<BaseLayout
+  title={`${type.label} projects`}
+  description={`${type.label} projects by João Guedes.`}
+>
+  <ProjectListView
+    all={all}
+    items={page.items}
+    active={type.slug}
+    current={page.current}
+    total={page.total}
+    base={href(`/projects/type/${type.slug}`)}
+    eyebrow={`${inType.length} ${type.label.toLowerCase()} ${inType.length === 1 ? "project" : "projects"}`}
+    title={`${type.label} projects`}
+    intro={type.blurb}
+  />
+</BaseLayout>

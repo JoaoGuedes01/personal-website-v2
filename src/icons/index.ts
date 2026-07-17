@@ -1,0 +1,145 @@
+/**
+ * Icon registry
+ * -------------------------------------------------------------------------
+ * Each value is the *inner* markup of a 24×24 stroke icon (Lucide style,
+ * https://lucide.dev — ISC licensed). Icons inherit the current text colour,
+ * so they adapt to every theme automatically.
+ *
+ * Use them anywhere via the <Icon /> component:
+ *     <Icon name="briefcase" />
+ *     <Icon name="github" size={18} class="text-primary" />
+ *
+ * ADD YOUR OWN: grab any icon from lucide.dev, copy the paths from its SVG,
+ * and paste them here under a new key. That's it — it's usable everywhere.
+ */
+export const icons: Record<string, string> = {
+  // people / project types
+  user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  "graduation-cap":
+    '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  briefcase:
+    '<rect width="20" height="14" x="2" y="6" rx="2"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+
+  // disciplines / tech
+  code: '<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>',
+  cpu: '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
+  server:
+    '<rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/>',
+  "hard-drive":
+    '<line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/>',
+  shield:
+    '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  "git-branch":
+    '<line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+  workflow:
+    '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>',
+  database:
+    '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+  terminal: '<path d="m4 17 6-6-6-6"/><path d="M12 19h8"/>',
+
+  // socials / contact
+  github: '<path d="M5.07758 0.09106C5.92017 0.271538 6.95066 0.723174 8.1909 1.51767L8.29707 1.58568L8.41941 1.55739C10.6823 1.03413 13.0479 1.03413 15.205 1.55667L15.3318 1.58739L15.4409 1.51481C16.631 0.723114 17.6507 0.272062 18.5095 0.091279C19.0844 -0.029733 19.503 -0.0180645 19.8169 0.0617895C20.0188 0.131222 20.1576 0.272452 20.2324 0.500589C20.74 1.84438 20.8402 3.16913 20.5393 4.49588L20.5058 4.64326L20.6 4.76032C21.5062 5.88725 22 7.31503 22 8.83393C22 13.725 19.875 15.9105 16.1457 16.859L15.8284 16.9397L15.9318 17.2555C16.1235 17.8406 16.231 18.551 16.231 19.1857V23.241C16.231 23.7111 15.947 24 15.4849 24C15.0229 24 14.7389 23.7111 14.7389 23.241V19.0789C14.8463 18.2239 14.5554 17.484 13.9159 16.8334C13.6854 16.5988 13.6289 16.3307 13.744 16.155L13.7858 16.0588C13.8432 15.8255 14.0747 15.6489 14.4269 15.5294C18.4493 15.1134 20.5079 13.347 20.5079 8.83393C20.5079 7.5578 20.0436 6.31773 19.1727 5.32091C18.9704 5.11429 18.9316 4.83779 19.0239 4.55591C19.3431 3.69042 19.371 2.78184 19.1353 1.82246L19.0653 1.5374L18.7821 1.59502C18.0643 1.74106 17.1561 2.17594 15.9419 3.03118C15.8012 3.16727 15.6215 3.1839 15.3709 3.09892C13.2147 2.47184 10.8776 2.44049 8.71408 3.00146L8.37397 3.09496C8.09923 3.18783 7.8905 3.17013 7.68116 3.02814C6.60021 2.20271 5.64231 1.75719 4.84537 1.59502L4.56217 1.5374L4.49212 1.82246C4.25638 2.78184 4.28429 3.69042 4.60725 4.56666C4.6838 4.8855 4.66514 5.11443 4.55756 5.23088L4.45469 5.32091C3.5838 6.31773 3.11948 7.5578 3.11948 8.83393C3.11948 13.347 5.1781 15.1134 9.26514 15.5436C9.55092 15.5452 9.76377 15.7421 9.8416 16.0588C9.91811 16.3702 9.8503 16.6921 9.71149 16.8334C9.14839 17.4063 8.88853 18.1113 8.88853 18.9722V23.1343C8.88853 23.6044 8.60457 23.8933 8.1425 23.8933C7.68043 23.8933 7.39647 23.6044 7.39647 23.1343V20.9563L7.04379 21.0161C5.11496 21.3431 3.82951 20.8278 2.67303 19.6134L2.54013 19.4702C2.34293 19.2523 2.2829 19.1793 1.87363 18.6704L1.59983 18.3238C1.44627 18.1319 1.38749 18.0669 1.27648 17.9539C1.0417 17.7151 0.816357 17.5648 0.558863 17.4994C0.179086 17.4217 -0.0971987 16.9617 0.0323845 16.6321C0.115381 16.2344 0.514746 15.9631 0.831015 16.0358L0.89737 16.0568C1.72388 16.3103 2.17959 16.7077 3.08751 17.7854C4.24013 19.3996 5.12468 19.8809 7.15026 19.4884L7.39647 19.4407V19.0789C7.39647 18.4352 7.50588 17.7395 7.68948 17.2725L7.82285 16.9332L7.47172 16.8567C3.79489 16.0551 1.62742 13.6744 1.62742 8.94065C1.62742 7.42175 2.12119 5.99397 3.02744 4.86704L3.12779 4.74225L3.08426 4.58723C2.68534 3.16672 2.78264 1.85507 3.38271 0.532278C3.46979 0.272452 3.6086 0.131222 3.83283 0.0551765C4.12565 -0.0183692 4.51431 -0.0295871 5.07758 0.09106Z"/>',
+  linkedin:
+    '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+  mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  rss: '<path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/>',
+
+  // arrows / chevrons
+  "arrow-up-right": '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+  "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  "arrow-left": '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+  "external-link":
+    '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+  "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+
+  // meta / misc
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  calendar:
+    '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+  "map-pin":
+    '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+  hash: '<line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  "book-open":
+    '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  download:
+    '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+  "file-text":
+    '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+  folder:
+    '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  image:
+    '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+  "pen-tool":
+    '<path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/><path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/><path d="m2.3 2.3 7.286 7.286"/><circle cx="11" cy="11" r="2"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  bike: '<circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>',
+  heart:
+    '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  sparkles:
+    '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+
+  // ui controls
+  palette:
+    '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  menu: '<line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>',
+  search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+
+  // credentials / experience / gallery
+  award:
+    '<path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/>',
+  "badge-check":
+    '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>',
+  "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+  "building-2":
+    '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>',
+  layers:
+    '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>',
+  maximize:
+    '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
+};
+
+export type IconName = keyof typeof icons;
+
+/** Which icon represents each project context. */
+export const projectTypeIcon: Record<string, string> = {
+  Personal: "user",
+  Academic: "graduation-cap",
+  Professional: "briefcase",
+};
+
+/** Which icon represents each snippet discipline. */
+export const disciplineIcon: Record<string, string> = {
+  "Software Engineering": "code",
+  Systems: "cpu",
+  DevOps: "git-branch",
+  Cybersecurity: "shield",
+  Data: "database",
+};
+
+/**
+ * Icon hint per certification provider. Falls back to "award" for anything
+ * not listed — add your providers here if you want a specific glyph.
+ */
+export const providerIcon: Record<string, string> = {
+  AWS: "server",
+  "Amazon Web Services": "server",
+  INE: "shield",
+  eLearnSecurity: "shield",
+  Coursera: "graduation-cap",
+  Udemy: "book-open",
+  "LinkedIn Learning": "linkedin",
+  Google: "sparkles",
+  Microsoft: "cpu",
+  HashiCorp: "terminal",
+};
+
+/** Resolve a provider to its icon, defaulting to a generic award badge. */
+export function iconForProvider(provider: string): string {
+  return providerIcon[provider] ?? "award";
+}

@@ -1,0 +1,147 @@
+---
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import Gallery from "../../components/Gallery.astro";
+import Icon from "../../components/Icon.astro";
+import { readingTime } from "../../utils/reading";
+import { href } from "../../data/site";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+}
+const { entry } = Astro.props;
+const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, gallery } = entry.data;
+const { Content, headings } = await render(entry);
+const rt = readingTime(entry.body);
+const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
+const hasToc = tocCount >= 2;
+
+// Resolve which Experience role(s) this project belongs to: explicit `experience`
+// pins take precedence; otherwise fall back to matching `org` to a role's company.
+// Link to the specific role when there's exactly one; if it spans several, link
+// to the Experience index instead.
+const allExperience = (await getCollection("experience")).filter((e) => !e.data.draft);
+const linkedRoles = entry.data.experience.length
+  ? allExperience.filter((e) => entry.data.experience.includes(e.id))
+  : org
+    ? allExperience.filter((e) => e.data.company.toLowerCase() === org.toLowerCase())
+    : [];
+const primaryRole = linkedRoles.length === 1 ? linkedRoles[0] : undefined;
+const expCompany = org ?? linkedRoles[0]?.data.company;
+const expHref = primaryRole ? href(`/experience/${primaryRole.id}`) : href("/experience");
+const showExpLink = linkedRoles.length > 0;
+---
+
+<BaseLayout title={title} description={summary}>
+  <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
+    <a href={href("/projects")} class="inline-flex items-center gap-1 text-sm text-base-content/55 transition-colors hover:text-primary">
+      <Icon name="arrow-left" size={14} /> Projects
+    </a>
+
+    <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
+      <article class="min-w-0">
+        <header>
+          <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm">
+            <span class="eyebrow">
+              {type}
+              {
+                org && (
+                  <>
+                    {" · "}
+                    {orgUrl ? (
+                      <a href={orgUrl} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+                        {org}
+                      </a>
+                    ) : (
+                      org
+                    )}
+                  </>
+                )
+              }
+            </span>
+            <span class="text-base-content/30">·</span>
+            <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{category}</span>
+            {year && <span class="text-xs text-base-content/45">{year}</span>}
+          </div>
+
+          <h1 class="mt-3 text-4xl leading-tight sm:text-5xl">{title}</h1>
+          <p class="mt-4 text-lg text-base-content/70">{summary}</p>
+          <p class="mt-2 text-sm text-base-content/45">{rt.label}</p>
+
+          {
+            stack.length > 0 && (
+              <ul class="mt-5 flex flex-wrap gap-1.5">
+                {stack.map((s) => (
+                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">{s}</li>
+                ))}
+              </ul>
+            )
+          }
+
+          {
+            (repo || demo || showExpLink) && (
+              <div class="mt-5 flex flex-wrap items-center gap-2.5">
+                {repo && (
+                  <a href={repo} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline rounded-field">
+                    View repository ↗
+                  </a>
+                )}
+                {demo && (
+                  <a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary rounded-field">
+                    Live demo ↗
+                  </a>
+                )}
+                {showExpLink && (
+                  <a
+                    href={expHref}
+                    class="inline-flex items-center gap-1.5 text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
+                  >
+                    <Icon name="building-2" size={14} />
+                    Part of my work at {expCompany}
+                  </a>
+                )}
+              </div>
+            )
+          }
+        </header>
+
+        {hasToc && <TableOfContents headings={headings} variant="mobile" class="mt-6" />}
+
+        <div class="mt-8 border-t border-base-300 pt-8">
+          <div class="prose">
+            <Content />
+          </div>
+        </div>
+
+        {
+          gallery.length > 0 && (
+            <div class="mt-12 border-t border-base-300 pt-8">
+              <p class="eyebrow flex items-center gap-1.5">
+                <Icon name="layers" size={14} /> Gallery
+              </p>
+              <h2 class="mt-2 mb-5 text-2xl">A closer look</h2>
+              <Gallery images={gallery} />
+            </div>
+          )
+        }
+      </article>
+
+      {
+        hasToc && (
+          <aside class="hidden lg:mt-1 lg:block">
+            <div class="lg:sticky lg:top-24">
+              <TableOfContents headings={headings} variant="desktop" />
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

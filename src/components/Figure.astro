@@ -1,0 +1,49 @@
+---
+/**
+ * <Figure /> — a captioned, softly-framed image for post bodies.
+ *
+ * In an .mdx post:
+ *     import Figure from "../../components/Figure.astro";
+ *     import diagram from "./diagram.png";      // optimized at build time
+ *     <Figure src={diagram} alt="System diagram" caption="How requests flow." />
+ *
+ * You can also pass a plain string for something in /public:
+ *     <Figure src="/covers/thing.png" alt="…" />
+ *
+ * Plain markdown doesn't need this — `![alt](./image.png)` (relative to the
+ * post) is optimized automatically. Use Figure when you want a caption.
+ */
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  caption?: string;
+  class?: string;
+}
+
+const { src, alt, caption, class: cls = "" } = Astro.props;
+const isImported = typeof src !== "string";
+---
+
+<figure class:list={["my-8", cls]}>
+  {
+    isImported ? (
+      <Image
+        src={src as ImageMetadata}
+        alt={alt}
+        class="w-full rounded-xl border border-base-300"
+        loading="lazy"
+      />
+    ) : (
+      <img
+        src={src as string}
+        alt={alt}
+        class="w-full rounded-xl border border-base-300"
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+  {caption && <figcaption class="mt-2 text-center text-sm text-base-content/55">{caption}</figcaption>}
+</figure>

@@ -1,0 +1,140 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import PostCard from "../components/PostCard.astro";
+import FaceIllustration from "../components/FaceIllustration.astro";
+import { readingTime } from "../utils/reading";
+import { href } from "../data/site";
+import { snippetUrl } from "../data/taxonomy";
+
+// Featured projects
+const featured = (await getCollection("projects"))
+  .filter((p) => p.data.featured && !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
+  .slice(0, 6);
+
+// Recent writing = blog + snippets, merged by date
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
+  .map((p) => ({
+    url: href(`/blog/${p.id}`),
+    title: p.data.title,
+    description: p.data.description,
+    date: p.data.pubDate,
+    tags: p.data.tags,
+    readingTime: readingTime(p.body).label,
+    category: undefined as string | undefined,
+    lang: undefined as string | undefined,
+  }));
+const snips = (await getCollection("snippets"))
+  .filter((p) => !p.data.draft)
+  .map((p) => ({
+    url: snippetUrl(p),
+    title: p.data.title,
+    description: p.data.description,
+    date: p.data.pubDate,
+    tags: p.data.tags,
+    readingTime: readingTime(p.body).label,
+    category: p.data.category as string | undefined,
+    lang: p.data.lang as string | undefined,
+  }));
+const recent = [...posts, ...snips]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 4);
+---
+
+<BaseLayout>
+  <!-- HERO -->
+  <section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-24">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+      <div class="reveal">
+        <p class="eyebrow">Backend engineer · ex-security · Porto</p>
+        <h1 class="mt-5 text-balance text-4xl leading-[1.08] sm:text-5xl md:text-[3.4rem]">
+          I build the quiet parts of software —
+          <span class="italic text-primary">the ones you never notice.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-base-content/70">
+          I'm João, a backend engineer at Uphold. A homelab that's been humming since 2022,
+          a motorcycle, and two very good dogs round out the picture. This is where I keep my
+          projects, the snippets I don't want to google twice, and the occasional deep dive.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href={href("/projects")} class="btn btn-primary rounded-field">See the projects</a>
+          <a href={href("/blog")} class="btn btn-ghost rounded-field">Read the blog</a>
+          <a
+            href={href("/about")}
+            class="text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
+          >
+            About me →
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal reveal-2 mx-auto w-full max-w-xs lg:max-w-none">
+        <FaceIllustration eager />
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED WORK -->
+  <section class="mx-auto mt-24 max-w-5xl px-4 sm:px-6">
+    <div class="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 class="mt-2 text-3xl">Things I've built</h2>
+      </div>
+      <a
+        href={href("/projects")}
+        class="hidden shrink-0 text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline sm:block"
+      >
+        All projects →
+      </a>
+    </div>
+
+    {
+      featured.length > 0 ? (
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((entry) => (
+            <ProjectCard entry={entry} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-base-content/60">No featured projects yet.</p>
+      )
+    }
+
+    <a
+      href={href("/projects")}
+      class="mt-6 inline-block text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline sm:hidden"
+    >
+      All projects →
+    </a>
+  </section>
+
+  <!-- RECENT WRITING -->
+  {
+    recent.length > 0 && (
+      <section class="mx-auto mt-20 max-w-5xl px-4 sm:px-6">
+        <div class="mb-8">
+          <p class="eyebrow">Notes &amp; snippets</p>
+          <h2 class="mt-2 text-3xl">Recently written down</h2>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          {recent.map((p) => (
+            <PostCard
+              url={p.url}
+              title={p.title}
+              description={p.description}
+              date={p.date}
+              readingTime={p.readingTime}
+              category={p.category}
+              tags={p.tags}
+              lang={p.lang}
+            />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

@@ -1,0 +1,126 @@
+---
+/**
+ * "On this page" outline from markdown headings (h2 + h3). Astro adds slug ids
+ * to headings automatically, so the anchor links just work.
+ *
+ * variant:
+ *   "desktop" → sticky sidebar list (hidden below lg)
+ *   "mobile"  → a collapsible <details>, meant for the TOP of the article (hidden at lg+)
+ *   "both"    → render both (default)
+ *
+ * Render the *mobile* variant near the top of the content flow and the *desktop*
+ * variant inside the sidebar aside. The active-link script self-guards, so it
+ * runs once even when both variants are present on the page.
+ */
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  variant?: "desktop" | "mobile" | "both";
+  class?: string;
+}
+const { headings, variant = "both", class: cls = "" } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const show = toc.length >= 2;
+const showMobile = variant === "mobile" || variant === "both";
+const showDesktop = variant === "desktop" || variant === "both";
+---
+
+{
+  show && showMobile && (
+    <nav class:list={["toc lg:hidden", cls]} aria-label="On this page">
+      <details class="toc-mobile group rounded-field border border-base-300 bg-base-100">
+        <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-2.5 text-sm font-medium">
+          <span class="inline-flex items-center gap-2 text-base-content/80">On this page</span>
+          <svg class="h-4 w-4 text-base-content/50 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </summary>
+        <ul class="space-y-0.5 border-t border-base-300 px-2 py-2">
+          {toc.map((h) => (
+            <li>
+              <a
+                href={`#${h.slug}`}
+                class:list={[
+                  "toc-link block rounded px-2 py-1 text-sm text-base-content/65 transition-colors hover:text-primary",
+                  h.depth === 3 && "pl-5",
+                ]}
+                data-slug={h.slug}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </nav>
+  )
+}
+
+{
+  show && showDesktop && (
+    <nav class:list={["toc hidden lg:block", cls]} aria-label="On this page">
+      <p class="eyebrow mb-3">On this page</p>
+      <ul class="space-y-1 border-l border-base-300">
+        {toc.map((h) => (
+          <li>
+            <a
+              href={`#${h.slug}`}
+              class:list={[
+                "toc-link -ml-px block border-l border-transparent py-1 pl-4 text-sm text-base-content/60 transition-colors hover:text-primary",
+                h.depth === 3 && "pl-7",
+              ]}
+              data-slug={h.slug}
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc-link.is-active {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    font-weight: 500;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    if (window.__tocInit) return; // both variants share one init
+    window.__tocInit = true;
+
+    const links = Array.from(document.querySelectorAll(".toc-link"));
+    if (!links.length) return;
+
+    function setActive(slug) {
+      links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("data-slug") === slug));
+    }
+
+    const ids = links.map((l) => l.getAttribute("data-slug")).filter(Boolean);
+    const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-80px 0px -70% 0px", threshold: 0 },
+    );
+    targets.forEach((t) => obs.observe(t));
+
+    // Collapse the mobile panel after choosing a link.
+    links.forEach((l) =>
+      l.addEventListener("click", () => {
+        const d = l.closest("details");
+        if (d) d.removeAttribute("open");
+      }),
+    );
+  })();
+</script>

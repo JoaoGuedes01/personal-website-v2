@@ -1,0 +1,186 @@
+---
+/**
+ * <ThemePicker /> — header control for switching theme + typeface at runtime.
+ *
+ * Themes set `data-theme` on <html> (daisyUI swaps every token) and toggle the
+ * `.dark` class for dark palettes. Fonts set `data-font`. Both choices persist
+ * in localStorage (`guedes-theme`, `guedes-font`) and are restored before paint
+ * by the inline script in BaseLayout.astro — keep the DARK map in sync there.
+ *
+ * The swatches carry real hex values so they always show each palette's true
+ * colours, regardless of which theme is currently active.
+ */
+import Icon from "./Icon.astro";
+
+const themes = [
+  { id: "slate", label: "Slate", bg: "#14161b", accent: "#6aa6ff" },
+  { id: "nord", label: "Nord", bg: "#2e3440", accent: "#88c0d0" },
+  { id: "gruvbox", label: "Gruvbox", bg: "#282828", accent: "#fe8019" },
+  { id: "rose-pine", label: "Rosé Pine", bg: "#191724", accent: "#ebbcba" },
+  { id: "tokyo-night", label: "Tokyo Night", bg: "#1a1b26", accent: "#7aa2f7" },
+  { id: "paper", label: "Paper", bg: "#f7f8fa", accent: "#3b6edb" },
+  { id: "solarized", label: "Solarized", bg: "#fdf6e3", accent: "#268bd2" },
+];
+
+const fonts = [
+  { id: "inter", label: "Inter", preview: "'Inter', system-ui, sans-serif" },
+  { id: "system", label: "System", preview: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" },
+  { id: "grotesk", label: "Space Grotesk", preview: "'Space Grotesk', system-ui, sans-serif" },
+  { id: "mono", label: "JetBrains Mono", preview: "'JetBrains Mono', ui-monospace, monospace" },
+];
+---
+
+<div class="relative">
+  <button
+    id="theme-picker-btn"
+    type="button"
+    class="btn btn-ghost btn-sm btn-square"
+    aria-label="Theme and typeface"
+    aria-haspopup="true"
+    aria-expanded="false"
+    title="Theme &amp; typeface"
+  >
+    <Icon name="palette" size={18} />
+  </button>
+
+  <div
+    id="theme-picker-panel"
+    class="absolute right-0 z-50 mt-2 hidden w-[min(20rem,92vw)] rounded-box border border-base-300 bg-base-100 p-4 shadow-xl"
+    role="dialog"
+    aria-label="Theme and typeface picker"
+  >
+    <div class="flex items-baseline justify-between">
+      <p class="eyebrow">Theme</p>
+      <span id="theme-current" class="text-[11px] text-base-content/50"></span>
+    </div>
+    <div class="mt-2.5 grid grid-cols-4 gap-2">
+      {
+        themes.map((t) => (
+          <button
+            type="button"
+            data-set-theme={t.id}
+            data-label={t.label}
+            title={t.label}
+            aria-label={`Use ${t.label} theme`}
+            class="theme-swatch flex aspect-square items-center justify-center rounded-lg border"
+            style={`background:${t.bg};border-color:${t.accent}40;`}
+          >
+            <span class="h-3.5 w-3.5 rounded-full" style={`background:${t.accent}`} />
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-5 flex items-baseline justify-between">
+      <p class="eyebrow">Typeface</p>
+      <span id="font-current" class="text-[11px] text-base-content/50"></span>
+    </div>
+    <div class="mt-2.5 grid grid-cols-2 gap-2">
+      {
+        fonts.map((f) => (
+          <button
+            type="button"
+            data-set-font={f.id}
+            data-label={f.label}
+            aria-label={`Use ${f.label}`}
+            class="font-btn rounded-field border border-base-300 px-3 py-2 text-left transition-colors hover:border-base-content/30"
+            style={`font-family:${f.preview}`}
+          >
+            <span class="block text-[13px] font-semibold leading-tight">{f.label}</span>
+            <span class="block text-[11px] text-base-content/45">Ag 0123</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .theme-swatch {
+    transition: transform 150ms ease;
+    cursor: pointer;
+  }
+  .theme-swatch:hover { transform: scale(1.06); }
+  .theme-swatch.is-active {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .font-btn.is-active {
+    border-color: var(--color-primary);
+    box-shadow: inset 0 0 0 1px var(--color-primary);
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var STORE_THEME = "guedes-theme";
+    var STORE_FONT = "guedes-font";
+    // Dark palettes → keep in sync with the no-flash script in BaseLayout.astro
+    var DARK = { slate: 1, nord: 1, gruvbox: 1, "rose-pine": 1, "tokyo-night": 1 };
+
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-picker-btn");
+    var panel = document.getElementById("theme-picker-panel");
+    var curTheme = document.getElementById("theme-current");
+    var curFont = document.getElementById("font-current");
+    if (!btn || !panel) return;
+
+    function mark(attr, val) {
+      var nodes = document.querySelectorAll("[" + attr + "]");
+      for (var i = 0; i < nodes.length; i++) {
+        var on = nodes[i].getAttribute(attr) === val;
+        nodes[i].classList.toggle("is-active", on);
+        nodes[i].setAttribute("aria-pressed", on ? "true" : "false");
+      }
+    }
+
+    function applyTheme(name) {
+      root.setAttribute("data-theme", name);
+      if (DARK[name]) root.classList.add("dark");
+      else root.classList.remove("dark");
+      try { localStorage.setItem(STORE_THEME, name); } catch (e) {}
+      mark("data-set-theme", name);
+      var b = document.querySelector('[data-set-theme="' + name + '"]');
+      if (curTheme) curTheme.textContent = (b && b.getAttribute("data-label")) || name;
+    }
+
+    function applyFont(name) {
+      root.setAttribute("data-font", name);
+      try { localStorage.setItem(STORE_FONT, name); } catch (e) {}
+      mark("data-set-font", name);
+      var b = document.querySelector('[data-set-font="' + name + '"]');
+      if (curFont) curFont.textContent = (b && b.getAttribute("data-label")) || name;
+    }
+
+    var tNodes = document.querySelectorAll("[data-set-theme]");
+    for (var i = 0; i < tNodes.length; i++) {
+      (function (el) {
+        el.addEventListener("click", function () { applyTheme(el.getAttribute("data-set-theme")); });
+      })(tNodes[i]);
+    }
+    var fNodes = document.querySelectorAll("[data-set-font]");
+    for (var j = 0; j < fNodes.length; j++) {
+      (function (el) {
+        el.addEventListener("click", function () { applyFont(el.getAttribute("data-set-font")); });
+      })(fNodes[j]);
+    }
+
+    function open() { panel.classList.remove("hidden"); btn.setAttribute("aria-expanded", "true"); }
+    function close() { panel.classList.add("hidden"); btn.setAttribute("aria-expanded", "false"); }
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      panel.classList.contains("hidden") ? open() : close();
+    });
+    panel.addEventListener("click", function (e) { e.stopPropagation(); });
+    document.addEventListener("click", function () {
+      if (!panel.classList.contains("hidden")) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+
+    // Reflect whatever the no-flash script already put on <html>.
+    applyTheme(root.getAttribute("data-theme") || "slate");
+    applyFont(root.getAttribute("data-font") || "inter");
+  })();
+</script>

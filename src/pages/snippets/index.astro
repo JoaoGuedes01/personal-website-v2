@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { href } from "../../data/site";
+import { SNIPPET_CATEGORIES } from "../../data/taxonomy";
+
+const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
+const total = snips.length;
+
+// Categories that actually have snippets, in taxonomy order.
+const categories = SNIPPET_CATEGORIES.map((cat) => ({
+  ...cat,
+  count: snips.filter((s) => s.data.category === cat.label).length,
+})).filter((c) => c.count > 0);
+---
+
+<BaseLayout
+  title="Snippets"
+  description="Useful snippets & tech tips by João Guedes — small, copy-pasteable solutions, organised by class."
+>
+  <section class="mx-auto max-w-4xl px-4 pt-16 sm:px-6 sm:pt-20">
+    <p class="eyebrow">Useful snippets &amp; tech tips</p>
+    <h1 class="mt-4 text-4xl sm:text-5xl">Snippets</h1>
+    <p class="mt-4 max-w-2xl text-lg text-base-content/70">
+      Small, self-contained solutions I keep reaching for — commands, config, one-liners.
+      Pick a class to dig in; each keeps its own tags and history.
+    </p>
+
+    {
+      categories.length > 0 ? (
+        <div class="mt-10 grid gap-4 sm:grid-cols-2">
+          {categories.map((c) => (
+            <a
+              href={href(`/snippets/${c.slug}`)}
+              class="card-lift group relative flex items-start gap-4 rounded-box border border-base-300 bg-base-100 p-6"
+            >
+              <span class="mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-field border border-base-300 bg-base-200 text-primary">
+                <Icon name={c.icon} size={20} />
+              </span>
+              <span class="min-w-0 pr-6">
+                <span class="flex items-baseline gap-2">
+                  <span class="font-display text-xl leading-snug group-hover:text-primary">{c.label}</span>
+                  <span class="text-xs text-base-content/45">
+                    {c.count} {c.count === 1 ? "snippet" : "snippets"}
+                  </span>
+                </span>
+                <span class="mt-1 block text-sm leading-relaxed text-base-content/65">{c.blurb}</span>
+              </span>
+              <Icon
+                name="arrow-up-right"
+                size={16}
+                class="absolute right-5 top-6 text-base-content/30 transition-colors group-hover:text-primary"
+              />
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="mt-8 text-base-content/60">No snippets yet.</p>
+      )
+    }
+
+    {
+      total > 0 && (
+        <p class="mt-8 text-sm text-base-content/50">
+          {total} {total === 1 ? "snippet" : "snippets"} across {categories.length}{" "}
+          {categories.length === 1 ? "class" : "classes"}.
+        </p>
+      )
+    }
+  </section>
+</BaseLayout>

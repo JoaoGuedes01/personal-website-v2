@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { href } from "../data/site";
+---
+
+<BaseLayout title="Page not found (404)" description="This page doesn't exist.">
+  <section class="mx-auto flex max-w-2xl flex-col items-center px-4 py-28 text-center sm:px-6">
+    <p class="eyebrow">Error 404</p>
+    <h1 class="mt-5 text-6xl sm:text-7xl">Page not found</h1>
+    <p class="mt-5 max-w-md text-lg text-base-content/70">
+      The page you're after moved or never existed. Let's get you back to something real.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href={href("/")} class="btn btn-primary rounded-field">Back home</a>
+      <a href={href("/projects")} class="btn btn-ghost rounded-field">Browse projects</a>
+    </div>
+  </section>
+</BaseLayout>

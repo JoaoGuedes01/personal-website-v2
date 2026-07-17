@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectListView from "../../components/ProjectListView.astro";
+import { href } from "../../data/site";
+import { paginate } from "../../utils/paginate";
+
+const sortProjects = (a: any, b: any) =>
+  (b.data.year ?? 0) - (a.data.year ?? 0) ||
+  a.data.order - b.data.order ||
+  a.data.title.localeCompare(b.data.title);
+
+const all = (await getCollection("projects")).filter((p) => !p.data.draft).sort(sortProjects);
+const page = paginate(all, 1);
+---
+
+<BaseLayout title="Projects" description="Projects by João Guedes — personal experiments, university work, and things shipped on the job.">
+  <ProjectListView
+    all={all}
+    items={page.items}
+    active="all"
+    current={page.current}
+    total={page.total}
+    base={href("/projects")}
+    eyebrow={`${all.length} projects`}
+    title="Projects"
+    intro="A mix of things I built for myself, work from university, and projects shipped on the job. Filter by where they came from."
+  />
+</BaseLayout>

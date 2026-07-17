@@ -1,0 +1,62 @@
+---
+/**
+ * <Icon /> — inline SVG icon that inherits the current text colour.
+ *
+ *   <Icon name="briefcase" />
+ *   <Icon name="github" size={18} class="text-primary" />
+ *   <Icon name="clock" title="Reading time" />   // adds an accessible label
+ *
+ * Icons live in ../icons/index.ts. Pass `title` when the icon conveys meaning
+ * on its own; otherwise it's marked decorative (aria-hidden).
+ */
+import { icons } from "../icons";
+
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+  strokeWidth?: number;
+  title?: string;
+  fill?: string;
+  stroke?: string;
+}
+
+// Defaults
+const { 
+  name,
+  size = 20,
+  class: cls = "",
+  strokeWidth = 2,
+  title,
+  fill = "none",
+  stroke = "currentColor"
+} = Astro.props;
+
+const body = icons[name];
+if (!body) {
+  // Fail loudly in dev, render nothing in prod, rather than a broken glyph.
+  console.warn(`[Icon] unknown icon "${name}"`);
+}
+const inner = (title ? `<title>${title}</title>` : "") + (body ?? "");
+---
+
+{
+  body && (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill={fill}
+      stroke={stroke}
+      stroke-width={strokeWidth}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class:list={["icon", cls]}
+      role={title ? "img" : undefined}
+      aria-label={title ?? undefined}
+      aria-hidden={title ? undefined : "true"}
+      set:html={inner}
+    />
+  )
+}

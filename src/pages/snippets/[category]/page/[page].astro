@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import SnippetCategoryView from "../../../../components/SnippetCategoryView.astro";
+import { SNIPPET_CATEGORIES } from "../../../../data/taxonomy";
+import { paginate, extraPageNumbers } from "../../../../utils/paginate";
+
+export async function getStaticPaths() {
+  const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
+  const paths: { params: { category: string; page: string }; props: { category: (typeof SNIPPET_CATEGORIES)[number] } }[] = [];
+  for (const cat of SNIPPET_CATEGORIES) {
+    const inCat = snips.filter((s) => s.data.category === cat.label);
+    for (const p of extraPageNumbers(inCat)) {
+      paths.push({ params: { category: cat.slug, page: String(p) }, props: { category: cat } });
+    }
+  }
+  return paths;
+}
+
+const { category } = Astro.props;
+const current = Number(Astro.params.page);
+const inCat = (await getCollection("snippets"))
+  .filter((s) => !s.data.draft && s.data.category === category.label)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const page = paginate(inCat, current);
+---
+
+<BaseLayout
+  title={`${category.label} snippets — page ${page.current}`}
+  description={`${category.label} snippets by João Guedes — ${category.blurb}`}
+>
+  <SnippetCategoryView
+    category={category}
+    items={page.items}
+    current={page.current}
+    total={page.total}
+    count={page.count}
+  />
+</BaseLayout>

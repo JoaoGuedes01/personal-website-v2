@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../../layouts/BaseLayout.astro";
+import BlogListView from "../../../../../components/BlogListView.astro";
+import { href } from "../../../../../data/site";
+import { slugify } from "../../../../../data/taxonomy";
+import { paginate, extraPageNumbers } from "../../../../../utils/paginate";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog")).filter((p) => !p.data.draft);
+  const map = new Map<string, string>();
+  for (const p of posts) for (const t of p.data.tags) {
+    const s = slugify(t);
+    if (!map.has(s)) map.set(s, t);
+  }
+  const paths: { params: { tag: string; page: string }; props: { label: string } }[] = [];
+  for (const [slug, label] of map) {
+    const inTag = posts.filter((p) => p.data.tags.some((t) => slugify(t) === slug));
+    for (const pg of extraPageNumbers(inTag)) {
+      paths.push({ params: { tag: slug, page: String(pg) }, props: { label } });
+    }
+  }
+  return paths;
+}
+
+const { label } = Astro.props;
+const tag = Astro.params.tag!;
+const current = Number(Astro.params.page);
+const all = (await getCollection("blog")).filter((p) => !p.data.draft);
+const posts = all
+  .filter((p) => p.data.tags.some((t) => slugify(t) === tag))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const page = paginate(posts, current);
+---
+
+<BaseLayout title={`Blog — ${label} — page ${page.current}`} description={`Blog posts tagged “${label}” by João Guedes.`}>
+  <BlogListView
+    all={all}
+    items={page.items}
+    active={tag}
+    current={page.current}
+    total={page.total}
+    base={href(`/blog/tag/${tag}`)}
+    activeLabel={label}
+  />
+</BaseLayout>

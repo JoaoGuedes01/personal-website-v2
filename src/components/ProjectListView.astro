@@ -1,0 +1,88 @@
+---
+/**
+ * One page of a project listing. Shared by the all-projects pages and the
+ * per-type pages. The type "filter" is now real navigation: each chip links
+ * to /projects (all) or /projects/type/<slug>, with the active one highlighted.
+ */
+import type { CollectionEntry } from "astro:content";
+import ProjectCard from "./ProjectCard.astro";
+import Pagination from "./Pagination.astro";
+import Icon from "./Icon.astro";
+import { href } from "../data/site";
+import { PROJECT_TYPES } from "../data/taxonomy";
+
+interface Props {
+  all: CollectionEntry<"projects">[]; // all non-draft projects (for chip counts)
+  items: CollectionEntry<"projects">[]; // current page
+  active: string; // "all" or a type slug
+  current: number;
+  total: number;
+  base: string; // pagination base, already href()'d
+  eyebrow: string;
+  title: string;
+  intro: string;
+}
+const { all, items, active, current, total, base, eyebrow, title, intro } = Astro.props;
+
+const chips = [
+  { label: "All", slug: "all", icon: "layers", href: href("/projects"), count: all.length },
+  ...PROJECT_TYPES.filter((t) => all.some((p) => p.data.type === t.label)).map((t) => ({
+    label: t.label,
+    slug: t.slug,
+    icon: t.icon,
+    href: href(`/projects/type/${t.slug}`),
+    count: all.filter((p) => p.data.type === t.label).length,
+  })),
+];
+---
+
+<section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="mt-4 text-4xl sm:text-5xl">{title}</h1>
+  <p class="mt-4 max-w-xl text-lg text-base-content/70">{intro}</p>
+
+  <div class="mt-8 flex flex-wrap gap-2" aria-label="Filter by type">
+    {
+      chips.map((c) => (
+        <a
+          href={c.href}
+          aria-current={c.slug === active ? "page" : undefined}
+          class:list={[
+            "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
+            c.slug === active && "is-active",
+          ]}
+        >
+          <Icon name={c.icon} size={13} />
+          {c.label} <span class="opacity-60">({c.count})</span>
+        </a>
+      ))
+    }
+  </div>
+
+  {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
+
+  {
+    items.length > 0 ? (
+      <div class="mt-8 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((entry) => (
+          <ProjectCard entry={entry} />
+        ))}
+      </div>
+    ) : (
+      <p class="mt-8 text-base-content/60">Nothing here yet.</p>
+    )
+  }
+
+  <Pagination base={base} current={current} total={total} />
+</section>
+
+<style>
+  .filter-chip.is-active {
+    background: var(--color-primary);
+    color: var(--color-primary-content);
+    border-color: var(--color-primary);
+  }
+  .filter-chip:not(.is-active):hover {
+    border-color: color-mix(in oklch, var(--color-base-content) 30%, transparent);
+  }
+</style>

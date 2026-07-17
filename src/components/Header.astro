@@ -1,0 +1,72 @@
+---
+import { nav, site, href } from "../data/site";
+import ThemePicker from "./ThemePicker.astro";
+
+const path = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const current = path.replace(base, "").replace(/\/$/, "") || "/";
+
+function isActive(itemPath: string) {
+  if (itemPath === "/") return current === "/";
+  return current === itemPath || current.startsWith(itemPath + "/");
+}
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-base-300/60 bg-base-100/85 backdrop-blur supports-[backdrop-filter]:bg-base-100/70"
+>
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <a href={href("/")} class="inline-flex shrink-0 items-center" aria-label={`${site.name} — home`}>
+      <img
+        src={href("/logo.svg")}
+        alt={`${site.shortName} logo`}
+        width="40"
+        height="40"
+        decoding="async"
+        class="block h-10 w-10 drop-shadow-sm"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={href(item.path)}
+            aria-current={isActive(item.path) ? "page" : undefined}
+            class:list={[
+              "text-sm transition-colors",
+              isActive(item.path)
+                ? "font-medium text-primary"
+                : "text-base-content/60 hover:text-base-content",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-1">
+      <ThemePicker />
+
+      <div class="dropdown dropdown-end lg:hidden">
+        <button tabindex="0" class="btn btn-ghost btn-sm btn-square" aria-label="Open menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line>
+          </svg>
+        </button>
+        <ul tabindex="0" class="dropdown-content menu z-50 mt-2 w-56 gap-0.5 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={href(item.path)} class:list={[isActive(item.path) && "menu-active"]}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
