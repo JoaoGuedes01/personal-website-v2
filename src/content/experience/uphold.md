@@ -13,7 +13,6 @@ highlights:
   - "TODO: a system you designed, maintained, or scaled."
   - "TODO: a reliability or cross-team win."
 # Résumé focus areas this role maps to (Backend | Security | Systems | Data).
-focus: ["Backend", "Systems"]
 order: 20
 ---
 

@@ -9,7 +9,6 @@ summary: "QA and automation at an application-security company — my cybersecur
 highlights:
   - "TODO: what you tested / automated, and the tooling you used."
   - "TODO: a bug class, process, or coverage improvement you drove."
-focus: ["Security"]
 order: 10
 ---
 

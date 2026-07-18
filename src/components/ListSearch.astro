@@ -1,0 +1,233 @@
+---
+/**
+ * <ListSearch /> — a dependency-free fuzzy "find" box for a listing.
+ *
+ * It wraps a section's filter chips and its browse grid. The search input sits
+ * top-right, across from the filters. Typing fuzzy-matches across ALL items in
+ * the section (not just the current page/filter) and renders result cards;
+ * clearing the box restores the normal browse view.
+ *
+ * Usage (in a listing page/component):
+ *
+ *   <ListSearch items={searchItems} placeholder="Search projects…">
+ *     <Fragment slot="filters">…chips…</Fragment>
+ *     …page info + grid + pagination…   ← default slot (the "browse" view)
+ *   </ListSearch>
+ *
+ * `items`: { title, url?, description?, meta?, tags? }[] — the full dataset.
+ */
+import Icon from "./Icon.astro";
+
+export interface SearchItem {
+  title: string;
+  url?: string;
+  description?: string;
+  meta?: string;
+  tags?: string[];
+}
+
+interface Props {
+  items: SearchItem[];
+  placeholder?: string;
+  label?: string;
+  resultsGridClass?: string;
+}
+const {
+  items,
+  placeholder = "Search…",
+  label = "Search",
+  resultsGridClass = "grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
+} = Astro.props;
+
+// Embed the dataset as JSON. Escape "<" so a stray "</script>" can't break out.
+const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
+---
+
+<div data-list-search>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="order-2 min-w-0 sm:order-1"><slot name="filters" /></div>
+    <div class="order-1 sm:order-2 sm:w-64 sm:shrink-0">
+      <div class="relative">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
+          <Icon name="search" size={15} />
+        </span>
+        <input
+          type="search"
+          data-search-input
+          aria-label={label}
+          placeholder={placeholder}
+          autocomplete="off"
+          spellcheck="false"
+          class="w-full rounded-field border border-base-300 bg-base-100 py-1.5 pl-9 pr-8 text-sm outline-none transition-colors placeholder:text-base-content/40 focus:border-primary"
+        />
+        <button
+          type="button"
+          data-search-clear
+          hidden
+          aria-label="Clear search"
+          class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/40 transition-colors hover:text-base-content"
+        >
+          <Icon name="x" size={14} />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div data-search-browse><slot /></div>
+
+  <div data-search-results hidden>
+    <p data-search-count class="mb-5 mt-8 text-sm text-base-content/50"></p>
+    <div data-search-grid class:list={[resultsGridClass, "pb-4"]}></div>
+    <p data-search-empty hidden class="py-12 text-center text-base-content/55">
+      No matches — try fewer or different words.
+    </p>
+  </div>
+
+  <script type="application/json" data-search-data set:html={dataJson}></script>
+</div>
+
+<script is:inline>
+  (function () {
+    const root = document.querySelector("[data-list-search]");
+    if (!root) return;
+    const input = root.querySelector("[data-search-input]");
+    const clearBtn = root.querySelector("[data-search-clear]");
+    const browse = root.querySelector("[data-search-browse]");
+    const results = root.querySelector("[data-search-results]");
+    const grid = root.querySelector("[data-search-grid]");
+    const countEl = root.querySelector("[data-search-count]");
+    const emptyEl = root.querySelector("[data-search-empty]");
+    const dataEl = root.querySelector("[data-search-data]");
+    if (!input || !dataEl) return;
+
+    let items = [];
+    try {
+      items = JSON.parse(dataEl.textContent || "[]");
+    } catch (e) {
+      items = [];
+    }
+    items.forEach(function (it) {
+      it._t = (it.title || "").toLowerCase();
+      it._s = (
+        (it.title || "") +
+        " " +
+        (it.description || "") +
+        " " +
+        (it.tags || []).join(" ") +
+        " " +
+        (it.meta || "")
+      ).toLowerCase();
+    });
+
+    function subseq(q, str) {
+      var i = 0;
+      for (var j = 0; j < str.length && i < q.length; j++) if (str[j] === q[i]) i++;
+      return i === q.length;
+    }
+    function score(q, it) {
+      var s = 0;
+      if (it._t.indexOf(q) !== -1) s += 100;
+      if (it._s.indexOf(q) !== -1) s += 40;
+      var toks = q.split(/\s+/).filter(Boolean);
+      var all = toks.length > 0;
+      for (var k = 0; k < toks.length; k++) {
+        if (it._s.indexOf(toks[k]) !== -1) s += 10;
+        else all = false;
+      }
+      if (all) s += 20;
+      if (s === 0) {
+        var qc = q.replace(/\s+/g, "");
+        if (subseq(qc, it._t)) s += 8;
+        else if (subseq(qc, it._s)) s += 4;
+      }
+      return s;
+    }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+    function card(it) {
+      var tags = (it.tags || [])
+        .slice(0, 6)
+        .map(function (t) {
+          return (
+            '<li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">' +
+            esc(t) +
+            "</li>"
+          );
+        })
+        .join("");
+      var titleHtml = it.url
+        ? '<a href="' +
+          esc(it.url) +
+          '" class="font-display text-lg leading-snug hover:text-primary">' +
+          esc(it.title) +
+          "</a>"
+        : '<span class="font-display text-lg leading-snug">' + esc(it.title) + "</span>";
+      return (
+        '<article class="card-lift relative flex h-full flex-col rounded-box border border-base-300 bg-base-100 p-6">' +
+        titleHtml +
+        (it.meta ? '<p class="mt-1 text-xs text-base-content/45">' + esc(it.meta) + "</p>" : "") +
+        (it.description
+          ? '<p class="mt-2 text-sm text-base-content/70">' + esc(it.description) + "</p>"
+          : "") +
+        (tags ? '<ul class="mt-3 flex flex-wrap gap-1.5">' + tags + "</ul>" : "") +
+        "</article>"
+      );
+    }
+
+    function run(q) {
+      q = (q || "").toLowerCase().trim();
+      if (clearBtn) clearBtn.hidden = q.length === 0;
+      if (!q) {
+        results.hidden = true;
+        browse.hidden = false;
+        grid.innerHTML = "";
+        return;
+      }
+      var matched = items
+        .map(function (it) {
+          return { it: it, sc: score(q, it) };
+        })
+        .filter(function (x) {
+          return x.sc > 0;
+        })
+        .sort(function (a, b) {
+          return b.sc - a.sc || a.it._t.localeCompare(b.it._t);
+        });
+      browse.hidden = true;
+      results.hidden = false;
+      if (matched.length === 0) {
+        grid.innerHTML = "";
+        emptyEl.hidden = false;
+        countEl.textContent = "No matches for “" + q + "”";
+        return;
+      }
+      emptyEl.hidden = true;
+      countEl.textContent =
+        matched.length + (matched.length === 1 ? " match" : " matches") + " for “" + q + "”";
+      grid.innerHTML = matched
+        .map(function (x) {
+          return card(x.it);
+        })
+        .join("");
+    }
+
+    input.addEventListener("input", function () {
+      run(input.value);
+    });
+    if (clearBtn)
+      clearBtn.addEventListener("click", function () {
+        input.value = "";
+        run("");
+        input.focus();
+      });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        input.value = "";
+        run("");
+      }
+    });
+  })();
+</script>

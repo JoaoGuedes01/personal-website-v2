@@ -4,6 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
+import Gallery from "../../components/Gallery.astro";
 import Icon from "../../components/Icon.astro";
 import { readingTime } from "../../utils/reading";
 import { href } from "../../data/site";
@@ -17,7 +18,7 @@ interface Props {
   entry: CollectionEntry<"blog">;
 }
 const { entry } = Astro.props;
-const { title, description, pubDate, updatedDate, tags, cover, coverAlt } = entry.data;
+const { title, description, pubDate, updatedDate, tags, cover, coverAlt, gallery } = entry.data;
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
 const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
@@ -75,6 +76,18 @@ const fmt = (d: Date) =>
             <Content />
           </div>
         </div>
+
+        {
+          gallery.length > 0 && (
+            <div class="mt-12 border-t border-base-300 pt-8">
+              <p class="eyebrow flex items-center gap-1.5">
+                <Icon name="layers" size={14} /> Gallery
+              </p>
+              <h2 class="mt-2 mb-5 text-2xl">A closer look</h2>
+              <Gallery images={gallery} />
+            </div>
+          )
+        }
       </article>
 
       {

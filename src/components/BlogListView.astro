@@ -1,21 +1,22 @@
 ---
 /**
- * One page of the blog index: header, tag filter, grid of posts, pagination.
- * Shared by /blog (all), /blog/page/[page], and the /blog/tag/<tag> routes.
+ * One page of the blog index: header, tag filter, search, grid of posts,
+ * pagination. Shared by /blog, /blog/page/[page], and /blog/tag/<tag>.
  *
- * The tag "filter" is real navigation (like project types): each chip links to
- * /blog or /blog/tag/<slug>, so it works alongside pagination.
+ * Tag chips are real navigation (each links to /blog or /blog/tag/<slug>), so
+ * they play nice with pagination. The search box is a global fuzzy find.
  */
 import type { CollectionEntry } from "astro:content";
 import PostCard from "./PostCard.astro";
 import Pagination from "./Pagination.astro";
+import ListSearch from "./ListSearch.astro";
 import Icon from "./Icon.astro";
 import { readingTime } from "../utils/reading";
 import { href } from "../data/site";
 import { slugify } from "../data/taxonomy";
 
 interface Props {
-  all: CollectionEntry<"blog">[]; // all non-draft posts (for chip counts)
+  all: CollectionEntry<"blog">[]; // all non-draft posts (chips + search)
   items: CollectionEntry<"blog">[]; // current page
   active: string; // "all" or a tag slug
   current: number;
@@ -49,6 +50,15 @@ const chips = [
 ];
 
 const filtered = active !== "all";
+
+const fmt = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+const searchItems = all.map((p) => ({
+  title: p.data.title,
+  url: href(`/blog/${p.id}`),
+  description: p.data.description,
+  meta: fmt(p.data.pubDate),
+  tags: p.data.tags,
+}));
 ---
 
 <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
@@ -62,50 +72,63 @@ const filtered = active !== "all";
     }
   </p>
 
-  {
-    tagMap.size > 0 && (
-      <div class="mt-8 flex flex-wrap gap-2" aria-label="Filter by tag">
-        {chips.map((c) => (
-          <a
-            href={c.href}
-            aria-current={c.slug === active ? "page" : undefined}
-            class:list={[
-              "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
-              c.slug === active && "is-active",
-            ]}
-          >
-            <Icon name={c.icon} size={13} />
-            {c.label} <span class="opacity-60">({c.count})</span>
-          </a>
-        ))}
-      </div>
-    )
-  }
+  <div class="mt-8">
+    <ListSearch
+      items={searchItems}
+      placeholder="Search posts…"
+      label="Search posts"
+      resultsGridClass="grid gap-5 sm:grid-cols-2"
+    >
+      <Fragment slot="filters">
+        {
+          tagMap.size > 0 ? (
+            <div class="flex flex-wrap gap-2" aria-label="Filter by tag">
+              {chips.map((c) => (
+                <a
+                  href={c.href}
+                  aria-current={c.slug === active ? "page" : undefined}
+                  class:list={[
+                    "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
+                    c.slug === active && "is-active",
+                  ]}
+                >
+                  <Icon name={c.icon} size={13} />
+                  {c.label} <span class="opacity-60">({c.count})</span>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <span />
+          )
+        }
+      </Fragment>
 
-  {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
+      {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
 
-  {
-    items.length > 0 ? (
-      <div class="mt-8 grid gap-5">
-        {items.map((p) => (
-          <PostCard
-            url={href(`/blog/${p.id}`)}
-            title={p.data.title}
-            description={p.data.description}
-            date={p.data.pubDate}
-            readingTime={readingTime(p.body).label}
-            tags={p.data.tags}
-            cover={p.data.cover}
-            coverAlt={p.data.coverAlt}
-          />
-        ))}
-      </div>
-    ) : (
-      <p class="mt-8 text-base-content/60">{filtered ? "No posts with this tag yet." : "First post coming soon."}</p>
-    )
-  }
+      {
+        items.length > 0 ? (
+          <div class="mt-8 grid gap-5">
+            {items.map((p) => (
+              <PostCard
+                url={href(`/blog/${p.id}`)}
+                title={p.data.title}
+                description={p.data.description}
+                date={p.data.pubDate}
+                readingTime={readingTime(p.body).label}
+                tags={p.data.tags}
+                cover={p.data.cover}
+                coverAlt={p.data.coverAlt}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-8 text-base-content/60">{filtered ? "No posts with this tag yet." : "First post coming soon."}</p>
+        )
+      }
 
-  <Pagination base={base} current={current} total={total} />
+      <Pagination base={base} current={current} total={total} />
+    </ListSearch>
+  </div>
 </section>
 
 <style>

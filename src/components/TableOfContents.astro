@@ -91,36 +91,46 @@ const showDesktop = variant === "desktop" || variant === "both";
 
 <script is:inline>
   (function () {
-    if (window.__tocInit) return; // both variants share one init
-    window.__tocInit = true;
+    function initToc() {
+      if (window.__tocInit) return; // both variants share one init
+      window.__tocInit = true;
 
-    const links = Array.from(document.querySelectorAll(".toc-link"));
-    if (!links.length) return;
+      const links = Array.from(document.querySelectorAll(".toc-link"));
+      if (!links.length) return;
 
-    function setActive(slug) {
-      links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("data-slug") === slug));
+      function setActive(slug) {
+        links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("data-slug") === slug));
+      }
+
+      const ids = links.map((l) => l.getAttribute("data-slug")).filter(Boolean);
+      const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
+
+      const obs = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]) setActive(visible[0].target.id);
+        },
+        { rootMargin: "-80px 0px -70% 0px", threshold: 0 },
+      );
+      targets.forEach((t) => obs.observe(t));
+
+      // Collapse the mobile panel after choosing a link.
+      links.forEach((l) =>
+        l.addEventListener("click", () => {
+          const d = l.closest("details");
+          if (d) d.removeAttribute("open");
+        }),
+      );
     }
 
-    const ids = links.map((l) => l.getAttribute("data-slug")).filter(Boolean);
-    const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-80px 0px -70% 0px", threshold: 0 },
-    );
-    targets.forEach((t) => obs.observe(t));
-
-    // Collapse the mobile panel after choosing a link.
-    links.forEach((l) =>
-      l.addEventListener("click", () => {
-        const d = l.closest("details");
-        if (d) d.removeAttribute("open");
-      }),
-    );
+    // Defer until the DOM (headings + both TOC variants) exists, so the
+    // scroll-spy observes real targets even when the mobile TOC renders first.
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initToc);
+    } else {
+      initToc();
+    }
   })();
 </script>

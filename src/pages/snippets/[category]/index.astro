@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import SnippetCategoryView from "../../../components/SnippetCategoryView.astro";
+import { href } from "../../../data/site";
 import { SNIPPET_CATEGORIES } from "../../../data/taxonomy";
 import { paginate } from "../../../utils/paginate";
 
@@ -26,9 +27,12 @@ const page = paginate(inCat, 1);
 >
   <SnippetCategoryView
     category={category}
+    all={inCat}
     items={page.items}
+    active="all"
     current={page.current}
     total={page.total}
     count={page.count}
+    base={href(`/snippets/${category.slug}`)}
   />
 </BaseLayout>

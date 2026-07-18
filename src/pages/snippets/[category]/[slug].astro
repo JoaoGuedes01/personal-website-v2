@@ -3,10 +3,11 @@ import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TableOfContents from "../../../components/TableOfContents.astro";
+import Gallery from "../../../components/Gallery.astro";
 import Icon from "../../../components/Icon.astro";
 import { readingTime } from "../../../utils/reading";
 import { href } from "../../../data/site";
-import { snippetCategorySlug, snippetCategoryByLabel } from "../../../data/taxonomy";
+import { snippetCategorySlug, snippetCategoryByLabel, slugify } from "../../../data/taxonomy";
 
 export async function getStaticPaths() {
   const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
@@ -20,7 +21,7 @@ interface Props {
   entry: CollectionEntry<"snippets">;
 }
 const { entry } = Astro.props;
-const { title, description, pubDate, category, lang, tags } = entry.data;
+const { title, description, pubDate, category, lang, tags, gallery } = entry.data;
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
 const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
@@ -61,7 +62,14 @@ const dateStr = pubDate.toLocaleDateString("en-US", { year: "numeric", month: "s
             tags.length > 0 && (
               <ul class="mt-4 flex flex-wrap gap-1.5">
                 {tags.map((t) => (
-                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">{t}</li>
+                  <li>
+                    <a
+                      href={href(`/snippets/${catSlug}/tag/${slugify(t)}`)}
+                      class="inline-block rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55 transition-colors hover:border-base-content/30 hover:text-primary"
+                    >
+                      {t}
+                    </a>
+                  </li>
                 ))}
               </ul>
             )
@@ -75,6 +83,18 @@ const dateStr = pubDate.toLocaleDateString("en-US", { year: "numeric", month: "s
             <Content />
           </div>
         </div>
+
+        {
+          gallery.length > 0 && (
+            <div class="mt-12 border-t border-base-300 pt-8">
+              <p class="eyebrow flex items-center gap-1.5">
+                <Icon name="layers" size={14} /> Gallery
+              </p>
+              <h2 class="mt-2 mb-5 text-2xl">A closer look</h2>
+              <Gallery images={gallery} />
+            </div>
+          )
+        }
       </article>
 
       {

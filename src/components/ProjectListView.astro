@@ -1,18 +1,20 @@
 ---
 /**
  * One page of a project listing. Shared by the all-projects pages and the
- * per-type pages. The type "filter" is now real navigation: each chip links
- * to /projects (all) or /projects/type/<slug>, with the active one highlighted.
+ * per-type pages. The type "filter" is real navigation (each chip links to
+ * /projects or /projects/type/<slug>); the search box does a global fuzzy find
+ * across every project.
  */
 import type { CollectionEntry } from "astro:content";
 import ProjectCard from "./ProjectCard.astro";
 import Pagination from "./Pagination.astro";
+import ListSearch from "./ListSearch.astro";
 import Icon from "./Icon.astro";
 import { href } from "../data/site";
 import { PROJECT_TYPES } from "../data/taxonomy";
 
 interface Props {
-  all: CollectionEntry<"projects">[]; // all non-draft projects (for chip counts)
+  all: CollectionEntry<"projects">[]; // all non-draft projects (chips + search)
   items: CollectionEntry<"projects">[]; // current page
   active: string; // "all" or a type slug
   current: number;
@@ -34,6 +36,15 @@ const chips = [
     count: all.filter((p) => p.data.type === t.label).length,
   })),
 ];
+
+// Global fuzzy-search dataset (across all projects, not just this page/type).
+const searchItems = all.map((p) => ({
+  title: p.data.title,
+  url: href(`/projects/${p.id}`),
+  description: p.data.summary,
+  meta: [p.data.type, p.data.org, p.data.year].filter(Boolean).join(" · "),
+  tags: p.data.stack,
+}));
 ---
 
 <section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
@@ -41,39 +52,45 @@ const chips = [
   <h1 class="mt-4 text-4xl sm:text-5xl">{title}</h1>
   <p class="mt-4 max-w-xl text-lg text-base-content/70">{intro}</p>
 
-  <div class="mt-8 flex flex-wrap gap-2" aria-label="Filter by type">
-    {
-      chips.map((c) => (
-        <a
-          href={c.href}
-          aria-current={c.slug === active ? "page" : undefined}
-          class:list={[
-            "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
-            c.slug === active && "is-active",
-          ]}
-        >
-          <Icon name={c.icon} size={13} />
-          {c.label} <span class="opacity-60">({c.count})</span>
-        </a>
-      ))
-    }
+  <div class="mt-8">
+    <ListSearch items={searchItems} placeholder="Search projects…" label="Search projects">
+      <Fragment slot="filters">
+        <div class="flex flex-wrap gap-2" aria-label="Filter by type">
+          {
+            chips.map((c) => (
+              <a
+                href={c.href}
+                aria-current={c.slug === active ? "page" : undefined}
+                class:list={[
+                  "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
+                  c.slug === active && "is-active",
+                ]}
+              >
+                <Icon name={c.icon} size={13} />
+                {c.label} <span class="opacity-60">({c.count})</span>
+              </a>
+            ))
+          }
+        </div>
+      </Fragment>
+
+      {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
+
+      {
+        items.length > 0 ? (
+          <div class="mt-8 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((entry) => (
+              <ProjectCard entry={entry} />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-8 text-base-content/60">Nothing here yet.</p>
+        )
+      }
+
+      <Pagination base={base} current={current} total={total} />
+    </ListSearch>
   </div>
-
-  {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
-
-  {
-    items.length > 0 ? (
-      <div class="mt-8 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((entry) => (
-          <ProjectCard entry={entry} />
-        ))}
-      </div>
-    ) : (
-      <p class="mt-8 text-base-content/60">Nothing here yet.</p>
-    )
-  }
-
-  <Pagination base={base} current={current} total={total} />
 </section>
 
 <style>
