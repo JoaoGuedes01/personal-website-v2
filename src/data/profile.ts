@@ -16,7 +16,7 @@ export interface Interest {
 export const profile = {
   name: "João Guedes",
   title: "Backend Software Engineer",
-  location: "Porto, Portugal", // TODO confirm (Braga?)
+  location: "Braga, Portugal", // TODO confirm (Braga?)
 
   // A short one-liner (used as a subtitle on the About hero).
   tagline: "What a good looking guy over here",
@@ -28,16 +28,16 @@ export const profile = {
   // Technical skills — grouped chips. Shown on About and the Résumé. Edit freely;
   // add or rename groups and they flow through to both pages.
   skills: {
-    Languages: ["TODO", "TODO", "TODO"],
+    "Languages": ["Node.js", "Python", "Go", "Java", "C#"],
     "Backend & APIs": ["REST", "gRPC", "GraphQL", "TODO"],
     "Data & storage": ["PostgreSQL", "TODO"],
     "Infra & DevOps": ["Docker", "TODO"],
-    Security: ["TODO"],
+    "Security": ["TODO"],
     "Guedes Things": ["guedes", "gudes"]
   } as Record<string, string[]>,
 
   // Soft skills — short list.
-  softSkills: ["Ownership", "Clear communication", "Pragmatism", "Mentoring"],
+  softSkills: ["Ownership", "Clear communication", "Pragmatism", "Mentoring", "Self-sufficient", "Fast-learner"],
 
   // Things I'm into outside code — shown on the About page as a small grid.
   // `icon` must exist in src/icons/index.ts (e.g. server, bike, heart, shield,
@@ -52,6 +52,6 @@ export const profile = {
   // Spoken languages.
   languages: [
     { name: "Portuguese", level: "Native" },
-    { name: "English", level: "Professional" }, // TODO confirm level
+    { name: "English", level: "Fluent" }, // TODO confirm level
   ] as { name: string; level: string }[],
 };
