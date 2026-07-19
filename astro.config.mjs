@@ -15,7 +15,7 @@ import tailwindcss from "@tailwindcss/vite";
 // ---------------------------------------------------------------------------
 
 export default defineConfig({
-  site: "https://joaoguedes01.github.io",
+  site: "https://joaoguedes.net",
   // base: "/personal_website", // ← uncomment only for a project-page deploy
 
   integrations: [mdx(), sitemap()],
