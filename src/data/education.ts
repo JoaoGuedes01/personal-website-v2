@@ -17,21 +17,23 @@ export interface EducationEntry {
 }
 
 export const education: EducationEntry[] = [
+    {
+    school: "University of Minho | School of Engineering",
+    degree: "Master's degree in Engineering and Management of Information Systems",
+    start: "2021",
+    end: "2024",
+    location: "Azurém, Guimarães, Portugal",
+    detail: "Advanced specialization in software and system architecture and development, machine learning engineering, and enterprise IT strategy. Developed high-level skills in designing intelligent systems, training predictive data models, and deploying robust digital infrastructures to solve complex business problems. Designed and implemented an advanced interoperability system for integrating ABI systems in healthcare environments with real world application.",
+    url: "https://tsiuminho.dsi.uminho.pt/oferta-educativa/miegsi"
+  },
   {
-    school: "TODO: University",
-    degree: "MSc in TODO (Software Engineering / Informatics?)",
-    start: "TODO",
-    end: "TODO",
-    location: "TODO",
+    school: "University of Minho | School of Engineering",
+    degree: "Bachelor's degree in Engineering and Management of Information Systems",
+    start: "2018",
+    end: "2021",
+    location: "Azurém, Guimarães, Portugal",
     detail:
-      "Master's thesis: an interoperability system for integrating ABI systems in healthcare environments.",
-    // url: "https://…",
-  },
-  {
-    school: "TODO: University",
-    degree: "BSc in TODO",
-    start: "TODO",
-    end: "TODO",
-    location: "TODO",
-  },
+      "Focused on building a strong foundation in software engineering, database management, and business processes. Developed core competencies in application development, data modeling, and analyzing organizational workflows to align technology with business goals.",
+    url: "https://tsiuminho.dsi.uminho.pt/oferta-educativa/miegsi",
+  }
 ];
