@@ -13,7 +13,7 @@ highlights:
   - "TODO: a system you designed, maintained, or scaled."
   - "TODO: a reliability or cross-team win."
 # Résumé focus areas this role maps to (Backend | Security | Systems | Data).
-order: 20
+order: 2
 ---
 
 Building and maintaining backend services in a fintech environment — where correctness,

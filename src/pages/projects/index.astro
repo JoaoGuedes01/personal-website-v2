@@ -14,7 +14,7 @@ const all = (await getCollection("projects")).filter((p) => !p.data.draft).sort(
 const page = paginate(all, 1);
 ---
 
-<BaseLayout title="Projects" description="Projects by João Guedes — personal experiments, university work, and things shipped on the job.">
+<BaseLayout title="Projects" description="My projects: personal experiments, university work, and things shipped on the job.">
   <ProjectListView
     all={all}
     items={page.items}
@@ -24,6 +24,6 @@ const page = paginate(all, 1);
     base={href("/projects")}
     eyebrow={`${all.length} projects`}
     title="Projects"
-    intro="A mix of things I built for myself, work from university, and projects shipped on the job. Filter by where they came from."
+    intro="Evergrowing gallery of everything I've built, personal projects, school work and stuff I worked on professionally. If it's here, it's worth talking about and each one's a small piece of how I got to be the engineer I am today."
   />
 </BaseLayout>

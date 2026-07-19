@@ -52,12 +52,12 @@ if (!resume.projects.length) {
 const showOrg = (t: string) => t === "Professional" || t === "Academic";
 ---
 
-<BaseLayout title="Resume" description={`Résumé of ${resume.name}, ${resume.title}.`}>
+<BaseLayout title="Resume" description={`Resume of ${resume.name}, ${resume.title}.`}>
   <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
     <!-- Header -->
     <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
       <div>
-        <p class="eyebrow">Résumé</p>
+        <p class="eyebrow">Resume</p>
         <h1 class="mt-3 text-4xl sm:text-5xl">{resume.name}</h1>
         <p class="mt-2 text-lg text-base-content/80">{resume.title}</p>
         <p class="text-sm text-base-content/50">{resume.location}</p>

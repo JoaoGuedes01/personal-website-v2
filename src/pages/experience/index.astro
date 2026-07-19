@@ -21,8 +21,7 @@ const relatedCount = (company: string) =>
     <p class="eyebrow">The road so far</p>
     <h1 class="mt-4 text-4xl sm:text-5xl">Experience</h1>
     <p class="mt-4 text-lg text-base-content/70">
-      Where I've worked and what I did there. Open a role for the details — and the
-      projects that came out of it.
+      Where I've worked and essentially what I did there. Open a role for the details and the projects related to it.
     </p>
 
     {
@@ -75,8 +74,8 @@ const relatedCount = (company: string) =>
     }
 
     <p class="mt-10 text-sm text-base-content/60">
-      Prefer the condensed version?
-      <a href={href("/resume")} class="text-primary underline underline-offset-4">See the résumé →</a>
+      <span class="mr-1">For a TLDR refer to</span>
+      <a href={href("/resume")} class="text-primary underline underline-offset-4">my resume →</a>
     </p>
   </section>
 </BaseLayout>
