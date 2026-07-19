@@ -107,6 +107,7 @@ const SNIPPET_CATEGORIES = [
   "DevOps",
   "Cybersecurity",
   "Data",
+  "Guedes",
 ] as const;
 
 const snippets = defineCollection({

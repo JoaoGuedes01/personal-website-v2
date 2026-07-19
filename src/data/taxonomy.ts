@@ -48,6 +48,12 @@ export const SNIPPET_CATEGORIES: Taxon[] = [
     icon: "database",
     blurb: "SQL, pipelines, and wrangling data into shape.",
   },
+  {
+    label: "Guedes",
+    slug: "guedes",
+    icon: "guedes",
+    blurb: "Test category meant for testing"
+  }
 ];
 
 // Project contexts. Order defines display order in filters/listings.
