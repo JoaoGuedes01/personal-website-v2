@@ -7,7 +7,7 @@ export const site = {
   role: "Backend Software Engineer",
   // One-line description used for SEO / social cards.
   description:
-    "Backend software engineer at Uphold. Ex-cybersecurity. I build systems, keep a homelab humming, and ride motorcycles.",
+    "Backend software engineer at Uphold. Security Professional. I'm passionate about security, engineering and systems design",
   // Absolute site URL — keep in sync with `site` in astro.config.mjs.
   url: "https://joaoguedes.net",
   locale: "en",
