@@ -3,7 +3,13 @@
   "release-type": "node",
   "packages": {
     ".": {
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "changelog-sections": [
+        { "type": "feat", "section": "✨ Features", "hidden": false },
+        { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
+        { "type": "content", "section": "📝 Content", "hidden": false },
+        { "type": "perf", "section": "⚡ Performance", "hidden": false }
+      ]
     }
   }
 }
