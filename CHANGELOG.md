@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.4.0...guedes-site-v0.5.0) (2026-07-19)
+
+
+### ✨ Features
+
+* New logo and guedes icon ([ab2f129](https://github.com/JoaoGuedes01/personal-website-v2/commit/ab2f1294b8f0f00a1b362f65ba0aaa3c19969841))
+
+
+### 🐛 Bug Fixes
+
+* updated icons stroke and width in snippets ([7bc10cc](https://github.com/JoaoGuedes01/personal-website-v2/commit/7bc10cc5126a932bb0967bb53b86a7216731afc8))
+
 ## [0.4.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.3.0...guedes-site-v0.4.0) (2026-07-19)
 
 
