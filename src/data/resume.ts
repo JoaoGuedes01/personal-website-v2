@@ -33,6 +33,7 @@ export interface ResumeCertification {
   name: string;
   issuer: string;
   issued: string;
+  featured: boolean;
 }
 
 export const resume = {

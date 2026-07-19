@@ -3,7 +3,11 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
 import { href } from "../data/site";
-import { resume, type ResumeExperience, type ResumeCertification } from "../data/resume";
+import {
+  resume,
+  type ResumeExperience,
+  type ResumeCertification,
+} from "../data/resume";
 
 // --- Experience: override (resume.ts) or auto from the experience collection ---
 const expEntries = (await getCollection("experience"))
@@ -18,7 +22,9 @@ const autoExperience: ResumeExperience[] = expEntries.map((e) => ({
   summary: e.data.summary,
   highlights: (e.data.highlights ?? []).slice(0, 3), // keep it brief
 }));
-const experience = resume.experience.length ? resume.experience : autoExperience;
+const experience = resume.experience.length
+  ? resume.experience
+  : autoExperience;
 
 // --- Certifications: override or auto ---
 const certEntries = (await getCollection("certifications"))
@@ -33,11 +39,16 @@ const autoCerts: ResumeCertification[] = certEntries.map((c) => ({
   name: c.data.name,
   issuer: c.data.issuer,
   issued: c.data.issued,
+  featured: c.data.featured
 }));
-const certifications = resume.certifications.length ? resume.certifications : autoCerts;
+const certifications = resume.certifications.length
+  ? resume.certifications
+  : autoCerts;
 
 // --- Projects: chosen ids (resume.ts) or every project flagged `resume: true` ---
-const allProjects = (await getCollection("projects")).filter((p) => !p.data.draft);
+const allProjects = (await getCollection("projects")).filter(
+  (p) => !p.data.draft,
+);
 const chosenIds = resume.projects.length
   ? resume.projects
   : allProjects.filter((p) => p.data.resume).map((p) => p.id);
@@ -46,16 +57,22 @@ let resumeProjects = chosenIds
   .filter((p): p is NonNullable<typeof p> => Boolean(p));
 if (!resume.projects.length) {
   resumeProjects = resumeProjects.sort(
-    (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0) || a.data.order - b.data.order,
+    (a, b) =>
+      (b.data.year ?? 0) - (a.data.year ?? 0) || a.data.order - b.data.order,
   );
 }
 const showOrg = (t: string) => t === "Professional" || t === "Academic";
 ---
 
-<BaseLayout title="Resume" description={`Resume of ${resume.name}, ${resume.title}.`}>
+<BaseLayout
+  title="Resume"
+  description={`Resume of ${resume.name}, ${resume.title}.`}
+>
   <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
     <!-- Header -->
-    <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+    <div
+      class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between"
+    >
       <div>
         <p class="eyebrow">Resume</p>
         <h1 class="mt-3 text-4xl sm:text-5xl">{resume.name}</h1>
@@ -63,17 +80,30 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
         <p class="text-sm text-base-content/50">{resume.location}</p>
       </div>
       <div class="no-print flex shrink-0 gap-2">
-        <a href={resume.pdfPath} class="btn btn-primary btn-sm rounded-field" download>
+        <a
+          href={resume.pdfPath}
+          class="btn btn-primary btn-sm rounded-field"
+          download
+        >
           <Icon name="download" size={15} /> Download PDF
         </a>
-        <button type="button" id="print-btn" class="btn btn-outline btn-sm rounded-field">Print</button>
+        <button
+          type="button"
+          id="print-btn"
+          class="btn btn-outline btn-sm rounded-field">Print</button
+        >
       </div>
     </div>
 
-    <p class="mt-6 max-w-2xl text-base leading-relaxed text-base-content/75">{resume.summary}</p>
+    <p class="mt-6 max-w-2xl text-base leading-relaxed text-base-content/75">
+      {resume.summary}
+    </p>
 
     <!-- Experience -->
-    <section aria-label="Experience" class="mt-12 border-t border-base-300 pt-10">
+    <section
+      aria-label="Experience"
+      class="mt-12 border-t border-base-300 pt-10"
+    >
       <h2 class="text-2xl">Experience</h2>
       {
         experience.length > 0 ? (
@@ -88,8 +118,12 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                     {job.start} — {job.end}
                   </span>
                 </div>
-                {job.location && <p class="text-xs text-base-content/45">{job.location}</p>}
-                {job.summary && <p class="mt-2 text-sm text-base-content/70">{job.summary}</p>}
+                {job.location && (
+                  <p class="text-xs text-base-content/45">{job.location}</p>
+                )}
+                {job.summary && (
+                  <p class="mt-2 text-sm text-base-content/70">{job.summary}</p>
+                )}
                 {job.highlights.length > 0 && (
                   <ul class="mt-3 space-y-1.5">
                     {job.highlights.map((h) => (
@@ -104,7 +138,9 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
             ))}
           </div>
         ) : (
-          <p class="mt-4 text-sm text-base-content/55">No experience entries yet.</p>
+          <p class="mt-4 text-sm text-base-content/55">
+            No experience entries yet.
+          </p>
         )
       }
     </section>
@@ -112,21 +148,38 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
     <!-- Selected projects -->
     {
       resumeProjects.length > 0 && (
-        <section aria-label="Selected projects" class="mt-12 border-t border-base-300 pt-10">
+        <section
+          aria-label="Selected projects"
+          class="mt-12 border-t border-base-300 pt-10"
+        >
           <h2 class="text-2xl">Selected projects</h2>
           <ul class="mt-6 space-y-5">
             {resumeProjects.map((p) => (
               <li>
                 <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
                   <h3 class="font-display text-base">
-                    <a href={href(`/projects/${p.id}`)} class="hover:text-primary">{p.data.title}</a>
+                    <a
+                      href={href(`/projects/${p.id}`)}
+                      class="hover:text-primary"
+                    >
+                      {p.data.title}
+                    </a>
                     {showOrg(p.data.type) && p.data.org && (
-                      <span class="text-sm font-normal text-base-content/55"> · {p.data.org}</span>
+                      <span class="text-sm font-normal text-base-content/55">
+                        {" "}
+                        · {p.data.org}
+                      </span>
                     )}
                   </h3>
-                  {p.data.year && <span class="text-xs text-base-content/45">{p.data.year}</span>}
+                  {p.data.year && (
+                    <span class="text-xs text-base-content/45">
+                      {p.data.year}
+                    </span>
+                  )}
                 </div>
-                <p class="mt-0.5 text-sm text-base-content/70">{p.data.summary}</p>
+                <p class="mt-0.5 text-sm text-base-content/70">
+                  {p.data.summary}
+                </p>
               </li>
             ))}
           </ul>
@@ -144,7 +197,9 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
               <p class="eyebrow mb-2">{group}</p>
               <ul class="flex flex-wrap gap-1.5">
                 {list.map((s) => (
-                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">{s}</li>
+                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">
+                    {s}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -160,7 +215,9 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                 <p class="eyebrow mb-2">Soft skills</p>
                 <ul class="flex flex-wrap gap-1.5">
                   {resume.softSkills.map((s) => (
-                    <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">{s}</li>
+                    <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">
+                      {s}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -184,7 +241,10 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
     </section>
 
     <!-- Education -->
-    <section aria-label="Education" class="mt-12 border-t border-base-300 pt-10">
+    <section
+      aria-label="Education"
+      class="mt-12 border-t border-base-300 pt-10"
+    >
       <h2 class="text-2xl">Education</h2>
       <div class="mt-6 space-y-6">
         {
@@ -198,9 +258,13 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
               </div>
               <p class="text-sm text-base-content/70">
                 {ed.school}
-                {ed.location && <span class="text-base-content/45"> · {ed.location}</span>}
+                {ed.location && (
+                  <span class="text-base-content/45"> · {ed.location}</span>
+                )}
               </p>
-              {ed.detail && <p class="mt-1 text-sm text-base-content/60">{ed.detail}</p>}
+              {ed.detail && (
+                <p class="mt-1 text-sm text-base-content/60">{ed.detail}</p>
+              )}
             </article>
           ))
         }
@@ -210,23 +274,32 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
     <!-- Certifications -->
     {
       certifications.length > 0 && (
-        <section aria-label="Certifications" class="mt-12 border-t border-base-300 pt-10">
+        <section
+          aria-label="Certifications"
+          class="mt-12 border-t border-base-300 pt-10"
+        >
           <div class="flex items-end justify-between gap-4">
             <h2 class="text-2xl">Certifications</h2>
-            <a href={href("/certifications")} class="no-print shrink-0 text-sm text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+            <a
+              href={href("/certifications")}
+              class="no-print shrink-0 text-sm text-base-content/55 underline-offset-4 hover:text-primary hover:underline"
+            >
               All certifications →
             </a>
           </div>
           <ul class="mt-6 space-y-2">
-            {certifications.map((c) => (
-              <li class="flex items-baseline justify-between gap-4 text-sm">
-                <span>
-                  <span class="font-medium">{c.name}</span>
-                  <span class="text-base-content/60"> · {c.issuer}</span>
-                </span>
-                <span class="text-xs text-base-content/50">{c.issued}</span>
-              </li>
-            ))}
+            {certifications &&
+              certifications
+                .filter((c) => c.featured)
+                .map((c) => (
+                  <li class="flex items-baseline justify-between gap-4 text-sm">
+                    <span>
+                      <span class="font-medium">{c.name}</span>
+                      <span class="text-base-content/60"> · {c.issuer}</span>
+                    </span>
+                    <span class="text-xs text-base-content/50">{c.issued}</span>
+                  </li>
+                ))}
           </ul>
         </section>
       )
@@ -272,5 +345,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
 </style>
 
 <script is:inline>
-  document.getElementById("print-btn")?.addEventListener("click", () => window.print());
+  document
+    .getElementById("print-btn")
+    ?.addEventListener("click", () => window.print());
 </script>
