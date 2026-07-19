@@ -49,19 +49,17 @@ const recent = [...posts, ...snips]
   <section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-24">
     <div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
       <div class="reveal">
-        <p class="eyebrow">Backend engineer · ex-security · Porto</p>
+        <p class="eyebrow">Software Engineering · Cybersecurity · Devops</p>
         <h1 class="mt-5 text-balance text-4xl leading-[1.08] sm:text-5xl md:text-[3.4rem]">
-          I build the quiet parts of software —
-          <span class="italic text-primary">the ones you never notice.</span>
+          Hi there, nice to meet you, I'm
+          <span class="italic text-primary"> Guedes</span>
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-base-content/70">
-          I'm João, a backend engineer at Uphold. A homelab that's been humming since 2022,
-          a motorcycle, and two very good dogs round out the picture. This is where I keep my
-          projects, the snippets I don't want to google twice, and the occasional deep dive.
+          My name is João Guedes, I'm a backend engineer with a background in security currently working at Uphold. Welcome to my corner on the web, this is the portal to everything Guedes. It's where i keep my work, the snippets I don't want to google twice and the odd ramblings about whatever project or adventure I've dragged myself into lately. Stay as long as you want!
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a href={href("/projects")} class="btn btn-primary rounded-field">See the projects</a>
-          <a href={href("/blog")} class="btn btn-ghost rounded-field">Read the blog</a>
+          <a href={href("/projects")} class="btn btn-primary rounded-field">See projects</a>
+          <a href={href("/blog")} class="btn btn-ghost rounded-field">Read my blog</a>
           <a
             href={href("/about")}
             class="text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
@@ -81,8 +79,8 @@ const recent = [...posts, ...snips]
   <section class="mx-auto mt-24 max-w-5xl px-4 sm:px-6">
     <div class="mb-8 flex items-end justify-between gap-4">
       <div>
-        <p class="eyebrow">Selected work</p>
-        <h2 class="mt-2 text-3xl">Things I've built</h2>
+        <p class="eyebrow">Featured work</p>
+        <h2 class="mt-2 text-3xl">What I've built</h2>
       </div>
       <a
         href={href("/projects")}
@@ -117,8 +115,8 @@ const recent = [...posts, ...snips]
     recent.length > 0 && (
       <section class="mx-auto mt-20 max-w-5xl px-4 sm:px-6">
         <div class="mb-8">
-          <p class="eyebrow">Notes &amp; snippets</p>
-          <h2 class="mt-2 text-3xl">Recently written down</h2>
+          <p class="eyebrow">Ramblings &amp; snippets</p>
+          <h2 class="mt-2 text-3xl">Recently written</h2>
         </div>
         <div class="grid gap-5 sm:grid-cols-2">
           {recent.map((p) => (
