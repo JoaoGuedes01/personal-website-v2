@@ -23,7 +23,7 @@ export const nav = [
   { label: "Certifications", path: "/certifications" },
   { label: "Academia", path: "/academia" },
   { label: "Snippets", path: "/snippets" },
-  { label: "Blog", path: "/blog" },
+  { label: "Ramblings", path: "/blog" },
   { label: "Resume", path: "/resume" },
   { label: "About", path: "/about" },
 ];
