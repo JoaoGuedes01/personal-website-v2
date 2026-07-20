@@ -54,13 +54,16 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
       href="/rss.xml"
     />
 
-    <!-- Fonts: Inter (default), Space Grotesk + JetBrains Mono (optional pairings).
-         The "System" typeface loads nothing. Trim families you don't keep. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts: self-hosted variable woff2 (see @font-face in global.css) — no
+         external requests. Preload the default (Inter) so first paint has it;
+         Space Grotesk / JetBrains Mono load on demand when their typeface is
+         picked. The "System" typeface loads nothing. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/inter-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     <!-- No-flash init: restore theme + typeface before first paint.

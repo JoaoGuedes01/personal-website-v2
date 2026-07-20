@@ -213,6 +213,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ===========================================================================
+   FONTS (self-hosted)
+   ---------------------------------------------------------------------------
+   Latin variable woff2, served from public/fonts — no external requests. The
+   weight ranges cover every weight the typefaces below ask for. Inter ships an
+   italic face too; Space Grotesk and JetBrains Mono are roman-only here.
+   =========================================================================== */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-wght-italic.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
+
+/* ===========================================================================
    TYPEFACES
    ---------------------------------------------------------------------------
    Four pairings, switchable at runtime via `data-font` on <html>. The theme
