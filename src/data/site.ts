@@ -1,5 +1,4 @@
-// Central place for site metadata, navigation and social links.
-// Edit these values to change what shows in the header, footer and <head>.
+// Site metadata, navigation and social links
 
 export const site = {
   name: "João Guedes",
@@ -28,18 +27,15 @@ export const nav = [
   { label: "About", path: "/about" },
 ];
 
-// Social / contact links. Replace the TODO placeholders with your real URLs.
 // `icon` maps to an entry in src/icons/index.ts.
 export const socials = [
   { label: "GitHub", href: "https://github.com/JoaoGuedes01", handle: "@JoaoGuedes01", icon: "github", stroke: "none", fill:"currentColor" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/joaom-guedes", handle: "in/TODO", icon: "linkedin", stroke: "currentColor", fill:"none" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/joaom-guedes", handle: "in/joaom-guedes", icon: "linkedin", stroke: "currentColor", fill:"none" },
   { label: "Email", href: "mailto:joaoguedes.cjp@gmail.com", handle: "joaoguedes.cjp@gmail.com", icon: "mail", stroke: "currentColor", fill:"none" },
 ];
 
 /**
  * Build an internal href that respects `base` from astro.config.mjs.
- * Use this for every internal link so a project-page deploy (sub-path) works.
- *   href("/projects")  → "/projects"  (user page)  |  "/personal_website/projects" (project page)
  */
 export function href(path = "/"): string {
   const base = import.meta.env.BASE_URL || "/";
