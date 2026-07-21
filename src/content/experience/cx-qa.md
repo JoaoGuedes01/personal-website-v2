@@ -3,8 +3,8 @@ company: "Checkmarx"
 role: "Quality Assurance Intern"
 start: "2021"
 end: "2021"
-location: "Braga"
-tags: ["QA", "Software Engineering", "Automation"]
+location: "Braga, Portugal"
+tags: ["QA", "Software Engineering", "Automation", "Security"]
 summary: "During my summer internship at Checkmarx, I joined the QA development team where I worked on internal tools supporting the continuous integration and testing pipelines to support product teams."
 highlights:
   - "Monitoring and maintaining automation pipelines"
