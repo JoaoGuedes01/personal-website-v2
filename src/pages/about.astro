@@ -153,7 +153,7 @@ const skillGroups = Object.entries(profile.skills);
                   <p class="text-xs text-base-content/45">{item.data.location}</p>
                 )}
                 <div class="prose prose-sm mt-2 max-w-none">
-                  <item.Content />
+                  {item.data.summary}
                 </div>
                 {item.data.tags.length > 0 && (
                   <ul class="mt-3 flex flex-wrap gap-1.5">
