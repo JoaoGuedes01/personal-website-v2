@@ -82,10 +82,11 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       <div class="no-print flex shrink-0 gap-2">
         <a
           href={resume.pdfPath}
+          target="_blank"
+          rel="noopener noreferrer"
           class="btn btn-primary btn-sm rounded-field"
-          download
         >
-          <Icon name="download" size={15} /> Download PDF
+          <Icon name="file-text" size={15} />Formal CV 
         </a>
         <button
           type="button"
