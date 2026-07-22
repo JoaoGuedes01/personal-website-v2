@@ -4,7 +4,7 @@ role: "Backend Software Engineer"
 start: "2026" 
 end: "Present"
 location: "Braga, Portugal"
-tags: ["Backend Development", "Microservices", "Event-Driven", "Kubernetes", "gRPC", "Optimization", "Crypto", "Fintech"]
+tags: ["Backend Development", "Microservices", "Event-Driven", "Kubernetes", "gRPC", "GraphQL", "REST", "Optimization", "Crypto", "Fintech"]
 summary: "I work in the Backend Development team responsible for Manager Tool at Uphold, where I design and develop on a vital tool for account agents to monitor and manage client accounts"
 highlights:
   - "Ship code and iterate Manager Tool"
