@@ -1,0 +1,10 @@
+---
+title: "Revisioning Healthcare Interoperability System for ABI Architectures: Introspection and Improvements"
+kind: "Paper"                 # Paper | Thesis
+authors: ["João Guedes"]
+venue: "MDPI"
+year: 2024
+abstract: "The integration of systems for Adaptive Business Intelligence (ABI) in the healthcare industry has the potential to revolutionize and reform the way organizations approach data analysis and decision-making. By providing real-time actionable insights and enabling organizations to continuously adapt and evolve, ABI has the potential to drive better outcomes, reduce costs, and improve the overall quality of patient care. The ABI Interoperability System was designed to facilitate the usage and integration of ABI systems in healthcare environments through interoperability resources like Health Level 7 (HL7) or Fast Healthcare Interoperability Resources (FHIR). The present article briefly describes both versions of this software, learning about their differences and improvements, and how they affect the solution. The changes introduced in the new version of the system will tackle code quality with automated tests, development workflow, and developer experience, with the introduction of Continuous Integration and Delivery pipelines in the development workflow, new support for the FHIR pattern, and address a few security concerns about the architecture. The second revision of the system features a more refined, modern, and secure architecture and has proven to be more performant and efficient than its predecessor. As it stands, the Interoperability System poses a significant step forward toward interoperability and ease of integration in the healthcare ecosystem."
+link: "https://doi.org/10.3390/info15120745"          # external page / DOI / repository
+pdf: "/papers/revisioning-system-paper.pdf"   # a file in public/papers/ (Open PDF + Download)
+---
