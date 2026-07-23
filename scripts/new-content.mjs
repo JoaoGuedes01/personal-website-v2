@@ -73,7 +73,7 @@ const TEMPLATES = {
 title: "${title}"
 summary: "One or two lines describing what it is and why it exists."
 type: "Personal"              # Personal | Academic | Professional
-category: "Software"          # Software | Web | Data & ML | Networking | Systems | Games
+category: "Software"          #  Web | Backend & Systems Architecture | Devops & Infrastructure | Data Science & ML | Game Development
 stack: []                     # e.g. ["TypeScript", "Postgres"]
 featured: false               # surface on the homepage / top of the list
 resume: false                 # include on the auto-generated /resume

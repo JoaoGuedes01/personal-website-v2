@@ -6,12 +6,11 @@ import { z } from "astro/zod";
 // To add an entry: drop a new file in the folder with the frontmatter below.
 
 const PROJECT_CATEGORIES = [
-  "Software",
   "Web",
-  "Data & ML",
-  "Networking",
-  "Systems",
-  "Games",
+  "Backend & Systems Architecture",
+  "Devops & Infrastructure",
+  "Data Science & ML",
+  "Game Development",
 ] as const;
 
 // Context in which a project was built.
@@ -107,7 +106,6 @@ const SNIPPET_CATEGORIES = [
   "DevOps",
   "Cybersecurity",
   "Data",
-  "Guedes",
 ] as const;
 
 const snippets = defineCollection({

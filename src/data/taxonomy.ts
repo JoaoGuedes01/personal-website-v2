@@ -58,9 +58,9 @@ export const SNIPPET_CATEGORIES: Taxon[] = [
 
 // Project contexts. Order defines display order in filters/listings.
 export const PROJECT_TYPES: Taxon[] = [
-  { label: "Professional", slug: "professional", icon: "briefcase", blurb: "Shipped on the job." },
-  { label: "Academic", slug: "academic", icon: "graduation-cap", blurb: "University work." },
-  { label: "Personal", slug: "personal", icon: "user", blurb: "Built for myself." },
+  { label: "Professional", slug: "professional", icon: "briefcase", blurb: "Projects built on the job" },
+  { label: "Academic", slug: "academic", icon: "graduation-cap", blurb: "Academic work" },
+  { label: "Personal", slug: "personal", icon: "user", blurb: "Built for myself" },
 ];
 
 const bySlug = (list: Taxon[], slug: string) => list.find((t) => t.slug === slug);
