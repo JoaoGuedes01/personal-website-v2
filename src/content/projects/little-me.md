@@ -8,15 +8,9 @@ featured: false
 resume: false
 order: 100
 draft: false
-# org: "Company"              # Professional/Academic: the employer/org
-# orgUrl: "https://…"         # optional: makes the org name a link
-# experience: "role-id"       # pin to a specific Experience entry (multi-role companies)
-repo: "https://github.com/JoaoGuedes01/LittleMe"           # optional repository link
-# demo: "https://…"           # optional live demo link
+repo: "https://github.com/JoaoGuedes01/LittleMe"
 year: 2019
-# cover: ./img/little-me/cover.png         # optional cover image (co-located)
-# coverAlt: "…"
-gallery:                    # optional image gallery (co-located, with lightbox)
+gallery:
   - { src: ./img/little-me/cover.png, alt: "Little me cover Image", caption: "The game's Main Menu." }
   - { src: ./img/little-me/saves.png, alt: "Save image", caption: "File based save system." }
   - { src: ./img/little-me/bedroom.png, alt: "Bedroom image", caption: "Hanging out in the bedroom." }
