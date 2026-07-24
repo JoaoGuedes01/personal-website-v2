@@ -1,21 +1,16 @@
 ---
 title: "Worldwide BI"
 summary: "Data Science project meant to study Natural Disasters and extract useful information from huge amounts of data."
-type: "Academic"              # Personal | Academic | Professional
-category: "Data Science & ML"          #  Web | Backend & Systems Architecture | Devops & Infrastructure | Data Science & ML | Game Development
-stack: ["Java", "MySQL", "Talend Open Studio", "Tableau"]                     # e.g. ["TypeScript", "Postgres"]
-featured: false               # surface on the homepage / top of the list
-resume: false                 # include on the auto-generated /resume
-order: 98                    # lower sorts first within a group
+type: "Academic"
+category: "Data Science & ML"
+stack: ["Java", "MySQL", "Talend Open Studio", "Tableau"]
+featured: false
+resume: false
+order: 98
 draft: false
-org: "University of Minho"              # Professional/Academic: the employer/org
-orgUrl: "https://www.uminho.pt/"         # optional: makes the org name a link
-# experience: "role-id"       # pin to a specific Experience entry (multi-role companies)
-# repo: "https://…"           # optional repository link
-# demo: "https://…"           # optional live demo link
+org: "University of Minho"
+orgUrl: "https://www.uminho.pt/"
 year: 2021
-# cover: ./cover.png          # optional cover image (co-located)
-# coverAlt: "…"
 gallery:                    # optional image gallery (co-located, with lightbox)
     - { src: ./img/worldwide-bi/cover.png, alt: "Cover Image", caption: "Team presentation." }
     - { src: ./img/worldwide-bi/plan.png, alt: "Plan Image", caption: "Our plan." }
