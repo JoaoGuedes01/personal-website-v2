@@ -3,7 +3,7 @@ title: "Press&Play"
 summary: "Progressive Web Application that allows people to schedule and reserve football games in fields all across Portugal."
 type: "Academic"
 category: "Web"
-stack: ["Node.js", "Express.js", "Javascript", "HTML", "CSS", "MySQL", "Google API"]
+stack: ["Node.js", "Express.js", "Javascript", "HTML", "CSS", "MySQL", "Google API", "Heroku"]
 featured: false
 resume: false
 order: 97
