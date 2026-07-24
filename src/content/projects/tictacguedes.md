@@ -6,7 +6,7 @@ category: "Web"
 stack: ["React", "Javascript", "Vite", "Chakra UI", "Web Audio API"]
 featured: false
 resume: false
-order: 100
+order: 95
 draft: false
 repo: "https://github.com/JoaoGuedes01/tictacboom"
 demo: "https://joaoguedes01.github.io/tictacboom/"
