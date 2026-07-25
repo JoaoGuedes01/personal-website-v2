@@ -24,7 +24,7 @@ gallery:
   - { src: ./img/bracelhertz/inmate.png, alt: "Inmate page Image", caption: "The inmate information page" }
 ---
 
-> ⚠️ **Demo Offline:** Due to recent Heroku pricing changes, the Press&Play demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon.
+> ⚠️ **Demo Offline:** Due to recent Heroku pricing changes, the BracelHertZ demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon.
 
 ## Overview
 
