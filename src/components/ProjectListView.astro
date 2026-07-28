@@ -1,49 +1,73 @@
 ---
 /**
- * One page of a project listing. Shared by the all-projects pages and the
- * per-type pages. The type "filter" is real navigation (each chip links to
- * /projects or /projects/type/<slug>); the search box does a global fuzzy find
- * across every project.
+ * Projects listing. Filtering is the shared <FilterBar />: Type and Category are
+ * dropdown facets that stack with the search box, all client-side, hiding/showing
+ * the real cards in place. Every non-draft project is rendered (no pagination) so
+ * the filters can span the whole set; without JS the full grid still shows.
  */
 import type { CollectionEntry } from "astro:content";
 import ProjectCard from "./ProjectCard.astro";
-import Pagination from "./Pagination.astro";
-import ListSearch from "./ListSearch.astro";
-import Icon from "./Icon.astro";
-import { href } from "../data/site";
-import { PROJECT_TYPES } from "../data/taxonomy";
+import FilterBar from "./FilterBar.astro";
+import type { Facet } from "./FilterBar.astro";
+import {
+  PROJECT_TYPES,
+  PROJECT_CATEGORIES,
+  projectTypeByLabel,
+  projectCategorySlug,
+} from "../data/taxonomy";
+import { PAGE_SIZE } from "../utils/paginate";
 
 interface Props {
-  all: CollectionEntry<"projects">[]; // all non-draft projects (chips + search)
-  items: CollectionEntry<"projects">[]; // current page
-  active: string; // "all" or a type slug
-  current: number;
-  total: number;
-  base: string; // pagination base, already href()'d
+  items: CollectionEntry<"projects">[]; // all non-draft projects
   eyebrow: string;
   title: string;
   intro: string;
 }
-const { all, items, active, current, total, base, eyebrow, title, intro } = Astro.props;
+const { items, eyebrow, title, intro } = Astro.props;
 
-const chips = [
-  { label: "All", slug: "all", icon: "layers", href: href("/projects"), count: all.length },
-  ...PROJECT_TYPES.filter((t) => all.some((p) => p.data.type === t.label)).map((t) => ({
-    label: t.label,
-    slug: t.slug,
-    icon: t.icon,
-    href: href(`/projects/type/${t.slug}`),
-    count: all.filter((p) => p.data.type === t.label).length,
-  })),
+// Facets — only values actually present, counts scoped to the set, taxonomy order.
+const facets: Facet[] = [
+  {
+    key: "type",
+    label: "Type",
+    icon: "layers",
+    options: PROJECT_TYPES.map((t) => ({
+      value: t.slug,
+      label: t.label,
+      icon: t.icon,
+      count: items.filter((p) => p.data.type === t.label).length,
+    })).filter((o) => o.count > 0),
+  },
+  {
+    key: "category",
+    label: "Category",
+    icon: "folder",
+    options: PROJECT_CATEGORIES.map((c) => ({
+      value: c.slug,
+      label: c.label,
+      icon: c.icon,
+      count: items.filter((p) => p.data.category === c.label).length,
+    })).filter((o) => o.count > 0),
+  },
 ];
 
-// Global fuzzy-search dataset (across all projects, not just this page/type).
-const searchItems = all.map((p) => ({
-  title: p.data.title,
-  url: href(`/projects/${p.id}`),
-  description: p.data.summary,
-  meta: [p.data.type, p.data.org, p.data.year].filter(Boolean).join(" · "),
-  tags: p.data.stack,
+// Per-card metadata the FilterBar matches against (one data-<facet.key> each).
+const cards = items.map((entry) => ({
+  entry,
+  type: projectTypeByLabel(entry.data.type)?.slug ?? "",
+  category: projectCategorySlug(entry.data.category),
+  search: [
+    entry.data.title,
+    entry.data.summary,
+    entry.data.type,
+    entry.data.org,
+    entry.data.category,
+    entry.data.year,
+    ...entry.data.stack,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase(),
 }));
 ---
 
@@ -53,53 +77,23 @@ const searchItems = all.map((p) => ({
   <p class="mt-4 max-w-xl text-lg text-base-content/70">{intro}</p>
 
   <div class="mt-8">
-    <ListSearch items={searchItems} placeholder="Search projects…" label="Search projects">
-      <Fragment slot="filters">
-        <div class="flex flex-wrap gap-2" aria-label="Filter by type">
-          {
-            chips.map((c) => (
-              <a
-                href={c.href}
-                aria-current={c.slug === active ? "page" : undefined}
-                class:list={[
-                  "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
-                  c.slug === active && "is-active",
-                ]}
-              >
-                <Icon name={c.icon} size={13} />
-                {c.label} <span class="opacity-60">({c.count})</span>
-              </a>
-            ))
-          }
-        </div>
-      </Fragment>
-
-      {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
-
-      {
-        items.length > 0 ? (
-          <div class="mt-8 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((entry) => (
-              <ProjectCard entry={entry} />
-            ))}
-          </div>
-        ) : (
-          <p class="mt-8 text-base-content/60">Nothing here yet.</p>
-        )
-      }
-
-      <Pagination base={base} current={current} total={total} />
-    </ListSearch>
+    <FilterBar
+      facets={facets}
+      count={items.length}
+      noun="project"
+      pageSize={PAGE_SIZE}
+      searchPlaceholder="Search projects…"
+      searchLabel="Search projects"
+    >
+      <div class="mt-2 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          cards.map((c) => (
+            <div data-filter-item data-type={c.type} data-category={c.category} data-search={c.search}>
+              <ProjectCard entry={c.entry} />
+            </div>
+          ))
+        }
+      </div>
+    </FilterBar>
   </div>
 </section>
-
-<style>
-  .filter-chip.is-active {
-    background: var(--color-primary);
-    color: var(--color-primary-content);
-    border-color: var(--color-primary);
-  }
-  .filter-chip:not(.is-active):hover {
-    border-color: color-mix(in oklch, var(--color-base-content) 30%, transparent);
-  }
-</style>

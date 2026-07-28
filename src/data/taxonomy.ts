@@ -63,6 +63,16 @@ export const PROJECT_TYPES: Taxon[] = [
   { label: "Personal", slug: "personal", icon: "user", blurb: "Built for myself" },
 ];
 
+// Project categories (discipline/domain). Labels MUST match the enum in
+// src/content.config.ts. Powers the category filter; order = display order.
+export const PROJECT_CATEGORIES: Taxon[] = [
+  { label: "Web", slug: "web", icon: "code", blurb: "Web apps, sites, and everything in the browser." },
+  { label: "Backend & Systems Architecture", slug: "backend-systems", icon: "server", blurb: "APIs, services, and the systems behind them." },
+  { label: "Devops & Infrastructure", slug: "devops-infrastructure", icon: "git-branch", blurb: "Pipelines, containers, and keeping things running." },
+  { label: "Data Science & ML", slug: "data-science-ml", icon: "database", blurb: "Models, data pipelines, and analysis." },
+  { label: "Game Development", slug: "game-development", icon: "joystick", blurb: "Games and interactive experiences." },
+];
+
 const bySlug = (list: Taxon[], slug: string) => list.find((t) => t.slug === slug);
 const byLabel = (list: Taxon[], label: string) => list.find((t) => t.label === label);
 
@@ -70,6 +80,13 @@ export const snippetCategoryBySlug = (slug: string) => bySlug(SNIPPET_CATEGORIES
 export const snippetCategoryByLabel = (label: string) => byLabel(SNIPPET_CATEGORIES, label);
 export const projectTypeBySlug = (slug: string) => bySlug(PROJECT_TYPES, slug);
 export const projectTypeByLabel = (label: string) => byLabel(PROJECT_TYPES, label);
+export const projectCategoryBySlug = (slug: string) => bySlug(PROJECT_CATEGORIES, slug);
+export const projectCategoryByLabel = (label: string) => byLabel(PROJECT_CATEGORIES, label);
+
+/** Slug for a project's category (falls back to a slugified label). */
+export function projectCategorySlug(label: string): string {
+  return projectCategoryByLabel(label)?.slug ?? slugify(label);
+}
 
 /** Slug for a snippet's category (falls back to a slugified label). */
 export function snippetCategorySlug(label: string): string {
