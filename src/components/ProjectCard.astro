@@ -1,8 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 import { href } from "../data/site";
 import Icon from "./Icon.astro";
 import { projectTypeIcon } from "../icons";
+import { projectCover } from "../utils/covers";
 
 interface Props {
   entry: CollectionEntry<"projects">;
@@ -10,11 +12,28 @@ interface Props {
 const { entry } = Astro.props;
 const { title, summary, type, org, orgUrl, category, stack, year, repo, demo } = entry.data;
 const url = href(`/projects/${entry.id}`);
+
+// Cover auto-detection
+const cover = projectCover(entry.id);
 ---
 
 <article
-  class="card-lift group relative flex h-full flex-col rounded-box border border-base-300 bg-base-100 p-6"
+  class="card-lift group relative flex h-full flex-col overflow-hidden rounded-box border border-base-300 bg-base-100 p-6"
 >
+  {
+    cover && (
+      <div class="-mx-6 -mt-6 mb-5 overflow-hidden border-b border-base-300 bg-base-200">
+        <Image
+          src={cover}
+          alt={`${title} — cover`}
+          width={800}
+          class="aspect-[16/9] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+
   <div class="mb-3 flex items-center justify-between gap-2">
     <p class="eyebrow flex items-center gap-1.5">
       <Icon name={projectTypeIcon[type]} size={13} />
