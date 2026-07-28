@@ -3,7 +3,7 @@ title: "BracelHertZ"
 summary: "BracelHertZ is an management Progressive Web Application designed to help lower prison suicide rates letting them monitor the inmates' heart rate."
 type: "Academic"
 category: "Web"
-stack: ["Java", "Spring Boot", "Arduino", "Heroku", "HTML", "CSS", "Javascript", "ESP32"]
+stack: ["Java", "Spring Boot", "Arduino", "ESP32", "C++", "Heroku", "HTML", "CSS", "Javascript"]
 featured: false
 resume: false
 order: 96

@@ -3,7 +3,7 @@ title: "Smart Food"
 summary: "Knowledge Based System that recommends dishes based on the user's preferences and finds the optimal routes for delivery."
 type: "Academic"
 category: "Data Science & ML"
-stack: ["Java", "Spring Boot", "Perl", "Prolog", "Node.js", "Javascript"]
+stack: ["Java", "Spring Boot", "Perl", "Prolog", "Node.js", "Javascript", "HTML", "CSS"]
 featured: false
 resume: false
 order: 88

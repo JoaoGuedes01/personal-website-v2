@@ -3,7 +3,7 @@ title: "GuedesDB"
 summary: "guedesDB is a lightweight, to the point, local file-based database for node.js projects."
 type: "Personal"
 category: "Backend & Systems Architecture"
-stack: ["Node.js", "Javascript"]
+stack: ["Node.js", "Javascript", "npm"]
 featured: false
 resume: false
 order: 94

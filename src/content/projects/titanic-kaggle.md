@@ -3,7 +3,7 @@ title: "Titanic Kaggle"
 summary: "Data Science project focused on studying and relating the features of the people aboard the titanic and their probability of death"
 type: "Personal"
 category: "Data Science & ML"
-stack: ["Python", "Pandas", "Jupyter Notebooks"]
+stack: ["Python", "Pandas", "NumPy", "Scikit-Learn", "Jupyter Notebooks"]
 featured: false
 resume: false
 order: 93

@@ -2,8 +2,8 @@
 title: "Web Server Load Balancing"
 summary: "Containerized automatic system that balances webserver load between a scalable cluster's instances of a service and keeps comunication private inside dedicated networks."
 type: "Academic"
-category: "Backend & Systems Architecture"
-stack: ["Docker", "Docker Compose", "Traefik", "Powershell", "Node.js", "Express.js", "Javascript", "MongoDB"]
+category: "Devops & Infrastructure"
+stack: ["Docker", "Docker Compose", "Traefik", "ZeroTier", "Powershell", "Node.js", "Express.js", "Javascript", "MongoDB"]
 featured: false
 resume: false
 order: 87

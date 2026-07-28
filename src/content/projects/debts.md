@@ -3,7 +3,7 @@ title: "Debts"
 summary: "PWA built with MERN that allows users to record all debts and borrowed money between groups of friends and makes trip budget divisions easy"
 type: "Personal"
 category: "Web"
-stack: ["Node.js", "Express.js", "MongoDB", "React", "Framer Motion", "Javascript"]
+stack: ["Node.js", "Express.js", "MongoDB", "Mongoose", "React", "Framer Motion", "Javascript", "CSS"]
 featured: false
 resume: false
 order: 90

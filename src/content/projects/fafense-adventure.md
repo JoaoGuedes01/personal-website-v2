@@ -3,7 +3,7 @@ title: "Fafense Adventure"
 summary: "A practical joke turned fully-fledged web platformer, built from scratch to explore the fundamentals of 2D game mechanics, level design, and WebGL deployment"
 type: "Personal"
 category: "Game Development"
-stack: ["Unity", "C#", "Photoshop"]
+stack: ["Unity", "C#", "Photoshop", "WebGL", "GitHub Pages"]
 featured: false
 resume: false
 order: 99

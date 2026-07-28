@@ -2,8 +2,8 @@
 title: "Guedes Sueca"
 summary: "The popular card game Sueca faithfully recreated using WebSockets for server-client real time communication."
 type: "Personal"
-category: "Game Development"
-stack: ["Node.js", "WebSockets", "React", "Ant Design", "JSX", "CSS"]
+category: "Web"
+stack: ["Node.js", "WebSockets", "React", "Ant Design", "JSX", "CSS", "Replit", "GitHub Pages"]
 featured: false
 resume: false
 order: 82

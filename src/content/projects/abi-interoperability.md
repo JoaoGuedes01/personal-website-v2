@@ -3,7 +3,7 @@ title: "ABI Interoperability System (Master's Thesis)"
 summary: "Interoperability system that turns HL7 & FHIR healthcare data into ML-ready inputs for Adaptive Business Intelligence models."
 type: "Academic"
 category: "Backend & Systems Architecture"
-stack: ["Node.js", "Javascript", "JWT", "Swagger OpenAPI", "MySQL", "PostgreSQL", "RabbitMQ", "Docker", "Docker Compose", "Mirth Connect", "Python", "Jupyter Notebooks", "Pandas", "React", "Ant Design", "Monaco Editor", "Github", "Github Actions", "Apache JMeter", "Cypress", "Debian", "Portainer"]
+stack: ["Node.js", "Javascript", "JWT", "Swagger OpenAPI", "MySQL", "PostgreSQL", "RabbitMQ", "Docker", "Docker Compose", "Mirth Connect", "Python", "Jupyter Notebooks", "Pandas", "React", "Ant Design", "Monaco Editor", "GitHub", "GitHub Actions", "GitHub Pages", "Apache JMeter", "Cypress", "Debian", "Portainer"]
 featured: false
 resume: false
 order: 79

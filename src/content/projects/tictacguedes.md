@@ -3,7 +3,7 @@ title: "TicTacGuedes"
 summary: "Web version of the fun game TicTacBoom that can be played anywhere with only a smartphone or computer."
 type: "Personal"
 category: "Web"
-stack: ["React", "Javascript", "Vite", "Chakra UI", "Web Audio API"]
+stack: ["React", "Javascript", "Vite", "Chakra UI", "Web Audio API", "GitHub Pages"]
 featured: false
 resume: false
 order: 95

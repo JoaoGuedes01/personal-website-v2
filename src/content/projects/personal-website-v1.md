@@ -3,7 +3,7 @@ title: "Personal Website V1"
 summary: "The first iteration of my personal website and portfolio."
 type: "Personal"
 category: "Web"
-stack: ["React", "JSX", "CSS", "EmailJS", "Github Pages"]
+stack: ["React", "JSX", "Javascript", "CSS", "Framer Motion", "EmailJS", "GitHub Pages"]
 featured: false
 resume: false
 order: 84

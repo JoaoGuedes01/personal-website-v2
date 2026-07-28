@@ -3,7 +3,7 @@ title: "Doppelganger"
 summary: "Platform to compare code bases, calculate similarity, and minimize redundancy."
 type: "Professional"
 category: "Backend & Systems Architecture"
-stack: ["Node.js", "Express.js", "Javascript", "MongoDB", "ElasticSearch", "DynamoDB", "AWS S3", "AWS Lambda", "Github API", "React", "Ant Design", "Jenkins", "Python", "Jupyter Notebooks"]
+stack: ["Node.js", "Express.js", "axios", "Javascript", "MongoDB", "ElasticSearch", "DynamoDB", "AWS S3", "AWS Lambda", "GitHub API", "React", "Ant Design", "Jenkins", "Python", "Jupyter Notebooks", "PowerBI"]
 featured: false
 resume: false
 order: 80

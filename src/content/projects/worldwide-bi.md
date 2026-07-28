@@ -3,7 +3,7 @@ title: "Worldwide BI"
 summary: "Data Science project meant to study Natural Disasters and extract useful information from huge amounts of data."
 type: "Academic"
 category: "Data Science & ML"
-stack: ["Java", "MySQL", "Talend Open Studio", "Tableau"]
+stack: ["Java", "MySQL", "Talend Open Studio", "Talend Data Quality", "Tableau"]
 featured: false
 resume: false
 order: 98

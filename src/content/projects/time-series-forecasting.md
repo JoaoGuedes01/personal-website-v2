@@ -3,7 +3,7 @@ title: "Time Series Forecasting"
 summary: "This app was built to predict the number of visits a Mall would have in a certain week so the marketing campaigns would be appropriately set up during each day."
 type: "Academic"
 category: "Data Science & ML"
-stack: ["R", "Shiny", "Jupyter Notebooks", "Python", "Anaconda"]
+stack: ["R", "Shiny", "rminer", "forecast", "RStudio", "Jupyter Notebooks", "Python", "Anaconda", "Shinyapps.io"]
 featured: false
 resume: false
 order: 85

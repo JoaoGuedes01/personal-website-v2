@@ -3,7 +3,7 @@ title: "SP Mobile"
 summary: "Progressive Web Application (PWA) that automates and integrates 3 different platforms into one via ERPs/CRMs, Web Services and Web APIs"
 type: "Academic"
 category: "Backend & Systems Architecture"
-stack: ["Node.js", "Express.js", "MongoDB", "Salesforce", "Hubspot", "Moloni", "Nodemailer", "Twilio", "Paypal", "Google Maps", "Facebook API", "Easyinvoice"]
+stack: ["Node.js", "Express.js", "MongoDB", "Salesforce", "HubSpot", "Moloni", "Nodemailer", "Twilio", "PayPal", "Google Maps", "Facebook API", "Twitter API", "EasyInvoice"]
 featured: false
 resume: false
 order: 92

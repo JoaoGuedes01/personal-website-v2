@@ -3,7 +3,7 @@ title: "Guedes Money"
 summary: "A CLI interface for interacting with Portal das Finanças automatically and programmatically."
 type: "Personal"
 category: "Backend & Systems Architecture"
-stack: ["Python", "Selenium", "Typer", "Jupyter Notebooks"]
+stack: ["Python", "Selenium", "Typer", "Jupyter Notebooks", "bumpversion", "PyPI"]
 featured: false
 resume: false
 order: 81

@@ -3,7 +3,7 @@ title: "SD Social App"
 summary: "Twitter-like social app and distributed system based on java sockets focused on traffic rules and flow over the network."
 type: "Academic"
 category: "Backend & Systems Architecture"
-stack: ["Java", "TCP Sockets", "JavaFX", "Scene Builder"]
+stack: ["Java", "TCP Sockets", "Java RMI", "JavaFX", "Scene Builder"]
 featured: false
 resume: false
 order: 89

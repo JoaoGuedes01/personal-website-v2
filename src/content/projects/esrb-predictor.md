@@ -3,7 +3,7 @@ title: "ESRB Predictor"
 summary: "App that can accurately predict the ESRB Rating of a video game based on its content flags."
 type: "Academic"
 category: "Data Science & ML"
-stack: ["Python", "Scikit Learn", "MySQL", "Tableau", "Flask", "Jupyter"]
+stack: ["Python", "Scikit-Learn", "MySQL", "Tableau", "Flask", "HTML", "CSS", "Jupyter Notebooks", "Heroku"]
 featured: false
 resume: false
 order: 86
