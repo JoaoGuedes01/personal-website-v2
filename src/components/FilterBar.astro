@@ -1,0 +1,509 @@
+---
+/**
+ * <FilterBar /> — the site-wide listing filter.
+ *
+ * A compact toolbar of dropdown facets + a search box. Options live inside the
+ * dropdowns (so the bar's height never grows, no matter how many tags exist);
+ * active choices show as removable pills (with the value's icon). Everything
+ * filters the rendered cards live, client-side, and stacks: OR within a facet,
+ * AND across facets, AND search.
+ *
+ * Facet counts are dynamic: each option shows how many results it would yield
+ * given the OTHER active facets + search (standard faceted-search behaviour).
+ *
+ * State (selections, search, how many loaded) is saved to sessionStorage per
+ * page, so returning via the back button restores your filters.
+ *
+ * Paging: every card stays in the DOM (so filters span the whole set), but only
+ * `pageSize` matches are shown at once, with a "Load more" button that recomputes
+ * against the filtered results. Pass pageSize={0} to show everything.
+ *
+ * The page supplies the grid via the default slot; each card must be wrapped in
+ * an element carrying:
+ *   • data-filter-item
+ *   • data-search="<lowercased haystack>"
+ *   • data-<facet.key>="<space-separated values this item has>"   (one per facet)
+ *
+ * Without JS you get every card — filters/paging are a progressive enhancement.
+ */
+import Icon from "./Icon.astro";
+
+export interface FacetOption {
+  value: string;
+  label: string;
+  icon?: string; // shown on the pill (and available to clone), not in the menu
+  count?: number;
+}
+export interface Facet {
+  key: string; // ↔ data-<key> on each item
+  label: string;
+  icon?: string; // shown on the facet button
+  options: FacetOption[];
+  multi?: boolean; // default true; false = single-select within the facet
+}
+interface Props {
+  facets: Facet[];
+  count: number; // initial total; the live count updates it
+  noun?: string; // singular; pluralised with a trailing "s"
+  pageSize?: number; // 0 = show all (no "Load more")
+  searchPlaceholder?: string;
+  searchLabel?: string;
+}
+const {
+  facets,
+  count,
+  noun = "result",
+  pageSize = 0,
+  searchPlaceholder = "Search…",
+  searchLabel = "Search",
+} = Astro.props;
+
+const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
+---
+
+<div data-filterbar data-noun={noun} data-page-size={pageSize}>
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div class="order-2 flex flex-wrap items-center gap-2 sm:order-1">
+      {
+        facets.map((f) => (
+          <div class="relative" data-facet-wrap>
+            <button
+              type="button"
+              data-facet-btn={f.key}
+              aria-haspopup="true"
+              aria-expanded="false"
+              class="facet-btn inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors"
+            >
+              {f.icon && <Icon name={f.icon} size={13} />}
+              {f.label}
+              <span
+                data-facet-badge
+                hidden
+                class="ml-0.5 inline-flex min-w-[1.1rem] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-content"
+              />
+              <span class="chev inline-flex transition-transform">
+                <Icon name="chevron-down" size={13} />
+              </span>
+            </button>
+
+            <div
+              data-facet-menu={f.key}
+              hidden
+              class="absolute left-0 top-full z-30 mt-2 max-h-72 min-w-[15rem] overflow-auto rounded-box border border-base-300 bg-base-100 p-1.5 shadow-xl"
+            >
+              {f.options.map((o) => (
+                <button
+                  type="button"
+                  data-facet-opt
+                  data-facet={f.key}
+                  data-value={o.value}
+                  data-label={o.label}
+                  aria-pressed="false"
+                  class="facet-opt flex w-full items-center gap-2 rounded-field px-2.5 py-1.5 text-left text-sm transition-colors hover:bg-base-200"
+                >
+                  {/* icon holder — hidden here; cloned into the pill when selected */}
+                  <span data-opt-icon hidden>{o.icon && <Icon name={o.icon} size={14} />}</span>
+                  <span class="opt-check text-primary">
+                    <Icon name="check" size={14} />
+                  </span>
+                  <span class="flex-1">{o.label}</span>
+                  {typeof o.count === "number" && (
+                    <span data-opt-count class="text-xs text-base-content/45">{o.count}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="order-1 sm:order-2 sm:ml-auto sm:w-64 sm:shrink-0">
+      <div class="relative">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
+          <Icon name="search" size={15} />
+        </span>
+        <input
+          type="search"
+          data-filter-search
+          aria-label={searchLabel}
+          placeholder={searchPlaceholder}
+          autocomplete="off"
+          spellcheck="false"
+          class="w-full rounded-field border border-base-300 bg-base-100 py-1.5 pl-9 pr-8 text-sm outline-none transition-colors placeholder:text-base-content/40 focus:border-primary"
+        />
+        <button
+          type="button"
+          data-filter-search-clear
+          hidden
+          aria-label="Clear search"
+          class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/40 transition-colors hover:text-base-content"
+        >
+          <Icon name="x" size={14} />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div data-filter-pills hidden class="mt-3 flex flex-wrap items-center gap-2">
+    <span data-filter-pills-list class="contents"></span>
+    <button
+      type="button"
+      data-filter-clear
+      class="text-xs text-base-content/50 underline-offset-4 transition-colors hover:text-primary hover:underline"
+    >
+      Clear all
+    </button>
+  </div>
+
+  <p class="mt-4 text-sm text-base-content/45" data-filter-count>
+    {count} {count === 1 ? noun : `${noun}s`}
+  </p>
+
+  <slot />
+
+  <div data-filter-more-wrap hidden class="mt-8 flex justify-center">
+    <button type="button" data-filter-more class="btn btn-sm btn-outline rounded-field">
+      Load more
+    </button>
+  </div>
+
+  <p data-filter-empty hidden class="py-12 text-center text-base-content/55">
+    Nothing matches these filters.
+  </p>
+
+  <script type="application/json" data-filter-facets is:inline set:html={JSON.stringify(facetMeta)}></script>
+</div>
+
+<style>
+  .facet-btn[aria-expanded="true"],
+  .facet-btn:hover {
+    border-color: color-mix(in oklch, var(--color-base-content) 30%, transparent);
+  }
+  .facet-btn[aria-expanded="true"] .chev {
+    transform: rotate(180deg);
+  }
+  .facet-opt .opt-check {
+    opacity: 0;
+  }
+  .facet-opt[aria-pressed="true"] .opt-check {
+    opacity: 1;
+  }
+  .facet-opt[aria-pressed="true"] {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  /* Dim options that would yield nothing given the other active filters. */
+  .facet-opt.is-empty:not([aria-pressed="true"]) {
+    opacity: 0.4;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector("[data-filterbar]");
+    if (!root) return;
+
+    var meta = [];
+    try {
+      meta = JSON.parse(root.querySelector("[data-filter-facets]").textContent || "[]");
+    } catch (e) {}
+    var noun = root.getAttribute("data-noun") || "result";
+    var pageSize = parseInt(root.getAttribute("data-page-size") || "0", 10) || 0;
+    var STORE_KEY = "filterbar:" + location.pathname;
+
+    var search = root.querySelector("[data-filter-search]");
+    var searchClear = root.querySelector("[data-filter-search-clear]");
+    var pillsRow = root.querySelector("[data-filter-pills]");
+    var pillsList = root.querySelector("[data-filter-pills-list]");
+    var countEl = root.querySelector("[data-filter-count]");
+    var emptyEl = root.querySelector("[data-filter-empty]");
+    var moreWrap = root.querySelector("[data-filter-more-wrap]");
+    var moreBtn = root.querySelector("[data-filter-more]");
+    var items = [].slice.call(root.querySelectorAll("[data-filter-item]"));
+    var options = [].slice.call(root.querySelectorAll("[data-facet-opt]"));
+
+    var selected = {}; // key -> { value: true }
+    var labels = {}; // key -> { value: label }
+    var multiOf = {};
+    meta.forEach(function (f) {
+      selected[f.key] = {};
+      labels[f.key] = {};
+      multiOf[f.key] = f.multi !== false;
+    });
+    options.forEach(function (o) {
+      var k = o.getAttribute("data-facet");
+      if (labels[k]) labels[k][o.getAttribute("data-value")] = o.getAttribute("data-label") || o.getAttribute("data-value");
+    });
+    var query = "";
+    var visible = pageSize > 0 ? pageSize : Infinity;
+
+    function chosen(key) {
+      return Object.keys(selected[key] || {});
+    }
+    function itemValues(el, key) {
+      return (el.getAttribute("data-" + key) || "").split(/\s+/).filter(Boolean);
+    }
+
+    // Passes all selected facets EXCEPT `exceptKey` (pass null for all), + search.
+    function passes(el, exceptKey) {
+      for (var i = 0; i < meta.length; i++) {
+        var key = meta[i].key;
+        if (key === exceptKey) continue;
+        var sel = chosen(key);
+        if (sel.length) {
+          var vals = itemValues(el, key);
+          var ok = false;
+          for (var j = 0; j < vals.length; j++) {
+            if (sel.indexOf(vals[j]) !== -1) {
+              ok = true;
+              break;
+            }
+          }
+          if (!ok) return false;
+        }
+      }
+      if (query) {
+        var hay = el.getAttribute("data-search") || "";
+        var toks = query.split(/\s+/);
+        for (var t = 0; t < toks.length; t++) {
+          if (toks[t] && hay.indexOf(toks[t]) === -1) return false;
+        }
+      }
+      return true;
+    }
+    function matches(el) {
+      return passes(el, null);
+    }
+
+    function iconFor(key, value) {
+      var opt = root.querySelector('[data-facet-opt][data-facet="' + key + '"][data-value="' + value + '"]');
+      var holder = opt && opt.querySelector("[data-opt-icon]");
+      return holder && holder.firstElementChild ? holder.firstElementChild.cloneNode(true) : null;
+    }
+
+    function renderPills() {
+      pillsList.innerHTML = "";
+      var any = query.length > 0;
+      meta.forEach(function (f) {
+        chosen(f.key).forEach(function (v) {
+          any = true;
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className =
+            "filter-pill inline-flex items-center gap-1 rounded-field border border-base-300 bg-base-200 px-2.5 py-1 text-xs text-base-content/80 transition-colors hover:border-primary";
+          b.setAttribute("data-remove-facet", f.key);
+          b.setAttribute("data-remove-value", v);
+          var ic = iconFor(f.key, v);
+          if (ic) b.appendChild(ic);
+          var lab = document.createElement("span");
+          lab.textContent = labels[f.key][v] || v;
+          b.appendChild(lab);
+          var x = document.createElement("span");
+          x.className = "text-base-content/45";
+          x.textContent = "✕";
+          b.appendChild(x);
+          pillsList.appendChild(b);
+        });
+      });
+      pillsRow.hidden = !any;
+    }
+
+    // Recompute each option's count against the OTHER active facets + search.
+    function updateCounts() {
+      options.forEach(function (o) {
+        var k = o.getAttribute("data-facet");
+        var v = o.getAttribute("data-value");
+        var n = 0;
+        for (var i = 0; i < items.length; i++) {
+          if (itemValues(items[i], k).indexOf(v) !== -1 && passes(items[i], k)) n++;
+        }
+        var cEl = o.querySelector("[data-opt-count]");
+        if (cEl) cEl.textContent = n;
+        o.classList.toggle("is-empty", n === 0);
+      });
+    }
+
+    function save() {
+      try {
+        var sel = {};
+        meta.forEach(function (f) {
+          var c = chosen(f.key);
+          if (c.length) sel[f.key] = c;
+        });
+        sessionStorage.setItem(STORE_KEY, JSON.stringify({ sel: sel, q: query, v: visible === Infinity ? 0 : visible }));
+      } catch (e) {}
+    }
+
+    function apply() {
+      var matched = [];
+      items.forEach(function (el) {
+        if (matches(el)) matched.push(el);
+        else el.hidden = true;
+      });
+      matched.forEach(function (el, i) {
+        el.hidden = i >= visible;
+      });
+
+      var total = matched.length;
+      countEl.textContent = total + " " + (total === 1 ? noun : noun + "s");
+      emptyEl.hidden = total !== 0 || items.length === 0;
+
+      if (moreWrap && moreBtn) {
+        var remaining = total - Math.min(visible, total);
+        moreWrap.hidden = remaining <= 0;
+        if (remaining > 0) moreBtn.textContent = "Load more (" + remaining + ")";
+      }
+
+      options.forEach(function (o) {
+        var k = o.getAttribute("data-facet");
+        var v = o.getAttribute("data-value");
+        o.setAttribute("aria-pressed", selected[k] && selected[k][v] ? "true" : "false");
+      });
+      meta.forEach(function (f) {
+        var badge = root.querySelector('[data-facet-btn="' + f.key + '"] [data-facet-badge]');
+        if (!badge) return;
+        var n = chosen(f.key).length;
+        badge.textContent = n ? String(n) : "";
+        badge.hidden = n === 0;
+      });
+      if (searchClear) searchClear.hidden = query.length === 0;
+
+      updateCounts();
+      renderPills();
+      save();
+    }
+
+    // Any filter/search change collapses back to the first page.
+    function refilter() {
+      visible = pageSize > 0 ? pageSize : Infinity;
+      apply();
+    }
+
+    function toggle(key, value) {
+      if (selected[key][value]) {
+        delete selected[key][value];
+      } else {
+        if (!multiOf[key]) selected[key] = {};
+        selected[key][value] = true;
+      }
+      refilter();
+    }
+
+    function closeMenus(except) {
+      meta.forEach(function (f) {
+        if (except === f.key) return;
+        var btn = root.querySelector('[data-facet-btn="' + f.key + '"]');
+        var menu = root.querySelector('[data-facet-menu="' + f.key + '"]');
+        if (menu) menu.hidden = true;
+        if (btn) btn.setAttribute("aria-expanded", "false");
+      });
+    }
+
+    meta.forEach(function (f) {
+      var btn = root.querySelector('[data-facet-btn="' + f.key + '"]');
+      var menu = root.querySelector('[data-facet-menu="' + f.key + '"]');
+      if (!btn || !menu) return;
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var open = menu.hidden;
+        closeMenus(open ? f.key : null);
+        menu.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      menu.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+    });
+
+    options.forEach(function (o) {
+      o.addEventListener("click", function () {
+        toggle(o.getAttribute("data-facet"), o.getAttribute("data-value"));
+      });
+    });
+
+    pillsList.addEventListener("click", function (e) {
+      var t = e.target;
+      while (t && t !== pillsList && !t.getAttribute("data-remove-facet")) t = t.parentNode;
+      if (!t || t === pillsList) return;
+      delete selected[t.getAttribute("data-remove-facet")][t.getAttribute("data-remove-value")];
+      refilter();
+    });
+
+    root.querySelector("[data-filter-clear]").addEventListener("click", function () {
+      meta.forEach(function (f) {
+        selected[f.key] = {};
+      });
+      query = "";
+      if (search) search.value = "";
+      closeMenus(null);
+      refilter();
+    });
+
+    if (search) {
+      search.addEventListener("input", function () {
+        query = (search.value || "").toLowerCase().trim();
+        refilter();
+      });
+      search.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          search.value = "";
+          query = "";
+          refilter();
+        }
+      });
+    }
+    if (searchClear) {
+      searchClear.addEventListener("click", function () {
+        if (search) search.value = "";
+        query = "";
+        refilter();
+        if (search) search.focus();
+      });
+    }
+    if (moreBtn) {
+      moreBtn.addEventListener("click", function () {
+        visible += pageSize > 0 ? pageSize : 0;
+        apply();
+      });
+    }
+
+    document.addEventListener("click", function () {
+      closeMenus(null);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenus(null);
+    });
+
+    // Restore saved state (back-navigation / refresh within the tab), then render.
+    (function restore() {
+      var raw;
+      try {
+        raw = sessionStorage.getItem(STORE_KEY);
+      } catch (e) {
+        return;
+      }
+      if (!raw) return;
+      var s;
+      try {
+        s = JSON.parse(raw);
+      } catch (e) {
+        return;
+      }
+      if (s.sel) {
+        meta.forEach(function (f) {
+          (s.sel[f.key] || []).forEach(function (v) {
+            if (labels[f.key] && labels[f.key][v]) selected[f.key][v] = true;
+          });
+        });
+      }
+      if (typeof s.q === "string") {
+        query = s.q;
+        if (search) search.value = s.q;
+      }
+      if (typeof s.v === "number" && s.v > 0) visible = s.v;
+    })();
+
+    apply();
+  })();
+</script>
