@@ -1,11 +1,13 @@
 ---
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
 import Icon from "../../components/Icon.astro";
 import { readingTime } from "../../utils/reading";
+import { projectCover } from "../../utils/covers";
 import { href } from "../../data/site";
 
 export async function getStaticPaths() {
@@ -18,6 +20,8 @@ interface Props {
 }
 const { entry } = Astro.props;
 const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, gallery } = entry.data;
+// Cover auto-detection
+const cover = projectCover(entry.id);
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
 const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
@@ -44,6 +48,20 @@ const showExpLink = linkedRoles.length > 0;
     <a href={href("/projects")} class="inline-flex items-center gap-1 text-sm text-base-content/55 transition-colors hover:text-primary">
       <Icon name="arrow-left" size={14} /> Projects
     </a>
+
+    {
+      cover && (
+        <figure class="mt-6 overflow-hidden rounded-box border border-base-300 bg-base-200">
+          <Image
+            src={cover}
+            alt={`${title} — cover`}
+            width={1600}
+            class="aspect-[5/2] w-full object-cover"
+            loading="eager"
+          />
+        </figure>
+      )
+    }
 
     <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
       <article class="min-w-0">

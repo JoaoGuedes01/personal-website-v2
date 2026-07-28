@@ -49,9 +49,6 @@ const projects = defineCollection({
       resume: z.boolean().default(false),
       repo: z.string().url().optional(),
       demo: z.string().url().optional(),
-      // Optional cover image (co-located, relative path) — optimized.
-      cover: image().optional(),
-      coverAlt: z.string().default(""),
       // Optional image gallery shown on the project page (with a lightbox).
       // Co-locate the files and reference them relatively:
       //   gallery:
