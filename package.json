@@ -24,6 +24,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.0",
     "daisyui": "^5.0.0",
+    "remark-directive": "^4.0.0",
     "simple-icons": "^16.27.1",
     "tailwindcss": "^4.1.0"
   }

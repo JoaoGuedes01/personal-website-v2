@@ -507,3 +507,77 @@
   font-weight: var(--shiki-dark-font-weight);
   text-decoration: var(--shiki-dark-text-decoration);
 }
+
+/* ===========================================================================
+   CALLOUTS / DISCLAIMERS
+   ---------------------------------------------------------------------------
+   Flat tinted panel · hairline accent border · icon chip + title. Authored in
+   markdown as `:::type[Title] … :::` (see remark-callouts.mjs) or dropped into
+   pages via <Callout>.
+
+   `--cc` is the ONE knob: the tint, border, icon chip and title are all
+   color-mixes of it. Each `.callout-<type>` sets it to a daisyUI semantic
+   token, so all seven themes — and every font — adapt automatically. Override
+   it inline to recolour a single callout:  :::note{color=accent}  or
+   <Callout color="#e4b96b"> — everything re-tints from that one value.
+   =========================================================================== */
+.callout {
+  --cc: var(--color-base-content); /* accent colour, overridden per type/inline */
+  --cc-tint: color-mix(in oklch, var(--cc) 9%, var(--color-base-100));
+  --cc-border: color-mix(in oklch, var(--cc) 32%, transparent);
+  margin-block: 1.6em;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--radius-box, 0.9rem);
+  background: var(--cc-tint);
+  color: color-mix(in oklch, var(--color-base-content) 90%, transparent);
+  font-size: 0.975rem;
+  line-height: 1.7;
+}
+
+.callout__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  color: var(--cc);
+}
+.callout__icon {
+  box-sizing: border-box;
+  width: 1.85rem;
+  height: 1.85rem;
+  flex: none;
+  padding: 0.34rem;
+  border-radius: 0.55rem;
+  background: color-mix(in oklch, var(--cc) 14%, transparent);
+}
+.callout__title {
+  font-family: var(--font-sans);
+  font-weight: 650;
+  font-size: 0.9375rem;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+
+/* Body flows normally; tidy the outer margins so it hugs the panel. These
+   `.callout`-scoped selectors already out-specify @tailwindcss/typography's
+   `.prose :where(p)` margins, so callouts space correctly inside prose too. */
+.callout > *:not(.callout__header) {
+  margin-block: 0.55rem;
+}
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+/* --- per-type accents (semantic tokens → automatic per-theme colours) ----- */
+.callout-note {
+  --cc: color-mix(in oklch, var(--color-base-content) 62%, transparent);
+}
+.callout-info      { --cc: var(--color-info); }
+.callout-tip       { --cc: var(--color-accent); }
+.callout-success   { --cc: var(--color-success); }
+.callout-warning   { --cc: var(--color-warning); }
+.callout-danger    { --cc: var(--color-error); }
+.callout-important { --cc: var(--color-primary); }
+.callout-security  { --cc: var(--color-secondary); }
+.callout-quote     { --cc: var(--color-secondary); }

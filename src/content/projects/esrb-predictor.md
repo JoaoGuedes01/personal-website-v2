@@ -21,7 +21,9 @@ gallery:
   - { src: ./img/esrb-predictor/pred-dash.png, alt: "Prediction Dashboard Image", caption: "Dashboard regarding model predictions." }
 ---
 
-> ⚠️ **Demo Offline:** Due to recent Heroku pricing changes, the ESRB Predictor demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon. For now the link leads to the model training notebook
+:::warning[Demo Offline]
+Due to recent Heroku pricing changes, the ESRB Predictor demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon. For now the link leads to the model training notebook.
+:::
 
 ## Overview
 

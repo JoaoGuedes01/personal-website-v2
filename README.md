@@ -39,6 +39,9 @@ kilobytes of vanilla JS. It's designed to be forked and made your own.
   routes, so filtering and pagination coexist.
 - 🖼 **Optional galleries** on any detail page (projects, blog, experience, snippets) with a
   dependency-free lightbox, plus an on-page **table of contents** that tracks your reading.
+- 📣 **Callouts & disclaimers** — flag a note, warning, or security caveat in any markdown body with
+  a `:::warning[Title] … :::` block (or a `<Callout>` on a page); nine semantic types that recolour
+  with the active theme.
 - ⚡ **Fast & accessible by default** — optimized images, semantic HTML, keyboard-friendly,
   great Lighthouse scores, SEO tags, sitemap and RSS out of the box.
 - 🧰 **A content generator** — `npm run new -- project "My Thing"` scaffolds a ready-to-edit file.

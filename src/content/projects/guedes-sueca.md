@@ -22,7 +22,9 @@ gallery:
   - { src: ./img/guedes-sueca/past.png, alt: "Past Games Image", caption: "Game history feature documenting past games held." }
 ---
 
-> ⚠️ **Server Offline:** Due to recent Replit pricing changes, I can no longer host the Guedes Sueca WebSocket server for free. The frontend still lives on GitHub Pages, but with no server to connect to it waits forever, leaving the game unplayable for now (Server status remains red). I'm actively searching for a better way to host projects like this one, but until then the demo remains unresponsive.
+:::warning[Server Offline]
+Due to recent Replit pricing changes, I can no longer host the Guedes Sueca WebSocket server for free. The frontend still lives on GitHub Pages, but with no server to connect to it waits forever, leaving the game unplayable for now (Server status remains red). I'm actively searching for a better way to host projects like this one, but until then the demo remains unresponsive.
+:::
 
 ## Overview
 
