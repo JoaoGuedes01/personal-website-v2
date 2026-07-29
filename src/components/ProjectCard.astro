@@ -10,7 +10,7 @@ interface Props {
   entry: CollectionEntry<"projects">;
 }
 const { entry } = Astro.props;
-const { title, summary, type, org, orgUrl, category, stack, year, repo, demo } = entry.data;
+const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, video } = entry.data;
 const url = href(`/projects/${entry.id}`);
 
 // Cover auto-detection
@@ -79,8 +79,8 @@ const cover = projectCover(entry.id);
   </div>
 
   {
-    (repo || demo) && (
-      <div class="relative z-10 mt-4 flex gap-4 text-xs">
+    (repo || demo || video) && (
+      <div class="relative z-10 mt-4 flex flex-wrap gap-4 text-xs">
         {repo && (
           <a href={repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
             Repository <Icon name="arrow-up-right" size={12} />
@@ -89,6 +89,11 @@ const cover = projectCover(entry.id);
         {demo && (
           <a href={demo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
             Live demo <Icon name="arrow-up-right" size={12} />
+          </a>
+        )}
+        {video && (
+          <a href={video} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+            <Icon name="circle-play" size={12} /> Video
           </a>
         )}
       </div>

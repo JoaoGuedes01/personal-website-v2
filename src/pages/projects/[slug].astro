@@ -19,7 +19,7 @@ interface Props {
   entry: CollectionEntry<"projects">;
 }
 const { entry } = Astro.props;
-const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, gallery } = entry.data;
+const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, video, gallery } = entry.data;
 // Cover auto-detection
 const cover = projectCover(entry.id);
 const { Content, headings } = await render(entry);
@@ -104,7 +104,7 @@ const showExpLink = linkedRoles.length > 0;
           }
 
           {
-            (repo || demo || showExpLink) && (
+            (repo || demo || video || showExpLink) && (
               <div class="mt-5 flex flex-wrap items-center gap-2.5">
                 {repo && (
                   <a href={repo} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline rounded-field">
@@ -114,6 +114,11 @@ const showExpLink = linkedRoles.length > 0;
                 {demo && (
                   <a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary rounded-field">
                     Live demo ↗
+                  </a>
+                )}
+                {video && (
+                  <a href={video} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline gap-1.5 rounded-field">
+                    <Icon name="circle-play" size={14} /> Watch video
                   </a>
                 )}
                 {showExpLink && (
