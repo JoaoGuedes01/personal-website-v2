@@ -4,8 +4,8 @@ summary: "Internal tool for comparison and management of different engines' resu
 type: "Professional"
 category: "Backend & Systems Architecture"
 stack: ["Node.js", "Express.js", "Javascript", "MongoDB", "MySQL", "gRPC", "Rest API", "Redis", "RabbitMQ", "AWS S3", "AWS Route 53", "Docker", "Docker Compose", "GitHub", "GitHub Actions", "React", "Ant Design", "Monaco Editor", "Python", "Pandas", "PowerBI"]
-featured: false
-resume: false
+featured: true
+resume: true
 order: 78
 draft: false
 org: "Checkmarx"

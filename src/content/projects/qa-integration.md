@@ -4,8 +4,8 @@ summary: "Integration Platform between Jira and Microsoft Devops(TFS) systems fo
 type: "Professional"
 category: "Backend & Systems Architecture"
 stack: ["React", "JSX", "CSS", "Node.js", "Javascript", "MongoDB", "Jira", "Azure Devops"]
-featured: false
-resume: false
+featured: true
+resume: true
 order: 84
 draft: false
 org: "Checkmarx"

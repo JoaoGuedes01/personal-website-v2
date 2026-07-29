@@ -4,7 +4,7 @@ summary: "Web version of the fun game TicTacBoom that can be played anywhere wit
 type: "Personal"
 category: "Web"
 stack: ["React", "Javascript", "Vite", "Chakra UI", "Web Audio API", "GitHub Pages"]
-featured: false
+featured: true
 resume: false
 order: 95
 draft: false

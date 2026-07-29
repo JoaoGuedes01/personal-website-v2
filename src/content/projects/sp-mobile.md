@@ -5,7 +5,7 @@ type: "Academic"
 category: "Backend & Systems Architecture"
 stack: ["Node.js", "Express.js", "MongoDB", "Salesforce", "HubSpot", "Moloni", "Nodemailer", "Twilio", "PayPal", "Google Maps", "Facebook API", "Twitter API", "EasyInvoice"]
 featured: false
-resume: false
+resume: true
 order: 92
 draft: false
 org: "University of Minho"

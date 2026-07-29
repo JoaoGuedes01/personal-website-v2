@@ -5,7 +5,7 @@ type: "Academic"
 category: "Web"
 stack: ["Java", "Spring Boot", "Arduino", "ESP32", "C++", "Heroku", "HTML", "CSS", "Javascript"]
 featured: false
-resume: false
+resume: true
 order: 96
 draft: false
 org: "University of Minho"

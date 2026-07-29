@@ -4,8 +4,8 @@ summary: "Platform to compare code bases, calculate similarity, and minimize red
 type: "Professional"
 category: "Backend & Systems Architecture"
 stack: ["Node.js", "Express.js", "axios", "Javascript", "MongoDB", "ElasticSearch", "DynamoDB", "AWS S3", "AWS Lambda", "GitHub API", "React", "Ant Design", "Jenkins", "Python", "Jupyter Notebooks", "PowerBI"]
-featured: false
-resume: false
+featured: true
+resume: true
 order: 80
 draft: false
 org: "Checkmarx"

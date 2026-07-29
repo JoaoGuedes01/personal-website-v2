@@ -4,8 +4,8 @@ summary: "Interoperability system that turns HL7 & FHIR healthcare data into ML-
 type: "Academic"
 category: "Backend & Systems Architecture"
 stack: ["Node.js", "Javascript", "JWT", "Swagger OpenAPI", "MySQL", "PostgreSQL", "RabbitMQ", "Docker", "Docker Compose", "Mirth Connect", "Python", "Jupyter Notebooks", "Pandas", "React", "Ant Design", "Monaco Editor", "GitHub", "GitHub Actions", "GitHub Pages", "Apache JMeter", "Cypress", "Debian", "Portainer"]
-featured: false
-resume: false
+featured: true
+resume: true
 order: 79
 draft: false
 org: "University of Minho"

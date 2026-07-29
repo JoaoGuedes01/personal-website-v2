@@ -5,7 +5,7 @@ type: "Academic"
 category: "Web"
 stack: ["Node.js", "Express.js", "Javascript", "HTML", "CSS", "MySQL", "Sequelize", "Google API", "Heroku"]
 featured: false
-resume: false
+resume: true
 order: 97
 draft: false
 org: "University of Minho"

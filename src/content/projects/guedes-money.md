@@ -4,7 +4,7 @@ summary: "A CLI interface for interacting with Portal das Finanças automaticall
 type: "Personal"
 category: "Backend & Systems Architecture"
 stack: ["Python", "Selenium", "Typer", "Jupyter Notebooks", "bumpversion", "PyPI"]
-featured: false
+featured: true
 resume: false
 order: 81
 draft: false
