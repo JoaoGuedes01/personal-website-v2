@@ -30,7 +30,7 @@ export const nav = [
 // `icon` maps to an entry in src/icons/index.ts.
 export const socials = [
   { label: "GitHub", href: "https://github.com/JoaoGuedes01", handle: "@JoaoGuedes01", icon: "github", stroke: "none", fill:"currentColor" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/joaom-guedes", handle: "in/joaom-guedes", icon: "linkedin", stroke: "currentColor", fill:"none" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/joaom-guedes", handle: "in/joaom-guedes", icon: "linkedin", stroke: "none", fill:"currentColor" },
   { label: "Email", href: "mailto:joaoguedes.cjp@gmail.com", handle: "joaoguedes.cjp@gmail.com", icon: "mail", stroke: "currentColor", fill:"none" },
 ];
 
