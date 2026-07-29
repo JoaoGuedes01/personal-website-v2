@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.7.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.6.0...guedes-site-v0.7.0) (2026-07-29)
+
+
+### ✨ Features
+
+* Add Hero feature to projects ([cae6533](https://github.com/JoaoGuedes01/personal-website-v2/commit/cae6533a5587d7c0307efb665e3b900406b9b360))
+* Add Hero feature to projects ([61bd077](https://github.com/JoaoGuedes01/personal-website-v2/commit/61bd077ee525f1b0c4d1ab869d0095a100860cf1))
+* Add new filtering to projects ([0a18ba1](https://github.com/JoaoGuedes01/personal-website-v2/commit/0a18ba157fb19062620c02ea45b873b794746040))
+* **callouts:** add themeable callout/disclaimer system ([6ac6b5c](https://github.com/JoaoGuedes01/personal-website-v2/commit/6ac6b5cd4e3102b464d86238227e87300adfede0))
+* **projects:** grouped, iconified & filterable project stack ([cb114ed](https://github.com/JoaoGuedes01/personal-website-v2/commit/cb114ed414e50e96deaabd6e24631fdd90fd2411))
+* **projects:** grouped, iconified & filterable project stack ([9ef10db](https://github.com/JoaoGuedes01/personal-website-v2/commit/9ef10db36f75cb1b881a1250fb4b440311415b7e))
+* Site version and changelog ([9c2ee30](https://github.com/JoaoGuedes01/personal-website-v2/commit/9c2ee30ac38ba86ac9e2f3cdac6d8ddf9295af1d))
+* Video link for projects ([6053a47](https://github.com/JoaoGuedes01/personal-website-v2/commit/6053a473e5f2104f997a5867f9473259dc8a7de3))
+
+
+### 📝 Content
+
+* Add misisng covers for projects ([1b8323a](https://github.com/JoaoGuedes01/personal-website-v2/commit/1b8323a6f1c2491e0d6a3bef04c45a2d4e63268e))
+* Add video links to projects ([5b0f64f](https://github.com/JoaoGuedes01/personal-website-v2/commit/5b0f64f05b0c5f440086c09968af8432f98b22c7))
+* Selecting featured projects ([d365f25](https://github.com/JoaoGuedes01/personal-website-v2/commit/d365f25b50c5584c3b9c2ce3a57bb5717b0c8ed4))
+* Updated projects categories and stacks ([c3b0804](https://github.com/JoaoGuedes01/personal-website-v2/commit/c3b080432616dee7ab06e97b7e732bdd63d576b8))
+
 ## [0.6.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.5.0...guedes-site-v0.6.0) (2026-07-28)
 
 
