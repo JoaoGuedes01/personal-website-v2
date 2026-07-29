@@ -1,0 +1,116 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { releases, version, formatReleaseDate } from "../utils/changelog";
+
+const repoUrl = "https://github.com/JoaoGuedes01/personal-website-v2";
+
+// Show the most recent releases here; older ones live on GitHub.
+const MAX_RELEASES = 12;
+const shown = releases.slice(0, MAX_RELEASES);
+const hasOlder = releases.length > MAX_RELEASES;
+---
+
+<BaseLayout
+  title="Changelog"
+  description={`What's new on joaoguedes.net, current version is v${version}`}
+>
+  <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
+    <p class="eyebrow">Release notes</p>
+    <h1 class="mt-4 text-4xl sm:text-5xl">Changelog</h1>
+    <p class="mt-4 max-w-2xl text-lg text-base-content/70">
+      Every shiny new feature on the site. Currently on
+      <span class="font-mono text-base-content/90 ml-1">v{version}</span>.
+    </p>
+
+    {
+      releases.length > 0 ? (
+        <ol class="mt-12 space-y-12">
+          {shown.map((r, i) => (
+            <li class="relative border-t border-base-300 pt-8 first:border-t-0 first:pt-0">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+                <h2 class="font-display text-2xl">
+                  {r.url ? (
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
+                    >
+                      v{r.version}
+                      <Icon name="external-link" size={14} class="text-base-content/40" />
+                    </a>
+                  ) : (
+                    <span>v{r.version}</span>
+                  )}
+                </h2>
+                {i === 0 && (
+                  <span class="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                    Current
+                  </span>
+                )}
+                {r.date && (
+                  <span class="ml-auto inline-flex items-center gap-1.5 text-sm text-base-content/50">
+                    <Icon name="calendar" size={13} />
+                    {formatReleaseDate(r.date)}
+                  </span>
+                )}
+              </div>
+
+              {r.groups.length > 0 ? (
+                <div class="mt-5 space-y-5">
+                  {r.groups.map((g) => (
+                    <div>
+                      <p class="eyebrow">{g.title}</p>
+                      <ul class="mt-2.5 space-y-1.5">
+                        {g.items.map((it) => (
+                          <li class="flex gap-2.5 text-sm leading-relaxed text-base-content/75">
+                            <span aria-hidden="true" class="mt-2 h-1 w-1 shrink-0 rounded-full bg-base-content/25" />
+                            <span>
+                              {it.text}
+                              {it.url && (
+                                <a
+                                  href={it.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="ml-1.5 font-mono text-xs text-base-content/40 underline-offset-2 hover:text-primary hover:underline"
+                                >
+                                  {it.hash?.slice(0, 7)}
+                                </a>
+                              )}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p class="mt-4 text-sm text-base-content/50">No notable changes recorded.</p>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="mt-8 text-base-content/60">No releases yet.</p>
+      )
+    }
+
+    <div class="mt-14 border-t border-base-300 pt-6">
+      {hasOlder && (
+        <p class="mb-2 text-sm text-base-content/50">
+          Showing the latest {MAX_RELEASES} releases.
+        </p>
+      )}
+      <a
+        href={`${repoUrl}/releases`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline"
+      >
+        {hasOlder ? "See older releases on GitHub" : "View all releases on GitHub"}
+        <Icon name="external-link" size={13} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import { site, socials, nav, href } from "../data/site";
+import { version } from "../utils/changelog";
 import Icon from "./Icon.astro";
 const year = new Date().getFullYear();
 ---
@@ -54,8 +55,16 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="mt-12 border-t border-base-300/60 pt-6 text-xs text-base-content/45">
-      © {year} {site.name}
+    <div class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-base-300/60 pt-6 text-xs text-base-content/45">
+      <span>© {year} {site.name}</span>
+      <a
+        href={href("/changelog")}
+        class="inline-flex items-center gap-1.5 rounded-full border border-base-300 px-2.5 py-1 font-mono text-[11px] text-base-content/55 transition-colors hover:border-primary hover:text-primary"
+        title="What's new — release notes"
+      >
+        <Icon name="rocket" size={12} />
+        v{version}
+      </a>
     </div>
   </div>
 </footer>
