@@ -15,6 +15,7 @@ import {
   projectTypeByLabel,
   projectCategorySlug,
 } from "../data/taxonomy";
+import { collectTech, resolveTech } from "../data/tech";
 import { PAGE_SIZE } from "../utils/paginate";
 
 interface Props {
@@ -49,6 +50,19 @@ const facets: Facet[] = [
       count: items.filter((p) => p.data.category === c.label).length,
     })).filter((o) => o.count > 0),
   },
+  {
+    // Every technology used across the set, most-used first. The list is long
+    // by design (no cap) so any tech linked from a project page resolves here;
+    // the dropdown scrolls and each option shows its live result count.
+    key: "stack",
+    label: "Stack",
+    icon: "cpu",
+    options: collectTech(items.map((p) => p.data.stack)).map((t) => ({
+      value: t.id,
+      label: t.label,
+      count: t.count,
+    })),
+  },
 ];
 
 // Per-card metadata the FilterBar matches against (one data-<facet.key> each).
@@ -56,6 +70,7 @@ const cards = items.map((entry) => ({
   entry,
   type: projectTypeByLabel(entry.data.type)?.slug ?? "",
   category: projectCategorySlug(entry.data.category),
+  stack: [...new Set(entry.data.stack.map((s) => resolveTech(s).id))].join(" "),
   search: [
     entry.data.title,
     entry.data.summary,
@@ -88,7 +103,13 @@ const cards = items.map((entry) => ({
       <div class="mt-2 grid gap-5 pb-4 sm:grid-cols-2 lg:grid-cols-3">
         {
           cards.map((c) => (
-            <div data-filter-item data-type={c.type} data-category={c.category} data-search={c.search}>
+            <div
+              data-filter-item
+              data-type={c.type}
+              data-category={c.category}
+              data-stack={c.stack}
+              data-search={c.search}
+            >
               <ProjectCard entry={c.entry} />
             </div>
           ))

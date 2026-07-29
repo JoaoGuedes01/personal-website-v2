@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import { href } from "../data/site";
 import Icon from "./Icon.astro";
+import TechBadge from "./TechBadge.astro";
 import { projectTypeIcon } from "../icons";
 import { projectCover } from "../utils/covers";
 
@@ -15,6 +16,12 @@ const url = href(`/projects/${entry.id}`);
 
 // Cover auto-detection
 const cover = projectCover(entry.id);
+
+// Keep the card balanced: show the first few technologies (authored order) and
+// fold the rest into a "+N more" hint — the full stack lives on the detail page.
+const CARD_STACK_LIMIT = 6;
+const shownStack = stack.slice(0, CARD_STACK_LIMIT);
+const moreCount = stack.length - shownStack.length;
 ---
 
 <article
@@ -69,12 +76,11 @@ const cover = projectCover(entry.id);
 
   <div class="mt-4 flex flex-wrap items-center gap-1.5">
     <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{category}</span>
+    {shownStack.map((s) => <TechBadge tech={s} />)}
     {
-      stack.map((s) => (
-        <span class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">
-          {s}
-        </span>
-      ))
+      moreCount > 0 && (
+        <span class="rounded-full px-2 py-0.5 text-[11px] text-base-content/45">+{moreCount} more</span>
+      )
     }
   </div>
 

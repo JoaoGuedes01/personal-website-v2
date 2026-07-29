@@ -335,6 +335,35 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       } catch (e) {}
     }
 
+    // Read facet selections from the URL query (?stack=react,docker&type=…) so a
+    // link from elsewhere (e.g. a tech badge on a project page) lands pre-filtered.
+    function parseUrl() {
+      var out = {};
+      try {
+        var params = new URLSearchParams(location.search);
+        meta.forEach(function (f) {
+          var raw = params.get(f.key);
+          if (raw) out[f.key] = raw.split(",").filter(Boolean);
+        });
+      } catch (e) {}
+      return out;
+    }
+
+    // Mirror the active facet selections back into the URL (no history spam), so
+    // the current filters are shareable and survive a refresh.
+    function syncUrl() {
+      try {
+        var params = new URLSearchParams(location.search);
+        meta.forEach(function (f) {
+          var c = chosen(f.key);
+          if (c.length) params.set(f.key, c.join(","));
+          else params.delete(f.key);
+        });
+        var qs = params.toString();
+        history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+      } catch (e) {}
+    }
+
     function apply() {
       var matched = [];
       items.forEach(function (el) {
@@ -372,6 +401,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       updateCounts();
       renderPills();
       save();
+      syncUrl();
     }
 
     // Any filter/search change collapses back to the first page.
@@ -475,8 +505,20 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       if (e.key === "Escape") closeMenus(null);
     });
 
-    // Restore saved state (back-navigation / refresh within the tab), then render.
+    // Restore saved state, then render. A URL query is authoritative when
+    // present (shareable/deep-linked filters); otherwise fall back to the
+    // sessionStorage state (back-navigation / refresh within the tab).
     (function restore() {
+      var fromUrl = parseUrl();
+      if (Object.keys(fromUrl).length) {
+        meta.forEach(function (f) {
+          (fromUrl[f.key] || []).forEach(function (v) {
+            if (labels[f.key] && labels[f.key][v]) selected[f.key][v] = true;
+          });
+        });
+        return;
+      }
+
       var raw;
       try {
         raw = sessionStorage.getItem(STORE_KEY);
