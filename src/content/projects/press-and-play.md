@@ -24,7 +24,9 @@ gallery:
    - { src: ./img/press-and-play/field-details.png, alt: "Field Details Image", caption: "The field details screen." }
    - { src: ./img/press-and-play/payments.png, alt: "Payments Image", caption: "Checking out an event or field reservation." }
 ---
-> ⚠️ **Demo Offline:** Due to recent Heroku pricing changes, the Press&Play demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon.
+:::warning[Demo Offline]
+Due to recent Heroku pricing changes, the Press&Play demo link is currently inactive. We plan to redeploy the demo to a new hosting platform soon.
+:::
 
 ## Overview
 

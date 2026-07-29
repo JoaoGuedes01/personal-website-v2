@@ -3,6 +3,8 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import remarkDirective from "remark-directive";
+import remarkCallouts from "./src/plugins/remark-callouts.mjs";
 
 // ---------------------------------------------------------------------------
 // Deployment note:
@@ -21,6 +23,9 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
 
   markdown: {
+    // `remarkDirective` parses `:::type[Title] … :::` blocks; `remarkCallouts`
+    // then turns the known ones into styled disclaimers (see the plugin).
+    remarkPlugins: [remarkDirective, remarkCallouts],
     shikiConfig: {
       // Dual themes: light code on light site themes, dark on dark ones.
       // `defaultColor: false` emits CSS vars that global.css switches via the

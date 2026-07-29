@@ -245,6 +245,79 @@ Purely static images (favicons, the OG card) live in `public/` and are reference
 
 ---
 
+## Callouts / disclaimers
+
+Highlight a note, warning, or disclaimer in **any markdown body** (projects, blog, snippets,
+experience) with a `:::type[Title] … :::` block. No import, no frontmatter — just write it:
+
+```md
+:::warning[Demo Offline]
+The live demo is down while I move it to a new host. The repo still builds locally.
+:::
+
+:::info
+Anything between the fences is normal markdown — **bold**, [links](/), `code`, lists.
+:::
+```
+
+The `[Title]` is optional; leave it off and the type's default label is used. Types (accent colour
+in brackets — pulled from the active theme, so they adapt everywhere):
+
+| Type | For | Alias |
+|------|-----|-------|
+| `note` | a neutral aside | |
+| `info` | context / FYI (info) | `information` |
+| `tip` | a helpful trick (accent) | `hint` |
+| `success` | a positive outcome (success) | |
+| `warning` | a heads-up (warning) | `warn`, `attention` |
+| `danger` | serious / breaking (error) | `caution`, `error` |
+| `important` | must-read (primary) | |
+| `security` | a security note (secondary) | |
+| `quote` | an intentional pull-quote (secondary) | `quotation` |
+
+**On a page (`.astro` / `.mdx`)** use the component instead — same look, same types:
+
+```astro
+---
+import Callout from "../components/Callout.astro";
+---
+<Callout type="security" title="Handle with care">
+  This endpoint accepts unauthenticated requests in dev only.
+</Callout>
+```
+
+### Colours & the `--cc` knob
+
+A callout's whole look is driven by **one CSS variable, `--cc`** — the tinted background, the
+border, the icon chip and the title are all `color-mix`es of it (see the `.callout` block in
+`src/styles/global.css`). You rarely touch `--cc-tint` / `--cc-border` directly; set `--cc` and the
+rest re-tints itself.
+
+- **Recolour one callout** without editing CSS — pass a `color`: a daisyUI token
+  (`primary`, `accent`, `info`, `success`, `warning`, `error`, `secondary`, `base-content`) or any
+  CSS colour (`#e4b96b`, `tomato`, `oklch(...)`):
+
+  ```md
+  :::note{color=accent}
+  A neutral note, but tinted with the theme's accent instead.
+  :::
+
+  :::warning{color=#e4b96b}
+  A warning locked to a specific hex, regardless of theme.
+  :::
+  ```
+
+  On a page: `<Callout type="note" color="accent">…</Callout>`.
+
+- **Change a type's colour everywhere** — edit its `.callout-<type> { --cc: … }` rule in
+  `src/styles/global.css`.
+
+- **Add a new type** — add an entry (label + icon) to `src/data/callouts.mjs`, then a matching
+  `.callout-<type> { --cc: … }` colour rule. Aliases go in the `ALIASES` map. The transform that
+  turns the directive into markup is `src/plugins/remark-callouts.mjs`.
+
+---
+
 ## Experience ↔ projects linking
 
 **One role at a company (common case):** set a project's `org` to the **exact `company`** of an

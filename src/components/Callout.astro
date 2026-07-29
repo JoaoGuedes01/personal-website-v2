@@ -1,0 +1,54 @@
+---
+/**
+ * <Callout /> — a disclaimer / admonition panel for .astro & .mdx pages.
+ *
+ *   <Callout type="warning">The live demo is currently down.</Callout>
+ *   <Callout type="security" title="Handle with care">…</Callout>
+ *
+ * In markdown content, prefer the `:::type[Title] … :::` directive instead
+ * (same look, no import needed) — see src/plugins/remark-callouts.mjs.
+ *
+ * `type` is any key/alias in src/data/callouts.mjs (note, info, tip, success,
+ * warning, danger/caution, important, security, quote); unknown → "note".
+ * Colours come from global.css (`.callout-<type>`), so it themes automatically.
+ *
+ * `color` recolours this one callout — a daisyUI token ("accent", "warning", …)
+ * or any CSS colour ("#e4b96b") — by overriding the `--cc` variable everything
+ * else derives from.
+ */
+import { CALLOUTS, resolveType, resolveColor } from "../data/callouts.mjs";
+
+interface Props {
+  type?: string;
+  title?: string;
+  color?: string;
+}
+
+const { type = "note", title, color } = Astro.props;
+const key = (resolveType(type) ?? "note") as keyof typeof CALLOUTS;
+const def = CALLOUTS[key];
+const heading = title ?? def.label;
+const custom = resolveColor(color);
+---
+
+<aside
+  class:list={["callout", `callout-${key}`]}
+  role="note"
+  style={custom ? `--cc: ${custom}` : undefined}
+>
+  <div class="callout__header">
+    <svg
+      class="callout__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      set:html={def.icon}
+    />
+    <span class="callout__title">{heading}</span>
+  </div>
+  <slot />
+</aside>

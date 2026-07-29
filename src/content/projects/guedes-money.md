@@ -22,7 +22,9 @@ gallery:
   - { src: ./img/guedes-money/attachments.png, alt: "Attachments Image", caption: "Attachments on the report e-mail are prints of every section the scrapper visited during session." }
 ---
 
-> ⚠️ **Project Deprecated:** Portal das Finanças has since overhauled its interface and now enforces two-factor authentication, and both changes break this scraper's automated login and navigation entirely. I don't plan to patch Guedes Money as it stands, instead, I intend to reverse engineer the portal's underlying API and build a proper interface on top of it, rather than a brittle screen scraper.
+:::danger[Deprecated Project]
+Portal das Finanças has since overhauled its interface and now enforces two-factor authentication, and both changes break this scraper's automated login and navigation entirely. I don't plan to patch Guedes Money as it stands, instead, I intend to reverse engineer the portal's underlying API and build a proper interface on top of it, rather than a brittle screen scraper.
+:::
 
 ## Overview
 

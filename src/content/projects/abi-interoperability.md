@@ -25,7 +25,9 @@ gallery:
   - { src: ./img/abi-interoperability/about.png, alt: "About Image", caption: "Displays the system's microservices as well as their states." }
 ---
 
-> ℹ️ **Not a Live Demo:** ABI Interoperability is a distributed system of microservices, which makes it impractical to host for free on the kind of traditional platforms these project demos usually rely on. Instead, the demo link leads to a starter web app, akin to Spring Initializr but for this system, that lets you configure the stack and bootstraps a ready-to-deploy Docker Compose setup from your choices.
+:::info[Not a Live Demo]
+ABI Interoperability is a distributed system of microservices, which makes it impractical to host for free on the kind of traditional platforms these project demos usually rely on. Instead, the demo link leads to a starter web app, akin to Spring Initializr but for this system, that lets you configure the stack and bootstraps a ready-to-deploy Docker Compose setup from your choices.
+:::
 
 ## Overview
 
