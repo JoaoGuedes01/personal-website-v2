@@ -6,9 +6,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
 import Icon from "../../components/Icon.astro";
+import TechBadge from "../../components/TechBadge.astro";
 import { readingTime } from "../../utils/reading";
 import { projectCover } from "../../utils/covers";
 import { href } from "../../data/site";
+import { resolveTech, TECH_GROUPS } from "../../data/tech";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -41,6 +43,16 @@ const primaryRole = linkedRoles.length === 1 ? linkedRoles[0] : undefined;
 const expCompany = org ?? linkedRoles[0]?.data.company;
 const expHref = primaryRole ? href(`/experience/${primaryRole.id}`) : href("/experience");
 const showExpLink = linkedRoles.length > 0;
+
+// Full stack, resolved and split into groups (taxonomy order). Each badge links
+// to the projects list pre-filtered to that technology.
+const resolvedStack = stack.map(resolveTech);
+const groupedStack = TECH_GROUPS.map((g) => ({
+  label: g.label,
+  icon: g.icon,
+  items: resolvedStack.filter((t) => t.group === g.key),
+})).filter((g) => g.items.length > 0);
+const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
 ---
 
 <BaseLayout title={title} description={summary}>
@@ -94,12 +106,24 @@ const showExpLink = linkedRoles.length > 0;
           <p class="mt-2 text-sm text-base-content/45">{rt.label}</p>
 
           {
-            stack.length > 0 && (
-              <ul class="mt-5 flex flex-wrap gap-1.5">
-                {stack.map((s) => (
-                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">{s}</li>
+            groupedStack.length > 0 && (
+              <div class="mt-6 flex flex-col gap-3">
+                {groupedStack.map((g) => (
+                  <div class="flex flex-col gap-1.5 sm:flex-row sm:gap-4">
+                    <span class="eyebrow flex items-center gap-1.5 pt-1 sm:w-44 sm:shrink-0">
+                      <Icon name={g.icon} size={13} />
+                      {g.label}
+                    </span>
+                    <ul class="flex flex-wrap gap-1.5">
+                      {g.items.map((t) => (
+                        <li>
+                          <TechBadge tech={t} href={techHref(t.id)} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )
           }
 

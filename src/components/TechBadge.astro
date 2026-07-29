@@ -1,0 +1,46 @@
+---
+/**
+ * <TechBadge /> — one technology, rendered as an on-theme chip with a
+ * monochrome icon (library logo, your own SVG, or a group-icon fallback —
+ * see resolveTech). Everything inherits the text colour; no brand colours.
+ *
+ *   <TechBadge tech="React" />            // plain chip
+ *   <TechBadge tech={resolved} href="…"/> // clickable (e.g. filter by this tech)
+ */
+import { resolveTech, type ResolvedTech } from "../data/tech";
+
+interface Props {
+  tech: string | ResolvedTech;
+  href?: string; // when set, the chip is a link (e.g. filter by this tech)
+  class?: string;
+}
+const { tech, href, class: cls = "" } = Astro.props;
+const t: ResolvedTech = typeof tech === "string" ? resolveTech(tech) : tech;
+const stroke = t.icon.mode === "stroke";
+
+const Tag = href ? "a" : "span";
+const base =
+  "inline-flex items-center gap-1.5 rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60";
+const interactive = href ? "transition-colors hover:border-primary hover:text-primary" : "";
+---
+
+<Tag class:list={[base, interactive, cls]} {...href ? { href } : {}}>
+  {
+    t.icon.svg && (
+      <svg
+        viewBox="0 0 24 24"
+        width="12"
+        height="12"
+        fill={stroke ? "none" : "currentColor"}
+        stroke={stroke ? "currentColor" : "none"}
+        stroke-width={stroke ? 2 : undefined}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        class="shrink-0 opacity-80"
+        set:html={t.icon.svg}
+      />
+    )
+  }
+  <span>{t.label}</span>
+</Tag>
