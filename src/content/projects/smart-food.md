@@ -11,6 +11,7 @@ draft: false
 org: "University of Minho"
 orgUrl: "https://www.uminho.pt/"
 repo: "https://github.com/JoaoGuedes01/sbcBackend"
+video: "https://www.youtube.com/watch?v=Rs8bN-K6f4w&t=214s"
 year: 2021
 gallery:
    - { src: ./img/smart-food/cover.png, alt: "Cover Image", caption: "Project Cover Image." }

@@ -9,6 +9,7 @@ resume: false
 order: 100
 draft: false
 repo: "https://github.com/JoaoGuedes01/LittleMe"
+video: "https://www.youtube.com/watch?v=j-a9NvyXbfM"
 year: 2019
 gallery:
   - { src: ./img/little-me/cover.png, alt: "Little me cover Image", caption: "The game's Main Menu." }

@@ -10,6 +10,7 @@ order: 98
 draft: false
 org: "University of Minho"
 orgUrl: "https://www.uminho.pt/"
+video: "https://www.youtube.com/watch?v=Y-PI2xwVct4"
 year: 2021
 gallery:                    # optional image gallery (co-located, with lightbox)
     - { src: ./img/worldwide-bi/cover.png, alt: "Cover Image", caption: "Team presentation." }

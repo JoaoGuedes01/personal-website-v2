@@ -12,6 +12,7 @@ org: "University of Minho"
 orgUrl: "https://www.uminho.pt/"
 repo: "https://github.com/JoaoGuedes01/BracelHertz"
 demo: "https://bracelhertz.herokuapp.com/"
+video: "https://www.youtube.com/watch?v=-Cp5I06yuSc"
 year: 2020
 gallery:
   - { src: ./img/bracelhertz/cover.png, alt: "Cover Image", caption: "The BracelHertZ Cover Image." }

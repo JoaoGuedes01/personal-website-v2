@@ -12,6 +12,7 @@ org: "University of Minho"
 orgUrl: "https://www.uminho.pt/"
 repo: "https://github.com/JoaoGuedes01/TIAPOSE_R_Data_Mining"
 demo: "https://guedes.shinyapps.io/shiny/"
+video: "https://www.youtube.com/watch?v=5QNv2cpboyg&t=132s"
 year: 2022
 gallery:
   - { src: ./img/time-series-forecasting/dash.png, alt: "Dashboard Image", caption: "The shiny app homepage and dashboard where users can test and see the results of the forecast and optimiazation." }

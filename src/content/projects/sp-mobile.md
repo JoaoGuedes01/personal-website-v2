@@ -11,6 +11,7 @@ draft: false
 org: "University of Minho"
 orgUrl: "https://www.uminho.pt/"
 repo: "https://github.com/JoaoGuedes01/ISI-IntegratedApp"
+video: "https://www.youtube.com/watch?v=f_Q1Jtap5WI"
 year: 2021
 gallery:
   - { src: ./img/sp-mobile/cover.png, alt: "Cover Image", caption: "SP Mobile Cover Image." }
