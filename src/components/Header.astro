@@ -1,7 +1,7 @@
 ---
 import { nav, site, href } from "../data/site";
 import ThemePicker from "./ThemePicker.astro";
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 
 const path = Astro.url.pathname;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -24,7 +24,7 @@ function isActive(itemPath: string) {
       class="inline-flex shrink-0 items-center"
       aria-label={`${site.name} — home`}
     >
-      <Icon
+      <SystemIcon
         name="guedes"
         stroke="currentColor"
         fill="currentColor"

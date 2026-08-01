@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
-import Icon from "../../components/Icon.astro";
+import SystemIcon from "../../components/SystemIcon.astro";
 import { readingTime } from "../../utils/reading";
 import { href } from "../../data/site";
 
@@ -31,7 +31,7 @@ const fmt = (d: Date) =>
 <BaseLayout title={title} description={description}>
   <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
     <a href={href("/blog")} class="inline-flex items-center gap-1 text-sm text-base-content/55 transition-colors hover:text-primary">
-      <Icon name="arrow-left" size={14} /> Ramblings
+      <SystemIcon name="arrow-left" size={14} /> Ramblings
     </a>
 
     <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
@@ -40,7 +40,7 @@ const fmt = (d: Date) =>
           <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-base-content/50">
             <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
             <span class="text-base-content/30">·</span>
-            <span class="inline-flex items-center gap-1"><Icon name="clock" size={13} /> {rt.label}</span>
+            <span class="inline-flex items-center gap-1"><SystemIcon name="clock" size={13} /> {rt.label}</span>
             {updatedDate && <span class="text-xs text-base-content/40">· updated {fmt(updatedDate)}</span>}
           </div>
 
@@ -81,7 +81,7 @@ const fmt = (d: Date) =>
           gallery.length > 0 && (
             <div class="mt-12 border-t border-base-300 pt-8">
               <p class="eyebrow flex items-center gap-1.5">
-                <Icon name="layers" size={14} /> Gallery
+                <SystemIcon name="layers" size={14} /> Gallery
               </p>
               <h2 class="mt-2 mb-5 text-2xl">A closer look</h2>
               <Gallery images={gallery} />

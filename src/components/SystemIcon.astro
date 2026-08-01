@@ -1,15 +1,17 @@
 ---
 /**
- * <Icon /> — inline SVG icon that inherits the current text colour.
+ * <SystemIcon /> — inline SVG icon that inherits the current text colour.
+ * Resolves through src/icons/index.ts: your own override, then lucide-static.
  *
- *   <Icon name="briefcase" />
- *   <Icon name="github" size={18} class="text-primary" />
- *   <Icon name="clock" title="Reading time" />   // adds an accessible label
+ *   <SystemIcon name="briefcase" />
+ *   <SystemIcon name="github" size={18} class="text-primary" />
+ *   <SystemIcon name="clock" title="Reading time" />   // adds an accessible label
  *
- * Icons live in ../icons/index.ts. Pass `title` when the icon conveys meaning
- * on its own; otherwise it's marked decorative (aria-hidden).
+ * Pass `title` when the icon conveys meaning on its own; otherwise it's
+ * marked decorative (aria-hidden). For a resolved tech/tool logo, use
+ * <TechIcon /> instead (see src/components/TechIcon.astro).
  */
-import { icons } from "../icons";
+import { resolveSystemIcon } from "../icons";
 
 interface Props {
   name: string;
@@ -22,7 +24,7 @@ interface Props {
 }
 
 // Defaults
-const { 
+const {
   name,
   size = 20,
   class: cls = "",
@@ -32,10 +34,10 @@ const {
   stroke = "currentColor"
 } = Astro.props;
 
-const body = icons[name];
+const body = resolveSystemIcon(name);
 if (!body) {
   // Fail loudly in dev, render nothing in prod, rather than a broken glyph.
-  console.warn(`[Icon] unknown icon "${name}"`);
+  console.warn(`[SystemIcon] unknown icon "${name}"`);
 }
 const inner = (title ? `<title>${title}</title>` : "") + (body ?? "");
 ---

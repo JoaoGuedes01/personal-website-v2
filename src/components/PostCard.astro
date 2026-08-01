@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 
 interface Props {
   url: string;
@@ -53,7 +53,7 @@ const dateISO = date.toISOString();
         <>
           <span class="text-base-content/25">·</span>
           <span class="inline-flex items-center gap-1">
-            <Icon name="clock" size={12} />
+            <SystemIcon name="clock" size={12} />
             {readingTime}
           </span>
         </>

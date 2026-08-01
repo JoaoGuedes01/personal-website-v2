@@ -1,7 +1,7 @@
 ---
 import { site, socials, nav, href } from "../data/site";
 import { version } from "../utils/changelog";
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 const year = new Date().getFullYear();
 ---
 
@@ -44,7 +44,7 @@ const year = new Date().getFullYear();
                     class="inline-flex items-center gap-2 text-sm text-base-content/65 transition-colors hover:text-primary"
                     {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
-                    <Icon name={s.icon} size={15} class="text-base-content/50", stroke={s.stroke}, fill={s.fill} />
+                    <SystemIcon name={s.icon} size={15} class="text-base-content/50" stroke={s.stroke} fill={s.fill} />
                     {s.label}
                   </a>
                 </li>
@@ -62,7 +62,7 @@ const year = new Date().getFullYear();
         class="inline-flex items-center gap-1.5 rounded-full border border-base-300 px-2.5 py-1 font-mono text-[11px] text-base-content/55 transition-colors hover:border-primary hover:text-primary"
         title="What's new — release notes"
       >
-        <Icon name="rocket" size={12} />
+        <SystemIcon name="rocket" size={12} />
         v{version}
       </a>
     </div>

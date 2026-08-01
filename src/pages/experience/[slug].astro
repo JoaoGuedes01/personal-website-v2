@@ -5,7 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
-import Icon from "../../components/Icon.astro";
+import SystemIcon from "../../components/SystemIcon.astro";
 import { href } from "../../data/site";
 
 export async function getStaticPaths() {
@@ -49,14 +49,14 @@ const related = (await getCollection("projects"))
 <BaseLayout title={`${role} · ${company}`} description={entry.data.summary ?? `${role} at ${company}.`}>
   <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-4xl"]}>
     <a href={href("/experience")} class="inline-flex items-center gap-1.5 text-sm text-base-content/55 transition-colors hover:text-primary">
-      <Icon name="chevron-left" size={15} /> Experience
+      <SystemIcon name="chevron-left" size={15} /> Experience
     </a>
 
     <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
       <article class="min-w-0">
         <header>
           <p class="eyebrow flex items-center gap-1.5">
-            <Icon name="building-2" size={14} /> {company}
+            <SystemIcon name="building-2" size={14} /> {company}
           </p>
           <h1 class="mt-3 text-4xl leading-tight sm:text-5xl">{role}</h1>
           <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-base-content/55">
@@ -64,7 +64,7 @@ const related = (await getCollection("projects"))
             {location && (
               <>
                 <span class="text-base-content/30">·</span>
-                <span class="inline-flex items-center gap-1"><Icon name="map-pin" size={13} /> {location}</span>
+                <span class="inline-flex items-center gap-1"><SystemIcon name="map-pin" size={13} /> {location}</span>
               </>
             )}
           </div>
@@ -107,7 +107,7 @@ const related = (await getCollection("projects"))
           gallery.length > 0 && (
             <div class="mt-12 border-t border-base-300 pt-8">
               <p class="eyebrow flex items-center gap-1.5">
-                <Icon name="layers" size={14} /> Gallery
+                <SystemIcon name="layers" size={14} /> Gallery
               </p>
               <h2 class="mt-2 mb-5 text-2xl">A closer look</h2>
               <Gallery images={gallery} />

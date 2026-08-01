@@ -7,7 +7,7 @@
  * Page 1 links to `base`; later pages link to `base/page/N` (see utils/paginate).
  * Renders nothing when there's only one page.
  */
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 import { pageHref } from "../utils/paginate";
 
 interface Props {
@@ -47,7 +47,7 @@ const list = pages(current, total);
           current > 1 ? "hover:border-base-content/30 hover:text-primary" : "pointer-events-none opacity-40",
         ]}
       >
-        <Icon name="chevron-left" size={16} />
+        <SystemIcon name="chevron-left" size={16} />
       </a>
 
       {list.map((p) =>
@@ -79,7 +79,7 @@ const list = pages(current, total);
           current < total ? "hover:border-base-content/30 hover:text-primary" : "pointer-events-none opacity-40",
         ]}
       >
-        <Icon name="chevron-right" size={16} />
+        <SystemIcon name="chevron-right" size={16} />
       </a>
     </nav>
   )

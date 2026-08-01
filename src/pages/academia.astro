@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Icon from "../components/Icon.astro";
+import SystemIcon from "../components/SystemIcon.astro";
 import { href } from "../data/site";
 import { education } from "../data/education";
 
@@ -36,7 +36,7 @@ const empty = education.length === 0 && groups.length === 0;
       education.length > 0 && (
         <div class="mt-12">
           <p class="eyebrow mb-4 flex items-center gap-1.5">
-            <Icon name="graduation-cap" size={14} /> Education
+            <SystemIcon name="graduation-cap" size={14} /> Education
           </p>
           <div class="space-y-6">
             {education.map((ed) => (
@@ -94,7 +94,7 @@ const empty = education.length === 0 && groups.length === 0;
                           rel="noopener noreferrer"
                           class="inline-flex items-center gap-1.5 font-medium text-primary underline-offset-4 hover:underline"
                         >
-                          <Icon name="file-text" size={14} /> Open PDF ↗
+                          <SystemIcon name="file-text" size={14} /> Open PDF ↗
                         </a>
                       )}
                       {pdfHref && (
@@ -103,7 +103,7 @@ const empty = education.length === 0 && groups.length === 0;
                           download
                           class="inline-flex items-center gap-1.5 text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
                         >
-                          <Icon name="download" size={14} /> Download
+                          <SystemIcon name="download" size={14} /> Download
                         </a>
                       )}
                       {p.data.link && (
@@ -113,7 +113,7 @@ const empty = education.length === 0 && groups.length === 0;
                           rel="noopener noreferrer"
                           class="inline-flex items-center gap-1.5 text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
                         >
-                          <Icon name="external-link" size={13} /> View publication ↗
+                          <SystemIcon name="external-link" size={13} /> View publication ↗
                         </a>
                       )}
                     </div>

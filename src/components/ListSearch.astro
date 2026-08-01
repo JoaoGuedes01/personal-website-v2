@@ -16,7 +16,7 @@
  *
  * `items`: { title, url?, description?, meta?, tags? }[] — the full dataset.
  */
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 
 export interface SearchItem {
   title: string;
@@ -49,7 +49,7 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
     <div class="order-1 sm:order-2 sm:w-64 sm:shrink-0">
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
-          <Icon name="search" size={15} />
+          <SystemIcon name="search" size={15} />
         </span>
         <input
           type="search"
@@ -67,7 +67,7 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
           aria-label="Clear search"
           class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/40 transition-colors hover:text-base-content"
         >
-          <Icon name="x" size={14} />
+          <SystemIcon name="x" size={14} />
         </button>
       </div>
     </div>

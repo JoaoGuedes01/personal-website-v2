@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Icon from "../components/Icon.astro";
+import SystemIcon from "../components/SystemIcon.astro";
 import { href } from "../data/site";
 import {
   resume,
@@ -86,7 +86,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
           rel="noopener noreferrer"
           class="btn btn-primary btn-sm rounded-field"
         >
-          <Icon name="file-text" size={15} />Formal CV 
+          <SystemIcon name="file-text" size={15} />Formal CV 
         </a>
         <button
           type="button"

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Icon from "../../components/Icon.astro";
+import SystemIcon from "../../components/SystemIcon.astro";
 import { href } from "../../data/site";
 
 const roles = (await getCollection("experience"))
@@ -44,7 +44,7 @@ const relatedCount = (company: string) =>
                 </div>
                 {e.data.location && (
                   <p class="mt-0.5 inline-flex items-center gap-1 text-xs text-base-content/45">
-                    <Icon name="map-pin" size={12} /> {e.data.location}
+                    <SystemIcon name="map-pin" size={12} /> {e.data.location}
                   </p>
                 )}
                 {e.data.summary && (
@@ -62,7 +62,7 @@ const relatedCount = (company: string) =>
                 <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                   Details
                   {count > 0 && <span class="text-base-content/50">· {count} related {count === 1 ? "project" : "projects"}</span>}
-                  <Icon name="arrow-right" size={14} class="transition-transform group-hover:translate-x-0.5" />
+                  <SystemIcon name="arrow-right" size={14} class="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </a>
             );

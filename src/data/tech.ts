@@ -18,7 +18,7 @@
 // on-theme in light and dark.
 // ---------------------------------------------------------------------------
 import * as simpleIcons from "simple-icons";
-import { icons } from "../icons";
+import { resolveSystemIcon } from "../icons";
 
 // slug -> path lookup from simple-icons, built once at build time. `import * as`
 // pulls the full set server-side only; the client receives just the paths we
@@ -149,7 +149,7 @@ function resolveIcon(key: string, group: TechGroup): TechIcon {
   if (path) return { svg: `<path d="${path}"/>`, mode: "fill" };
 
   // Fallback: the group's own line icon.
-  return { svg: icons[GROUP_ICON[group]] ?? "", mode: "stroke" };
+  return { svg: resolveSystemIcon(GROUP_ICON[group]) ?? "", mode: "stroke" };
 }
 
 export function resolveTech(raw: string): ResolvedTech {

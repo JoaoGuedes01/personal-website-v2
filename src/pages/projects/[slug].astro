@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
-import Icon from "../../components/Icon.astro";
+import SystemIcon from "../../components/SystemIcon.astro";
 import TechBadge from "../../components/TechBadge.astro";
 import { readingTime } from "../../utils/reading";
 import { projectCover } from "../../utils/covers";
@@ -58,7 +58,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
 <BaseLayout title={title} description={summary}>
   <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
     <a href={href("/projects")} class="inline-flex items-center gap-1 text-sm text-base-content/55 transition-colors hover:text-primary">
-      <Icon name="arrow-left" size={14} /> Projects
+      <SystemIcon name="arrow-left" size={14} /> Projects
     </a>
 
     {
@@ -111,7 +111,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
                 {groupedStack.map((g) => (
                   <div class="flex flex-col gap-1.5 sm:flex-row sm:gap-4">
                     <span class="eyebrow flex items-center gap-1.5 pt-1 sm:w-44 sm:shrink-0">
-                      <Icon name={g.icon} size={13} />
+                      <SystemIcon name={g.icon} size={13} />
                       {g.label}
                     </span>
                     <ul class="flex flex-wrap gap-1.5">
@@ -142,7 +142,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
                 )}
                 {video && (
                   <a href={video} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline gap-1.5 rounded-field">
-                    <Icon name="circle-play" size={14} /> Watch video
+                    <SystemIcon name="circle-play" size={14} /> Watch video
                   </a>
                 )}
                 {showExpLink && (
@@ -150,7 +150,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
                     href={expHref}
                     class="inline-flex items-center gap-1.5 text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
                   >
-                    <Icon name="building-2" size={14} />
+                    <SystemIcon name="building-2" size={14} />
                     Part of my work at {expCompany}
                   </a>
                 )}
@@ -171,7 +171,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
           gallery.length > 0 && (
             <div class="mt-12 border-t border-base-300 pt-8">
               <p class="eyebrow flex items-center gap-1.5">
-                <Icon name="layers" size={14} /> Project Gallery
+                <SystemIcon name="layers" size={14} /> Project Gallery
               </p>
               <h2 class="mt-2 mb-5 text-2xl">See it in action</h2>
               <Gallery images={gallery} />

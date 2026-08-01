@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Icon from "../components/Icon.astro";
+import SystemIcon from "../components/SystemIcon.astro";
 import { releases, version, formatReleaseDate } from "../utils/changelog";
 
 const repoUrl = "https://github.com/JoaoGuedes01/personal-website-v2";
@@ -38,7 +38,7 @@ const hasOlder = releases.length > MAX_RELEASES;
                       class="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
                     >
                       v{r.version}
-                      <Icon name="external-link" size={14} class="text-base-content/40" />
+                      <SystemIcon name="external-link" size={14} class="text-base-content/40" />
                     </a>
                   ) : (
                     <span>v{r.version}</span>
@@ -51,7 +51,7 @@ const hasOlder = releases.length > MAX_RELEASES;
                 )}
                 {r.date && (
                   <span class="ml-auto inline-flex items-center gap-1.5 text-sm text-base-content/50">
-                    <Icon name="calendar" size={13} />
+                    <SystemIcon name="calendar" size={13} />
                     {formatReleaseDate(r.date)}
                   </span>
                 )}
@@ -109,7 +109,7 @@ const hasOlder = releases.length > MAX_RELEASES;
         class="inline-flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline"
       >
         {hasOlder ? "See older releases on GitHub" : "View all releases on GitHub"}
-        <Icon name="external-link" size={13} />
+        <SystemIcon name="external-link" size={13} />
       </a>
     </div>
   </section>

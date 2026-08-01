@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Icon from "../../components/Icon.astro";
+import SystemIcon from "../../components/SystemIcon.astro";
 import ListSearch from "../../components/ListSearch.astro";
 import { iconForProvider } from "../../icons";
 
@@ -54,11 +54,11 @@ const searchItems = certs.map((c) => ({
             <Fragment slot="filters">
               <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by provider">
                 <button type="button" data-filter="all" class="cert-chip is-active inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors">
-                  <Icon name="layers" size={13} /> All <span class="opacity-60">({certs.length})</span>
+                  <SystemIcon name="layers" size={13} /> All <span class="opacity-60">({certs.length})</span>
                 </button>
                 {providers.map((p) => (
                   <button type="button" data-filter={p} class="cert-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors">
-                    <Icon name={iconForProvider(p)} size={13} />
+                    <SystemIcon name={iconForProvider(p)} size={13} />
                     {p} <span class="opacity-60">({counts[p]})</span>
                   </button>
                 ))}
@@ -73,7 +73,7 @@ const searchItems = certs.map((c) => ({
                 >
                   <div class="flex items-start gap-3">
                     <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-field border border-base-300 bg-base-200 text-primary">
-                      <Icon name={iconForProvider(c.data.issuer)} size={18} />
+                      <SystemIcon name={iconForProvider(c.data.issuer)} size={18} />
                     </span>
                     <div class="min-w-0">
                       <p class="eyebrow">{c.data.issuer}</p>
@@ -104,7 +104,7 @@ const searchItems = certs.map((c) => ({
                       rel="noopener noreferrer"
                       class="relative z-10 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline"
                     >
-                      Verify <Icon name="external-link" size={13} />
+                      Verify <SystemIcon name="external-link" size={13} />
                     </a>
                   )}
                 </article>

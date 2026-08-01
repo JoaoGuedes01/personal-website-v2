@@ -10,7 +10,7 @@ import type { CollectionEntry } from "astro:content";
 import PostCard from "./PostCard.astro";
 import Pagination from "./Pagination.astro";
 import ListSearch from "./ListSearch.astro";
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 import { readingTime } from "../utils/reading";
 import { href } from "../data/site";
 import { slugify } from "../data/taxonomy";
@@ -92,7 +92,7 @@ const searchItems = all.map((p) => ({
                     c.slug === active && "is-active",
                   ]}
                 >
-                  <Icon name={c.icon} size={13} />
+                  <SystemIcon name={c.icon} size={13} />
                   {c.label} <span class="opacity-60">({c.count})</span>
                 </a>
               ))}

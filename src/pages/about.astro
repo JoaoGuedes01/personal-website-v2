@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Icon from "../components/Icon.astro";
+import SystemIcon from "../components/SystemIcon.astro";
 import { href } from "../data/site";
 import { profile } from "../data/profile";
 
@@ -112,7 +112,7 @@ const skillGroups = Object.entries(profile.skills);
             {profile.interests.map((it) => (
               <div class="flex items-start gap-3.5 rounded-box border border-base-300 bg-base-100 p-5">
                 <span class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-field border border-base-300 bg-base-200 text-primary">
-                  <Icon name={it.icon} size={18} />
+                  <SystemIcon name={it.icon} size={18} />
                 </span>
                 <div class="min-w-0">
                   <p class="font-display text-base leading-snug">{it.label}</p>

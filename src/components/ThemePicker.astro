@@ -10,7 +10,7 @@
  * The swatches carry real hex values so they always show each palette's true
  * colours, regardless of which theme is currently active.
  */
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 
 const themes = [
   { id: "slate", label: "Slate", bg: "#14161b", accent: "#6aa6ff" },
@@ -40,7 +40,7 @@ const fonts = [
     aria-expanded="false"
     title="Theme &amp; typeface"
   >
-    <Icon name="palette" size={18} />
+    <SystemIcon name="palette" size={18} />
   </button>
 
   <div

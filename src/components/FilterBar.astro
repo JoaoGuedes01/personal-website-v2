@@ -26,7 +26,7 @@
  *
  * Without JS you get every card — filters/paging are a progressive enhancement.
  */
-import Icon from "./Icon.astro";
+import SystemIcon from "./SystemIcon.astro";
 
 export interface FacetOption {
   value: string;
@@ -74,7 +74,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
               aria-expanded="false"
               class="facet-btn inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors"
             >
-              {f.icon && <Icon name={f.icon} size={13} />}
+              {f.icon && <SystemIcon name={f.icon} size={13} />}
               {f.label}
               <span
                 data-facet-badge
@@ -82,7 +82,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
                 class="ml-0.5 inline-flex min-w-[1.1rem] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-content"
               />
               <span class="chev inline-flex transition-transform">
-                <Icon name="chevron-down" size={13} />
+                <SystemIcon name="chevron-down" size={13} />
               </span>
             </button>
 
@@ -102,9 +102,9 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
                   class="facet-opt flex w-full items-center gap-2 rounded-field px-2.5 py-1.5 text-left text-sm transition-colors hover:bg-base-200"
                 >
                   {/* icon holder — hidden here; cloned into the pill when selected */}
-                  <span data-opt-icon hidden>{o.icon && <Icon name={o.icon} size={14} />}</span>
+                  <span data-opt-icon hidden>{o.icon && <SystemIcon name={o.icon} size={14} />}</span>
                   <span class="opt-check text-primary">
-                    <Icon name="check" size={14} />
+                    <SystemIcon name="check" size={14} />
                   </span>
                   <span class="flex-1">{o.label}</span>
                   {typeof o.count === "number" && (
@@ -121,7 +121,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
     <div class="order-1 sm:order-2 sm:ml-auto sm:w-64 sm:shrink-0">
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
-          <Icon name="search" size={15} />
+          <SystemIcon name="search" size={15} />
         </span>
         <input
           type="search"
@@ -139,7 +139,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
           aria-label="Clear search"
           class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/40 transition-colors hover:text-base-content"
         >
-          <Icon name="x" size={14} />
+          <SystemIcon name="x" size={14} />
         </button>
       </div>
     </div>
