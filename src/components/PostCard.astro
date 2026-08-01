@@ -11,6 +11,7 @@ interface Props {
   category?: string;
   tags?: string[];
   lang?: string;
+  source?: string;
   cover?: ImageMetadata;
   coverAlt?: string;
 }
@@ -23,6 +24,7 @@ const {
   category,
   tags = [],
   lang,
+  source,
   cover,
   coverAlt = "",
 } = Astro.props;
@@ -70,6 +72,14 @@ const dateISO = date.toISOString();
       lang && !category && (
         <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">
           {lang}
+        </span>
+      )
+    }
+    {
+      source && (
+        <span class="inline-flex items-center gap-1 rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">
+          <SystemIcon name="book-open" size={11} />
+          {source}
         </span>
       )
     }

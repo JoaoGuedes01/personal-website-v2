@@ -116,6 +116,10 @@ const snippets = defineCollection({
       // Discipline this snippet belongs to (its "class" in the /snippets nav).
       // Must match a label in src/data/taxonomy.ts.
       category: z.enum(SNIPPET_CATEGORIES).default("Software Engineering"),
+      // Where this came from (a course, a CTF, work) — shown as a small badge.
+      // Purely informational; group/subgroup nav is derived from folder nesting,
+      // not from this field, so it never gates navigation.
+      source: z.string().optional(),
       // Primary language/tool — shown as a small label on the snippet.
       lang: z.string().default("shell"),
       // Tool tags, e.g. ["git"], ["docker", "compose"].

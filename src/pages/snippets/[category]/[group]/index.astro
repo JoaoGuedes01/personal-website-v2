@@ -1,0 +1,93 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import TaxonCardGrid from "../../../../components/TaxonCardGrid.astro";
+import SnippetListView from "../../../../components/SnippetListView.astro";
+import SystemIcon from "../../../../components/SystemIcon.astro";
+import { href } from "../../../../data/site";
+import { SNIPPET_CATEGORIES, snippetPath } from "../../../../data/taxonomy";
+import { snippetGroupInfo, snippetSubgroupInfo, curatedSubgroupIndex } from "../../../../data/snippetGroups";
+
+export async function getStaticPaths() {
+  const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
+  const paths: { params: { category: string; group: string }; props: { categorySlug: string; groupSlug: string } }[] = [];
+  for (const cat of SNIPPET_CATEGORIES) {
+    const inCat = snips.filter((s) => s.data.category === cat.label);
+    const groupSlugs = new Set(inCat.map((s) => snippetPath(s).group).filter((g): g is string => Boolean(g)));
+    for (const groupSlug of groupSlugs) {
+      paths.push({ params: { category: cat.slug, group: groupSlug }, props: { categorySlug: cat.slug, groupSlug } });
+    }
+  }
+  return paths;
+}
+
+const { categorySlug, groupSlug } = Astro.props;
+const category = SNIPPET_CATEGORIES.find((c) => c.slug === categorySlug)!;
+const group = snippetGroupInfo(categorySlug, groupSlug);
+
+const inGroup = (await getCollection("snippets"))
+  .filter((s) => !s.data.draft && s.data.category === category.label && snippetPath(s).group === groupSlug)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const subgroupSlugs = [
+  ...new Set(inGroup.map((s) => snippetPath(s).subgroup).filter((g): g is string => Boolean(g))),
+].sort(
+  (a, b) =>
+    curatedSubgroupIndex(categorySlug, groupSlug, a) - curatedSubgroupIndex(categorySlug, groupSlug, b) ||
+    a.localeCompare(b),
+);
+const subgroups = subgroupSlugs.map((slug) => {
+  const info = snippetSubgroupInfo(categorySlug, groupSlug, slug);
+  return {
+    href: href(`/snippets/${categorySlug}/${groupSlug}/${slug}`),
+    icon: info.icon,
+    label: info.label,
+    blurb: info.blurb,
+    count: inGroup.filter((s) => snippetPath(s).subgroup === slug).length,
+  };
+});
+---
+
+<BaseLayout
+  title={`${group.label} snippets — ${category.label}`}
+  description={`${group.label} snippets by João Guedes — ${group.blurb}`}
+>
+  {
+    subgroups.length > 0 ? (
+      <section class="mx-auto max-w-4xl px-4 pt-14 sm:px-6 sm:pt-20">
+        <a
+          href={href(`/snippets/${categorySlug}`)}
+          class="text-sm text-base-content/55 transition-colors hover:text-primary"
+        >
+          ← {category.label}
+        </a>
+
+        <p class="eyebrow mt-6 flex items-center gap-1.5">
+          <SystemIcon name={category.icon} size={14} fill="currentColor" stroke="currentColor" />
+          {category.label}
+        </p>
+        <h1 class="mt-3 text-4xl sm:text-5xl">{group.label}</h1>
+        <p class="mt-4 max-w-2xl text-lg text-base-content/70">{group.blurb}</p>
+
+        <div class="mt-8">
+          <TaxonCardGrid cards={subgroups} />
+        </div>
+
+        <p class="mt-8 text-sm text-base-content/50">
+          {inGroup.length} {inGroup.length === 1 ? "snippet" : "snippets"} across {subgroups.length}{" "}
+          {subgroups.length === 1 ? "group" : "groups"}.
+        </p>
+      </section>
+    ) : (
+      <SnippetListView
+        icon={group.icon}
+        eyebrow={category.label}
+        title={group.label}
+        intro={group.blurb}
+        items={inGroup}
+        backHref={href(`/snippets/${categorySlug}`)}
+        backLabel={category.label}
+      />
+    )
+  }
+</BaseLayout>

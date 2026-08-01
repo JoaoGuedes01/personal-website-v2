@@ -48,12 +48,6 @@ export const SNIPPET_CATEGORIES: Taxon[] = [
     icon: "database",
     blurb: "SQL, pipelines, and wrangling data into shape.",
   },
-  {
-    label: "Guedes",
-    slug: "guedes",
-    icon: "guedes",
-    blurb: "Test category meant for testing"
-  }
 ];
 
 // Project contexts. Order defines display order in filters/listings.
@@ -93,9 +87,29 @@ export function snippetCategorySlug(label: string): string {
   return snippetCategoryByLabel(label)?.slug ?? slugify(label);
 }
 
-/** Canonical URL for a snippet: /snippets/<category>/<id>. */
+export interface SnippetPath {
+  group?: string;
+  subgroup?: string;
+  slug: string;
+}
+
+/**
+ * A snippet's group/subgroup come from folder nesting, not frontmatter: the
+ * collection id is "group/subgroup/slug", "group/slug", or just "slug" for a
+ * category with no groups. See src/data/snippetGroups.ts for group metadata.
+ */
+export function snippetPath(entry: CollectionEntry<"snippets">): SnippetPath {
+  const parts = entry.id.split("/");
+  const slug = parts[parts.length - 1];
+  const [group, subgroup] = parts.slice(0, -1);
+  return { group, subgroup, slug };
+}
+
+/** Canonical URL for a snippet: /snippets/<category>/[<group>/[<subgroup>/]]<slug>. */
 export function snippetUrl(entry: CollectionEntry<"snippets">): string {
-  return href(`/snippets/${snippetCategorySlug(entry.data.category)}/${entry.id}`);
+  const catSlug = snippetCategorySlug(entry.data.category);
+  const { group, subgroup, slug } = snippetPath(entry);
+  return href(`/snippets/${[catSlug, group, subgroup, slug].filter(Boolean).join("/")}`);
 }
 
 /** Generic slugify for anything not in a table above. */
@@ -105,4 +119,13 @@ export function slugify(s: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+/** "remote-service-exploitation" -> "Remote Service Exploitation" — fallback
+ *  label for a group/subgroup folder that exists without curated metadata. */
+export function titleizeSlug(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }

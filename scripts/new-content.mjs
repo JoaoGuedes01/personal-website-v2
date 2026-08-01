@@ -58,13 +58,20 @@ function usage(msg) {
     paper          a paper or thesis   → src/content/papers/
 
   Options:
-    --slug <slug>  override the auto-generated filename
-    -h, --help     show this help
+    --slug <slug>        override the auto-generated filename
+    --group <slug>       snippet only: nest under src/content/snippets/<group>/
+    --subgroup <slug>    snippet only: nest under <group>/<subgroup>/ (requires --group)
+    -h, --help           show this help
 
   Examples:
     node scripts/new-content.mjs project "Realtime Chat Service"
     node scripts/new-content.mjs blog "What the homelab taught me"
     npm run new -- snippet "Tail all compose logs"
+    npm run new -- snippet "John the Ripper" --group tools --subgroup credential-attack-tools
+
+  Snippet group/subgroup are folder-derived, not frontmatter (see src/data/
+  snippetGroups.ts) — passing --group/--subgroup just nests the new file so it
+  shows up under that group's page without a manual move afterward.
 `);
 }
 
@@ -119,6 +126,7 @@ category: "Software Engineering"   # Software Engineering | Systems | DevOps | C
 lang: "shell"                      # primary language/tool, shown as a label
 tags: []                           # tool tags, e.g. ["git"] → filter within the class
 draft: false
+# source: "INE Certification"      # where this came from — shown as a small badge
 ---
 
 A sentence of context, then the snippet:
@@ -186,13 +194,23 @@ if (argv.includes("-h") || argv.includes("--help") || argv.length === 0) {
 }
 
 let slugOverride = null;
+let group = null;
+let subgroup = null;
 const positional = [];
 for (let i = 0; i < argv.length; i++) {
   if (argv[i] === "--slug") {
     slugOverride = argv[++i];
+  } else if (argv[i] === "--group") {
+    group = argv[++i];
+  } else if (argv[i] === "--subgroup") {
+    subgroup = argv[++i];
   } else {
     positional.push(argv[i]);
   }
+}
+if (subgroup && !group) {
+  usage("--subgroup requires --group.");
+  process.exit(1);
 }
 
 const typeArg = (positional.shift() || "").toLowerCase();
@@ -215,13 +233,13 @@ if (!slug) {
 }
 
 // Reserved slugs that would collide with list routes.
-const RESERVED = { project: ["page", "type"], blog: ["page", "tag"], snippet: ["page", "tag"] };
+const RESERVED = { project: ["page", "type"], blog: ["page", "tag"] };
 if ((RESERVED[type] || []).includes(slug)) {
   usage(`"${slug}" is a reserved name for ${type}s (it collides with a list route). Pick another with --slug.`);
   process.exit(1);
 }
 
-const dir = path.join(ROOT, DIRS[type]);
+const dir = path.join(ROOT, DIRS[type], ...(type === "snippet" ? [group, subgroup].filter(Boolean) : []));
 const file = path.join(dir, `${slug}.md`);
 if (existsSync(file)) {
   console.error(`\n  ✖ ${path.relative(ROOT, file)} already exists — not overwriting.\n`);

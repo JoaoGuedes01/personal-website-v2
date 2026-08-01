@@ -1,10 +1,12 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import SnippetCategoryView from "../../../components/SnippetCategoryView.astro";
+import TaxonCardGrid from "../../../components/TaxonCardGrid.astro";
+import SnippetListView from "../../../components/SnippetListView.astro";
+import SystemIcon from "../../../components/SystemIcon.astro";
 import { href } from "../../../data/site";
-import { SNIPPET_CATEGORIES } from "../../../data/taxonomy";
-import { paginate } from "../../../utils/paginate";
+import { SNIPPET_CATEGORIES, snippetPath } from "../../../data/taxonomy";
+import { snippetGroupInfo, curatedGroupIndex } from "../../../data/snippetGroups";
 
 export async function getStaticPaths() {
   const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
@@ -18,21 +20,60 @@ const inCat = (await getCollection("snippets"))
   .filter((s) => !s.data.draft && s.data.category === category.label)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const page = paginate(inCat, 1);
+// Group slugs actually present on disk for this category — curated order
+// first, then anything uncurated appended alphabetically (see snippetGroups.ts).
+const groupSlugs = [...new Set(inCat.map((s) => snippetPath(s).group).filter((g): g is string => Boolean(g)))].sort(
+  (a, b) => curatedGroupIndex(category.slug, a) - curatedGroupIndex(category.slug, b) || a.localeCompare(b),
+);
+const groups = groupSlugs.map((slug) => {
+  const info = snippetGroupInfo(category.slug, slug);
+  return {
+    href: href(`/snippets/${category.slug}/${slug}`),
+    icon: info.icon,
+    label: info.label,
+    blurb: info.blurb,
+    count: inCat.filter((s) => snippetPath(s).group === slug).length,
+  };
+});
 ---
 
 <BaseLayout
   title={`${category.label} snippets`}
   description={`${category.label} snippets by João Guedes — ${category.blurb}`}
 >
-  <SnippetCategoryView
-    category={category}
-    all={inCat}
-    items={page.items}
-    active="all"
-    current={page.current}
-    total={page.total}
-    count={page.count}
-    base={href(`/snippets/${category.slug}`)}
-  />
+  {
+    groups.length > 0 ? (
+      <section class="mx-auto max-w-4xl px-4 pt-14 sm:px-6 sm:pt-20">
+        <a href={href("/snippets")} class="text-sm text-base-content/55 transition-colors hover:text-primary">
+          ← All snippets
+        </a>
+
+        <p class="eyebrow mt-6 flex items-center gap-1.5">
+          <SystemIcon name={category.icon} size={14} fill="currentColor" stroke="currentColor" />
+          Snippets
+        </p>
+        <h1 class="mt-3 text-4xl sm:text-5xl">{category.label}</h1>
+        <p class="mt-4 max-w-2xl text-lg text-base-content/70">{category.blurb}</p>
+
+        <div class="mt-8">
+          <TaxonCardGrid cards={groups} />
+        </div>
+
+        <p class="mt-8 text-sm text-base-content/50">
+          {inCat.length} {inCat.length === 1 ? "snippet" : "snippets"} across {groups.length}{" "}
+          {groups.length === 1 ? "group" : "groups"}.
+        </p>
+      </section>
+    ) : (
+      <SnippetListView
+        icon={category.icon}
+        eyebrow="Snippets"
+        title={category.label}
+        intro={category.blurb}
+        items={inCat}
+        backHref={href("/snippets")}
+        backLabel="All snippets"
+      />
+    )
+  }
 </BaseLayout>

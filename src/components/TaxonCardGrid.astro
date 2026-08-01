@@ -1,0 +1,48 @@
+---
+/**
+ * <TaxonCardGrid /> — a grid of drill-down cards (icon, label, blurb, count)
+ * linking into a taxon (category/group/subgroup). Shared by the /snippets
+ * landing page, a category page listing its groups, and a group page listing
+ * its subgroups — same look at every level.
+ */
+import SystemIcon from "./SystemIcon.astro";
+
+export interface TaxonCard {
+  href: string;
+  icon: string;
+  label: string;
+  blurb: string;
+  count: number;
+  noun?: string; // singular noun for the count, default "snippet"
+}
+interface Props {
+  cards: TaxonCard[];
+}
+const { cards } = Astro.props;
+---
+
+<div class="grid gap-4 sm:grid-cols-2">
+  {
+    cards.map((c) => (
+      <a href={c.href} class="card-lift group relative flex items-start gap-4 rounded-box border border-base-300 bg-base-100 p-6">
+        <span class="mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-field border border-base-300 bg-base-200 text-primary">
+          <SystemIcon name={c.icon} size={20} fill="currentColor" stroke="currentColor" />
+        </span>
+        <span class="min-w-0 pr-6">
+          <span class="flex items-baseline gap-2">
+            <span class="font-display text-xl leading-snug group-hover:text-primary">{c.label}</span>
+            <span class="text-xs text-base-content/45">
+              {c.count} {c.count === 1 ? (c.noun ?? "snippet") : `${c.noun ?? "snippet"}s`}
+            </span>
+          </span>
+          <span class="mt-1 block text-sm leading-relaxed text-base-content/65">{c.blurb}</span>
+        </span>
+        <SystemIcon
+          name="arrow-up-right"
+          size={16}
+          class="absolute right-5 top-6 text-base-content/30 transition-colors group-hover:text-primary"
+        />
+      </a>
+    ))
+  }
+</div>

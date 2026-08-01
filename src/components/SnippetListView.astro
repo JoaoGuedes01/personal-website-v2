@@ -1,0 +1,103 @@
+---
+/**
+ * <SnippetListView /> — the leaf-level snippet listing, reused at every depth
+ * that ends in a flat list: a category with no groups, a group with no
+ * subgroups, or a subgroup itself. Filtering is the shared <FilterBar />: a
+ * "Tag" facet + its built-in search box, both client-side (same pattern as
+ * ProjectListView.astro). Every non-draft snippet in `items` is rendered (no
+ * pagination) so filters span the whole set; FilterBar's "Load more" handles
+ * paging into view.
+ */
+import type { CollectionEntry } from "astro:content";
+import PostCard from "./PostCard.astro";
+import FilterBar from "./FilterBar.astro";
+import type { Facet } from "./FilterBar.astro";
+import SystemIcon from "./SystemIcon.astro";
+import { readingTime } from "../utils/reading";
+import { snippetUrl, slugify } from "../data/taxonomy";
+import { PAGE_SIZE } from "../utils/paginate";
+
+interface Props {
+  icon: string;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  items: CollectionEntry<"snippets">[];
+  backHref: string;
+  backLabel: string;
+}
+const { icon, eyebrow, title, intro, items, backHref, backLabel } = Astro.props;
+
+// Distinct tags across this set → the Tag facet's options.
+const tagCounts = new Map<string, { label: string; count: number }>();
+for (const s of items) {
+  for (const t of s.data.tags) {
+    const slug = slugify(t);
+    const e = tagCounts.get(slug) ?? { label: t, count: 0 };
+    e.count++;
+    tagCounts.set(slug, e);
+  }
+}
+const facets: Facet[] = [
+  {
+    key: "tag",
+    label: "Tag",
+    icon: "hash",
+    options: [...tagCounts.entries()]
+      .sort((a, b) => b[1].count - a[1].count || a[1].label.localeCompare(b[1].label))
+      .map(([value, { label, count }]) => ({ value, label, count })),
+  },
+];
+
+const cards = items.map((entry) => ({
+  entry,
+  tag: entry.data.tags.map(slugify).join(" "),
+  search: [entry.data.title, entry.data.description, entry.data.lang, ...entry.data.tags]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase(),
+}));
+---
+
+<section class="mx-auto max-w-3xl px-4 pt-14 sm:px-6 sm:pt-20">
+  <a href={backHref} class="text-sm text-base-content/55 transition-colors hover:text-primary">
+    ← {backLabel}
+  </a>
+
+  <p class="eyebrow mt-6 flex items-center gap-1.5">
+    <SystemIcon name={icon} size={14} fill="currentColor" stroke="currentColor" />
+    {eyebrow}
+  </p>
+  <h1 class="mt-3 text-4xl sm:text-5xl">{title}</h1>
+  <p class="mt-4 max-w-2xl text-lg text-base-content/70">{intro}</p>
+
+  <div class="mt-8">
+    <FilterBar
+      facets={facets}
+      count={items.length}
+      noun="snippet"
+      pageSize={PAGE_SIZE}
+      searchPlaceholder="Search…"
+      searchLabel="Search snippets"
+    >
+      <div class="mt-2 grid gap-5 pb-4">
+        {
+          cards.map((c) => (
+            <div data-filter-item data-tag={c.tag} data-search={c.search}>
+              <PostCard
+                url={snippetUrl(c.entry)}
+                title={c.entry.data.title}
+                description={c.entry.data.description}
+                date={c.entry.data.pubDate}
+                readingTime={readingTime(c.entry.body).label}
+                tags={c.entry.data.tags}
+                lang={c.entry.data.lang}
+                source={c.entry.data.source}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </FilterBar>
+  </div>
+</section>
