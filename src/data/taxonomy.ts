@@ -39,8 +39,8 @@ export const SNIPPET_CATEGORIES: Taxon[] = [
   {
     label: "Cybersecurity",
     slug: "cybersecurity",
-    icon: "shield",
-    blurb: "Hardening, tooling, and the security-minded habits that stuck.",
+    icon: "shield-check",
+    blurb: "Command cheat sheets, tool configurations, and security software scripts.",
   },
   {
     label: "Data",
