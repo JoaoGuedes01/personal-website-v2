@@ -1,15 +1,15 @@
 ---
 title: "SMB & NetBIOS enumeration"
-description: "Full command reference for enumerating SMB shares, users, sessions and OS info — plus the NetBIOS basics underneath it."
+description: "Full command reference for enumerating SMB shares, users, sessions and OS info."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["smb", "netbios", "enumeration", "windows"]
+tags: ["smb", "netbios", "enumeration", "windows", "nmap", "smbmap", "smbclient", "enum4linux", "metasploit", "hydra"]
 draft: false
 ---
 
-SMB (port 445, or 139 when it's still riding on top of NetBIOS) is the file-sharing protocol behind almost every Windows-network engagement, and it's rarely locked down as tightly as it should be — anonymous/guest login and weak credentials are the two misconfigurations to check for first. NetBIOS itself (ports 137 Name Service, 138 Datagram, 139 Session) is the older API SMB originally rode on top of; on a modern network you'll mostly encounter it as SMB's legacy port rather than something to enumerate separately.
+SMB (port 445, or 139 if running on NetBIOS) is the file-sharing protocol behind almost every Windows-network engagement, and it's rarely locked down as tightly as it should be. Anonymous/Guest login and weak credentials are the two misconfigurations to check for first. NetBIOS itself (ports 137 Name Service, 138 Datagram, 139 Session) is the older API SMB originally rode on top of. On a modern network you'll mostly encounter it as SMB's legacy port rather than something to enumerate separately.
 
 ```bash
 #################### NMAP ####################
@@ -49,4 +49,4 @@ auxiliary/scanner/smb/smb_login         # brute-force
 hydra -l admin -P /usr/share/wordlists/rockyou.txt <target_ip> smb
 ```
 
-A few patterns worth checking for by habit: SMB commonly creates a directory named after the logged-in user, so a share containing a directory matching a known username is worth investigating first. If SMBv1 is enabled, anonymous login is often possible even when later versions would block it — that alone is worth flagging as a finding. RCE is achievable through SMB in more than one way (EternalBlue on unpatched SMBv1, or legitimate credentials via PsExec) — see the SMB Exploitation snippet for the exploitation side once enumeration turns up a way in.
+A few patterns worth checking for are that SMB commonly creates a directory named after the logged-in user, so a share containing a directory matching a known username is worth investigating first. If SMBv1 is enabled, anonymous login is often possible even when later versions would block it. That alone is worth flagging as a finding. RCE is achievable through SMB in more than one way (EternalBlue on unpatched SMBv1, or legitimate credentials via PsExec)

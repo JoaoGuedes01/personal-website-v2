@@ -1,15 +1,22 @@
 ---
 title: "FTP enumeration"
-description: "Check anonymous access, brute-force credentials, and identify server version on FTP (port 21)."
+description: "Gathering as much information as possible on an FTP server and attempt to gain access via a misconfiguration or weak credentials"
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["ftp", "enumeration"]
+tags: ["ftp", "enumeration", "nmap", "metasploit", "hydra", "searchsploit", "bruteforce"]
 draft: false
 ---
 
-FTP (default port 21) is old enough that its main risks haven't changed in years: misconfigured anonymous access, and weak credentials that fall to a straightforward brute-force.
+FTP runs usually on **port 21** and is old enough that its main risks haven't changed in years: misconfigured anonymous access, and weak credentials that fall to a straightforward brute-force.
+
+## Tools mentioned
+- [nmap](../tools/scanning-enumeration-tools/nmap)
+- [metasploit](../tools/exploitation-frameworks/metasploit-framework)
+- [hydra](../tools/credential-attack-tools/hydra)
+- [searchsploit](../tools/exploitation-frameworks/searchsploit)
+
 
 ```bash
 #################### FTP CLI ####################
@@ -34,4 +41,4 @@ hydra -L users.txt -P passwords.txt <target_ip> ftp
 searchsploit <ftp_server_and_version>     # once you have a specific version
 ```
 
-There isn't much middle ground with FTP: either anonymous login works, valid credentials fall to brute-force, or you're waiting on a version-specific exploit (see the FTP Exploitation snippet — vsftpd 2.3.4's backdoor is the classic example). Brute-forcing FTP can overload a fragile server, so treat it as a mild denial-of-service risk on anything not built to handle high connection volume.
+There isn't much wiggle room with FTP: either anonymous login works, weak credentials work under brute-force, or you're waiting on a version-specific exploit ([vsftpd 2.3.4 CVE Exploitation Example](../exploitation/remote-service-exploitation/linux-ftp-ssh-exploitation)). Brute-forcing FTP can overload a fragile server so we should not hammer it with frequent requests and be more lenient when it comes to setting attempt intervals.

@@ -5,7 +5,7 @@ pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["http", "web", "enumeration", "directory-discovery"]
+tags: ["http", "web", "enumeration", "directory-discovery", "nmap", "dirb", "gobuster","curl", "whatweb", "browsh", "metasploit"]
 draft: false
 ---
 
@@ -47,4 +47,4 @@ auxiliary/scanner/http/http_put            # test upload/delete via HTTP PUT/DEL
 auxiliary/scanner/http/http_git            # check for an exposed .git directory
 ```
 
-HTTP uses port 80 by default and 443 when TLS is configured — treat HTTP and HTTPS as the same protocol wearing different clothes, not two separate things to enumerate independently. Response headers often leak the exact server/framework/language stack even when `whatweb` doesn't catch it. Status codes worth knowing at a glance: `200` success, `301`/`302` redirect (worth following, it often reveals the "real" internal hostname), `401` auth required, `403` forbidden (the resource exists — don't skip it just because it's blocked), `404` not found, `500` server error (sometimes with a stack trace worth reading). For anything beyond simple brute-forcing — crawling a full app, spidering discovered links, intercepting and replaying requests — Burp Suite's crawler or OWASP ZAP's spider are the standard next step up from directory wordlists alone.
+HTTP uses port `80` by default and `443` when TLS is configured. HTTP and HTTPS are exactly the same protocol, not two separate things to enumerate independently. Response headers often leak the exact server/framework/language stack even when `whatweb` doesn't catch it. For anything beyond simple brute-forcing, crawling a full app, spidering discovered links, intercepting and replaying requests, Burp Suite's crawler or OWASP ZAP's spider are the standard next step up from directory wordlists alone.

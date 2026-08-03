@@ -1,15 +1,15 @@
 ---
 title: "SSH enumeration"
-description: "Version/algorithm fingerprinting, user enumeration, and brute-forcing against SSH (port 22)."
+description: "Version/algorithm fingerprinting, user enumeration, and brute-forcing on SSH servers."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["ssh", "enumeration"]
+tags: ["ssh", "enumeration", "nmap", "metasploit", "hydra"]
 draft: false
 ---
 
-SSH is deliberately narrow from an attacker's side — there's no anonymous mode, so it comes down to finding a vulnerable version or brute-forcing valid credentials.
+SSH is deliberately narrow from an attacker's side as there's no anonymous mode, so it comes down to either finding a vulnerable version or brute-forcing valid credentials.
 
 ```bash
 #################### NETCAT / SSH CLI ####################
@@ -33,4 +33,4 @@ auxiliary/scanner/ssh/ssh_login       # brute-force with username/password
 hydra -L users.txt -P passwords.txt <target_ip> ssh
 ```
 
-If `ssh-auth-methods` comes back showing `none_auth` for a user, that means no authentication at all is required for that account — worth checking explicitly rather than assuming every account needs a password. Once valid credentials or a key are found, it's a full interactive shell straightaway — no further exploitation step needed, unlike most other services on this list.
+If `ssh-auth-methods` comes back showing `none_auth` for a user, that means no authentication at all is required for that account. This is worth checking explicitly rather than assuming every account needs a password. Once valid credentials or a key are found, that's it we have access to the system and we need no more exploitation. We can go straight to Privilege Escalation or Post Exploitation.

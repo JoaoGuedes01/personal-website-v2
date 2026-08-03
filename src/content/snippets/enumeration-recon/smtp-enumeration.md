@@ -1,15 +1,15 @@
 ---
 title: "SMTP enumeration"
-description: "Version fingerprinting and user enumeration against SMTP (port 25/465/587)."
+description: "Version fingerprinting and user enumeration on SMTP servers."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["smtp", "enumeration"]
+tags: ["smtp", "enumeration", "nmap", "metasploit", "telnet"]
 draft: false
 ---
 
-SMTP's biggest enumeration win is usually username enumeration — the protocol's own `VRFY`/`EXPN` commands (or timing/response differences around them) leak whether an account exists, which is exactly what `smtp-user-enum` and Metasploit's `smtp_enum` module automate.
+SMTP's biggest enumeration win is usually username enumeration. The protocol's own `VRFY`/`EXPN` commands (or timing/response differences around them) leak whether an account exists or not, which is exactly what `smtp-user-enum` and Metasploit's `smtp_enum` module automate.
 
 ```bash
 #################### NMAP ####################
@@ -29,4 +29,4 @@ telnet <target_ip> 25              # manual banner/interaction check
 sendemail -f admin@attacker.xyz -t root@target.xyz -s <target_ip> -u "Fakemail" -m "test" -o tls=no
 ```
 
-Default port is `25`, with `465`/`587` as common alternatives (usually for authenticated/encrypted submission rather than open relay). Any usernames enumerated here feed directly into brute-forcing other services on the same host — SMTP is rarely interesting on its own, but it's a reliable source of valid usernames for everything else.
+Default port is `25`, with `465`/`587` as common alternatives (usually for authenticated/encrypted submission rather than open relay). Any usernames enumerated here feed directly into brute-forcing other services on the same host. SMTP is rarely interesting on its own, but it's a reliable source of valid usernames for everything else.

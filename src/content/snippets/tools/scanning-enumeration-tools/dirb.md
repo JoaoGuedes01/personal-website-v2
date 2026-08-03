@@ -1,11 +1,11 @@
 ---
 title: "dirb: dictionary-based web content scanner"
-description: "Brute-force hidden directories and files on a web server with a wordlist."
+description: "Brute-force hidden directories and files on a web server with wordlists."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
-tags: ["dirb", "web", "recon"]
+tags: ["dirb", "web", "recon", "dirbuster"]
 draft: false
 ---
 

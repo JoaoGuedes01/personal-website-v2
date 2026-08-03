@@ -1,15 +1,20 @@
 ---
 title: "MySQL enumeration"
-description: "Version fingerprinting, schema dumping, and brute-forcing against MySQL (port 3306)."
+description: "Version fingerprinting, schema dumping, and brute-forcing MySQL servers."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "sql"
-tags: ["mysql", "sql", "enumeration"]
+tags: ["mysql", "sql", "enumeration", "nmap", "metasploit", "hydra"]
 draft: false
 ---
 
-MySQL enumeration is mostly about one account: `root`. It's frequently the only user that exists, and it's frequently reachable with an empty password — check that before reaching for a full brute-force.
+MySQL enumeration is mostly about the `root` account. It's frequently the only user that exists, and it's frequently reachable with an empty password. It's always a good idea to check that before reaching for a full brute-force.
+
+## Tools mentioned
+- [nmap](../tools/scanning-enumeration-tools/nmap)
+- [metasploit](../tools/exploitation-frameworks/metasploit-framework)
+- [hydra](../tools/credential-attack-tools/hydra)
 
 ```bash
 #################### MYSQL CLI ####################
@@ -42,4 +47,4 @@ admin/mysql/mysql_sql                        # run an arbitrary SQL query with v
 hydra -l root -P passwords.txt <target_ip> mysql
 ```
 
-Default port is `3306`. Because `root` is so often the only account and so often has a blank password in test/lab environments, the empty-password check is worth running before a full wordlist brute-force — it's a one-line nmap script and saves real time when it hits.
+Default port is `3306`. Because `root` is so often the only account and so often has a blank password in test/lab environments, the empty-password check is worth running before a full wordlist brute-force.
