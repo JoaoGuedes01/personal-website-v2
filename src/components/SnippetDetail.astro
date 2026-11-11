@@ -1,7 +1,7 @@
 ---
 /**
- * <SnippetDetail /> — a single snippet's page body: breadcrumb chips, header,
- * tags, content, optional gallery/TOC. Shared by the three detail routes
+ * <SnippetDetail /> — a single snippet's page body: breadcrumb trail, header,
+ * content, tags, optional gallery/TOC. Shared by the three detail routes
  * (groupless, grouped, subgrouped) — only the breadcrumb chain and the
  * back/tag-filter target differ per depth.
  */
@@ -12,6 +12,7 @@ import Gallery from "./Gallery.astro";
 import SystemIcon from "./SystemIcon.astro";
 import { readingTime } from "../utils/reading";
 import { slugify } from "../data/taxonomy";
+import { href } from "../data/site";
 
 export interface Crumb {
   label: string;
@@ -22,9 +23,9 @@ interface Props {
   entry: CollectionEntry<"snippets">;
   crumbs: Crumb[]; // category [, group [, subgroup]], in order
   listHref: string; // immediate parent listing — back link + tag ?tag= target
-  backLabel: string;
+  backLabel?: string; // unused — breadcrumbs now carry the way back
 }
-const { entry, crumbs, listHref, backLabel } = Astro.props;
+const { entry, crumbs, listHref } = Astro.props;
 const { title, description, pubDate, lang, tags, gallery, source } = entry.data;
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
@@ -34,62 +35,53 @@ const dateStr = pubDate.toLocaleDateString("en-US", { year: "numeric", month: "s
 ---
 
 <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
-  <a
-    href={listHref}
-    class="inline-flex items-center gap-1.5 text-sm text-base-content/55 transition-colors hover:text-primary"
-  >
-    <SystemIcon name="chevron-left" size={15} />
-    {backLabel}
-  </a>
+  <nav aria-label="Breadcrumb">
+    <ol class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-base-content/55">
+      <li>
+        <a href={href("/snippets")} class="transition-colors hover:text-primary">Snippets</a>
+      </li>
+      {
+        crumbs.map((c, i) => (
+          <li class="inline-flex items-center gap-1.5">
+            <SystemIcon name="chevron-right" size={13} class="text-base-content/30" />
+            <a
+              href={c.href}
+              aria-current={i === crumbs.length - 1 ? "page" : undefined}
+              class="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
+            >
+              <SystemIcon name={c.icon} size={13} />
+              {c.label}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
 
-  <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
+  <div class:list={["mt-8", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
     <article class="min-w-0">
       <header>
-        <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-base-content/50">
-          <time datetime={pubDate.toISOString()}>{dateStr}</time>
-          <span class="text-base-content/30">·</span>
-          <span>{rt.label}</span>
-          {
-            crumbs.map((c) => (
-              <a
-                href={c.href}
-                class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary transition-colors hover:bg-primary/20"
-              >
-                <SystemIcon name={c.icon} size={11} />
-                {c.label}
-              </a>
-            ))
-          }
-          <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{lang}</span>
-          {
-            source && (
-              <span class="inline-flex items-center gap-1 rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">
-                <SystemIcon name="book-open" size={11} />
-                {source}
-              </span>
-            )
-          }
-        </div>
-
-        <h1 class="mt-3 text-3xl leading-tight sm:text-4xl">{title}</h1>
+        <h1 class="text-3xl leading-tight sm:text-4xl">{title}</h1>
         <p class="mt-3 text-lg text-base-content/70">{description}</p>
 
-        {
-          tags.length > 0 && (
-            <ul class="mt-4 flex flex-wrap gap-1.5">
-              {tags.map((t) => (
-                <li>
-                  <a
-                    href={`${listHref}?tag=${slugify(t)}`}
-                    class="inline-block rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55 transition-colors hover:border-base-content/30 hover:text-primary"
-                  >
-                    {t}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )
-        }
+        <p class="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-base-content/50">
+          <span class="rounded-md bg-base-200 px-2 py-0.5 font-mono text-xs text-base-content/70">{lang}</span>
+          <span class="text-base-content/25">·</span>
+          <span>{rt.label}</span>
+          <span class="text-base-content/25">·</span>
+          <time datetime={pubDate.toISOString()}>{dateStr}</time>
+          {
+            source && (
+              <>
+                <span class="text-base-content/25">·</span>
+                <span class="inline-flex items-center gap-1">
+                  <SystemIcon name="book-open" size={13} />
+                  {source}
+                </span>
+              </>
+            )
+          }
+        </p>
       </header>
 
       {hasToc && <TableOfContents headings={headings} variant="mobile" class="mt-6" />}
@@ -99,6 +91,23 @@ const dateStr = pubDate.toLocaleDateString("en-US", { year: "numeric", month: "s
           <Content />
         </div>
       </div>
+
+      {
+        tags.length > 0 && (
+          <ul class="mt-10 flex flex-wrap gap-1.5 border-t border-base-300 pt-6">
+            {tags.map((t) => (
+              <li>
+                <a
+                  href={`${listHref}?tag=${slugify(t)}`}
+                  class="inline-block rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/55 transition-colors hover:border-primary/40 hover:text-primary"
+                >
+                  {t}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
 
       {
         gallery.length > 0 && (

@@ -9,7 +9,7 @@
  * paging into view.
  */
 import type { CollectionEntry } from "astro:content";
-import PostCard from "./PostCard.astro";
+import SnippetCard from "./SnippetCard.astro";
 import FilterBar from "./FilterBar.astro";
 import type { Facet } from "./FilterBar.astro";
 import SystemIcon from "./SystemIcon.astro";
@@ -84,15 +84,13 @@ const cards = items.map((entry) => ({
         {
           cards.map((c) => (
             <div data-filter-item data-tag={c.tag} data-search={c.search}>
-              <PostCard
+              <SnippetCard
                 url={snippetUrl(c.entry)}
                 title={c.entry.data.title}
                 description={c.entry.data.description}
-                date={c.entry.data.pubDate}
                 readingTime={readingTime(c.entry.body).label}
                 tags={c.entry.data.tags}
                 lang={c.entry.data.lang}
-                source={c.entry.data.source}
               />
             </div>
           ))

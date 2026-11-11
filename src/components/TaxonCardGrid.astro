@@ -4,6 +4,10 @@
  * linking into a taxon (category/group/subgroup). Shared by the /snippets
  * landing page, a category page listing its groups, and a group page listing
  * its subgroups — same look at every level.
+ *
+ * Layout: icon tile on top, then title + blurb, then a quiet footer row with
+ * the count on the left and an arrow on the right. The footer is pinned to the
+ * bottom so cards in a row line up regardless of blurb length.
  */
 import SystemIcon from "./SystemIcon.astro";
 
@@ -19,29 +23,34 @@ interface Props {
   cards: TaxonCard[];
 }
 const { cards } = Astro.props;
+// 3 (or 5+) cards read best in three columns; 1, 2 or 4 pair up in two.
+const threeUp = cards.length === 3 || cards.length > 4;
 ---
 
-<div class="grid gap-4 sm:grid-cols-2">
+<div class:list={["grid gap-4 sm:grid-cols-2", threeUp && "lg:grid-cols-3"]}>
   {
     cards.map((c) => (
-      <a href={c.href} class="card-lift group relative flex items-start gap-4 rounded-box border border-base-300 bg-base-100 p-6">
-        <span class="mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-field border border-base-300 bg-base-200 text-primary">
+      <a
+        href={c.href}
+        class="card-lift group flex flex-col rounded-box border border-base-300 bg-base-100 p-5 hover:border-primary/40"
+      >
+        <span class="inline-flex h-11 w-11 items-center justify-center rounded-field bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-primary-content">
           <SystemIcon name={c.icon} size={20} />
         </span>
-        <span class="min-w-0 pr-6">
-          <span class="flex items-baseline gap-2">
-            <span class="font-display text-xl leading-snug group-hover:text-primary">{c.label}</span>
-            <span class="text-xs text-base-content/45">
-              {c.count} {c.count === 1 ? (c.noun ?? "snippet") : `${c.noun ?? "snippet"}s`}
-            </span>
+
+        <h2 class="mt-4 font-display text-lg leading-snug">{c.label}</h2>
+        <p class="mb-5 mt-1.5 line-clamp-3 text-sm leading-relaxed text-base-content/65">{c.blurb}</p>
+
+        <span class="mt-auto flex items-center justify-between border-t border-base-300/70 pt-3 text-xs text-base-content/50">
+          <span class="tabular-nums">
+            {c.count} {c.count === 1 ? (c.noun ?? "snippet") : `${c.noun ?? "snippet"}s`}
           </span>
-          <span class="mt-1 block text-sm leading-relaxed text-base-content/65">{c.blurb}</span>
+          <SystemIcon
+            name="arrow-right"
+            size={16}
+            class="-translate-x-1 text-base-content/30 transition-all duration-200 group-hover:translate-x-0 group-hover:text-primary"
+          />
         </span>
-        <SystemIcon
-          name="arrow-up-right"
-          size={16}
-          class="absolute right-5 top-6 text-base-content/30 transition-colors group-hover:text-primary"
-        />
       </a>
     ))
   }

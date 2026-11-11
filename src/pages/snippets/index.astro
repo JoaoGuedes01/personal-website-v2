@@ -4,7 +4,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ListSearch from "../../components/ListSearch.astro";
 import TaxonCardGrid from "../../components/TaxonCardGrid.astro";
 import { href } from "../../data/site";
-import { SNIPPET_CATEGORIES, snippetPath, snippetUrl } from "../../data/taxonomy";
+import { readingTime } from "../../utils/reading";
+import { SNIPPET_CATEGORIES, snippetCategorySlug, snippetPath, snippetUrl } from "../../data/taxonomy";
+import { snippetGroupInfo, snippetSubgroupInfo } from "../../data/snippetGroups";
 
 const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
 const total = snips.length;
@@ -21,11 +23,20 @@ const categories = SNIPPET_CATEGORIES.map((cat) => ({
 // Global fuzzy-search across every snippet, regardless of class/group.
 const searchItems = snips.map((s) => {
   const { group, subgroup } = snippetPath(s);
+  const cat = snippetCategorySlug(s.data.category);
+  // Human labels for the path line (search still matches on them too).
+  const path = [
+    s.data.category,
+    group && snippetGroupInfo(cat, group).label,
+    group && subgroup && snippetSubgroupInfo(cat, group, subgroup).label,
+  ].filter(Boolean);
   return {
     title: s.data.title,
     url: snippetUrl(s),
     description: s.data.description,
-    meta: [s.data.category, group, subgroup, s.data.lang].filter(Boolean).join(" · "),
+    meta: path.join(" · "),
+    lang: s.data.lang,
+    reading: readingTime(s.body).label,
     tags: s.data.tags,
   };
 });
@@ -50,6 +61,7 @@ const searchItems = snips.map((s) => {
             placeholder="Search all snippets…"
             label="Search snippets"
             resultsGridClass="grid gap-5 sm:grid-cols-2"
+            variant="snippet"
           >
             <Fragment slot="filters"><span /></Fragment>
 
