@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.8.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.7.0...guedes-site-v0.8.0) (2026-11-11)
+
+
+### ✨ Features
+
+* **snippets:** grouped, drill-down navigation by group/subgroup ([2686319](https://github.com/JoaoGuedes01/personal-website-v2/commit/26863190afd9385e4de96dcc198766e2f1389fe7))
+
+
+### 🐛 Bug Fixes
+
+* removed icon fill in snippets ([b72a038](https://github.com/JoaoGuedes01/personal-website-v2/commit/b72a03869493a311b391aa96b54ac889cbd0a9ef))
+* rw-wrote cybersecurity snippet category descriptions ([45ebee7](https://github.com/JoaoGuedes01/personal-website-v2/commit/45ebee728110ec90d81b9c481e78bf0ea1a64bf6))
+
+
+### 📝 Content
+
+* Add cheat sheet and useful links goodies to cyber snippets ([8ca363e](https://github.com/JoaoGuedes01/personal-website-v2/commit/8ca363ec53b420647b3411b0ed77bc0e8cc637b3))
+* Add cybersecurity credential attack tools snippets ([a82337d](https://github.com/JoaoGuedes01/personal-website-v2/commit/a82337d818f6d15d463ca380a815b02df48c8696))
+* Add cybersecurity enum and recon snippets ([3a26882](https://github.com/JoaoGuedes01/personal-website-v2/commit/3a2688298080d4a1e5d2ef669dd219dcc6335b51))
+* Add cybersecurity exploitation and post frameworks snippets ([5024179](https://github.com/JoaoGuedes01/personal-website-v2/commit/5024179810e8cb65cf8361ba09077657aa05adfd))
+* Add cybersecurity post exploitation and persistence snippets ([744dc8f](https://github.com/JoaoGuedes01/personal-website-v2/commit/744dc8ffaf313f72796049ab7403234b0ad6dde0))
+* Add cybersecurity privilege escalation snippets ([141f17f](https://github.com/JoaoGuedes01/personal-website-v2/commit/141f17f1b7fdc420d6cd94cd986c82f1d1993f52))
+* Add cybersecurity remote service exploitation snippets ([c581aab](https://github.com/JoaoGuedes01/personal-website-v2/commit/c581aabe0f7d56b10ed5a9d73ab4056444b034d0))
+* Add cybersecurity rmeote access and netutils snippets ([8663e55](https://github.com/JoaoGuedes01/personal-website-v2/commit/8663e551e4774b14abe42b0afa6fb7b93dc2f775))
+* Add cybersecurity scanning and enumeration tools snippets ([fb74ffc](https://github.com/JoaoGuedes01/personal-website-v2/commit/fb74ffcc6407f84238e07e65d00a6e8751838f45))
+* add cybersecurity snippets from eJPT certification ([3e95d9b](https://github.com/JoaoGuedes01/personal-website-v2/commit/3e95d9b5fbf35e542ba7d25b0aa4c926da519134))
+* revamp snippet markdown + inner links ([caf75c2](https://github.com/JoaoGuedes01/personal-website-v2/commit/caf75c224015becec2b7bbebe724573eac36e48c))
+
 ## [0.7.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.6.0...guedes-site-v0.7.0) (2026-07-29)
 
 
