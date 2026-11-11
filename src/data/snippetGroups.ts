@@ -86,6 +86,12 @@ export const SNIPPET_GROUPS: Record<string, SnippetGroup[]> = {
         },
       ],
     },
+    {
+      label: "Extras",
+      slug: "extras",
+      icon: "gift",
+      blurb: "Some extra goodies from my studying.",
+    },
   ],
 };
 
