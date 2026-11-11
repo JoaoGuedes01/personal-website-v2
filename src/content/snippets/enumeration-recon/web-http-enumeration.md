@@ -9,33 +9,46 @@ tags: ["http", "web", "enumeration", "directory-discovery", "nmap", "dirb", "gob
 draft: false
 ---
 
-A useful order of operations: identify the server and its version, pull its headers, check `robots.txt`, then brute-force directories/files, and only then start probing individual endpoints or user accounts.
+A useful order of operations: identify the server and its version, pull its headers, check `robots.txt`, then brute-force directories/files, and only then start probing individual endpoints or user accounts. HTTP uses port `80` by default and `443` when TLS is configured; they're the same protocol, not two separate things to enumerate independently.
+
+## Nmap
 
 ```bash
-#################### NMAP ####################
 nmap -sS -sV -p80,443 <target_ip>                  # confirm the server + version
 nmap --script http-enum -sV -p80 <target_ip>       # enumerate common paths
 nmap --script http-headers -sV -p80 <target_ip>
 nmap --script http-methods -p80 <target_ip>        # which HTTP verbs are allowed
 nmap --script http-webdav-scan --script-args http-methods.url-path=/webdav/ -p80 <target_ip>
+```
 
-#################### DIRECTORY / FILE BRUTE-FORCE ####################
+## Directory and file brute-force
+
+```bash
 dirb http://<target_ip>
 gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirb/common.txt -b 403,404 -t 60
+```
 
-#################### CURL ####################
+## curl
+
+```bash
 curl <target_ip>                    # basic GET
 curl -I <target_ip>                 # headers only
 curl --digest -u alice:password1 http://<target_ip>/protected/    # authenticated request, digest auth
 curl -X OPTIONS <target_ip> -v      # check which methods a specific path allows
 curl -X PUT <target_ip>             # test if uploads are accepted (misconfigured WebDAV/servers)
+```
 
-#################### WHATWEB / HTTPIE / BROWSH ####################
+## Fingerprinting and browsing
+
+```bash
 whatweb <target_ip>                     # fingerprint the stack (server, CMS, JS libs)
 http <target_ip>                        # httpie — curl-like syntax, nicer output
 browsh --startup-url http://<target_ip>   # full terminal browser when you need rendered JS
+```
 
-#################### METASPLOIT ####################
+## Metasploit
+
+```text
 auxiliary/scanner/http/http_version        # identify server version
 auxiliary/scanner/http/http_header         # pull headers
 auxiliary/scanner/http/robots_txt          # check robots.txt content
@@ -47,4 +60,16 @@ auxiliary/scanner/http/http_put            # test upload/delete via HTTP PUT/DEL
 auxiliary/scanner/http/http_git            # check for an exposed .git directory
 ```
 
-HTTP uses port `80` by default and `443` when TLS is configured. HTTP and HTTPS are exactly the same protocol, not two separate things to enumerate independently. Response headers often leak the exact server/framework/language stack even when `whatweb` doesn't catch it. For anything beyond simple brute-forcing, crawling a full app, spidering discovered links, intercepting and replaying requests, Burp Suite's crawler or OWASP ZAP's spider are the standard next step up from directory wordlists alone.
+## Tips
+
+- Response headers often leak the exact server/framework/language stack even when `whatweb` doesn't catch it.
+- For anything beyond simple brute-forcing (crawling a full app, spidering discovered links, intercepting and replaying requests), Burp Suite's crawler or OWASP ZAP's spider are the standard next step up from directory wordlists alone.
+
+## Related
+
+- [dirb](/snippets/cybersecurity/tools/scanning-enumeration-tools/dirb): dictionary-based content scanner
+- [Gobuster](/snippets/cybersecurity/tools/scanning-enumeration-tools/gobuster): dir, DNS and vhost brute-forcing
+- [FFuF](/snippets/cybersecurity/tools/scanning-enumeration-tools/ffuf): fast web fuzzing
+- [WebDAV exploitation](/snippets/cybersecurity/exploitation/remote-service-exploitation/webdav-exploitation): when `http-webdav-scan` finds something
+- [Shellshock](/snippets/cybersecurity/exploitation/remote-service-exploitation/shellshock-cve-2014-6271): if you find CGI scripts
+- [WMAP](/snippets/cybersecurity/tools/scanning-enumeration-tools/wmap): web scanning inside Metasploit

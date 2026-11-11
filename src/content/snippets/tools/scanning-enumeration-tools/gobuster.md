@@ -9,12 +9,36 @@ tags: ["gobuster", "web", "recon"]
 draft: false
 ---
 
-Gobuster's directory mode is the one you'll use the most, but it's worth remembering it's a multi-purpose tool, it also does subdomain brute-forcing and vhost discovery.
+Gobuster's directory mode is the one you'll use the most, but it's a multi-purpose tool: it also does subdomain brute-forcing and vhost discovery.
+
+## Directory scan
 
 ```bash
 gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirb/common.txt -b 403,404 -t 60
 ```
 
-Key flags: `-w` wordlist, `-b` status codes to blacklist (hide expected noise like 403/404), `-t` thread count (default 10), `-x` extensions to append (`-x php,txt,bak`), `-r` follow redirects, `-o` write results to a file.
+| Flag | Meaning |
+| --- | --- |
+| `-w` | Wordlist |
+| `-b` | Status codes to blacklist (hide expected noise like 403/404) |
+| `-t` | Thread count (default 10) |
+| `-x` | Extensions to append (`-x php,txt,bak`) |
+| `-r` | Follow redirects |
+| `-o` | Write results to a file |
 
-Modes beyond `dir`: `dns` (subdomain brute-force), `vhost` (virtual host enumeration), `fuzz` (generic `FUZZ` keyword replacement in URL/headers/body), `s3`/`gcs` (cloud bucket enumeration).
+## Modes
+
+| Mode | Purpose |
+| --- | --- |
+| `dir` | Directory and file brute-force |
+| `dns` | Subdomain brute-force |
+| `vhost` | Virtual host enumeration |
+| `fuzz` | Generic `FUZZ` keyword replacement in URL/headers/body |
+| `s3` / `gcs` | Cloud bucket enumeration |
+
+## Related
+
+- [Web server & HTTP enumeration](/snippets/cybersecurity/enumeration-recon/web-http-enumeration): the workflow this plugs into
+- [dirb](/snippets/cybersecurity/tools/scanning-enumeration-tools/dirb): slower, recursive-by-default alternative
+- [FFuF](/snippets/cybersecurity/tools/scanning-enumeration-tools/ffuf): when you need to fuzz headers or POST bodies
+- [dig](/snippets/cybersecurity/tools/scanning-enumeration-tools/dig): DNS lookups and zone transfers

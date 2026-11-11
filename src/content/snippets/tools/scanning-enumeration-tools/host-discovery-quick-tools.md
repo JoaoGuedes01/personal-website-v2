@@ -9,7 +9,9 @@ tags: ["ping", "fping", "arp-scan", "netdiscover", "nmblookup", "host-discovery"
 draft: false
 ---
 
-These tools should be the fast first pass before a proper nmap sweep, especially on networks where ICMP is filtered.
+These tools should be the fast first pass before a proper [nmap](/snippets/cybersecurity/tools/scanning-enumeration-tools/nmap) sweep, especially on networks where ICMP is filtered.
+
+## Tools
 
 ```bash
 # ping: basic ICMP echo
@@ -28,4 +30,21 @@ netdiscover -r 192.168.31.0/24
 nmblookup -A <target_ip>
 ```
 
-Windows hosts block ICMP by default, so a plain `ping` sweep will under-report a Windows-heavy network. `arp-scan`/`netdiscover` or an nmap TCP SYN ping are great options under those conditions. `fping` is great for quickly scanning a large subnet. `nmblookup` is useful for resolving NetBIOS names on a network once you have a list of IP addresses.
+## Which to use
+
+| Tool | Best for |
+| --- | --- |
+| `ping` | Checking a single host |
+| `fping` | Quickly sweeping a large subnet |
+| `arp-scan` / `netdiscover` | Local network, hosts that filter ICMP |
+| `nmblookup` | Resolving NetBIOS names once you have a list of IPs |
+
+:::note[Windows blocks ICMP by default]
+A plain `ping` sweep will under-report a Windows-heavy network. Use `arp-scan`/`netdiscover` or an nmap TCP SYN ping instead.
+:::
+
+## Related
+
+- [Host discovery & network mapping workflow](/snippets/cybersecurity/enumeration-recon/host-discovery-network-mapping): the full recon sequence
+- [Nmap](/snippets/cybersecurity/tools/scanning-enumeration-tools/nmap): the proper sweep that follows
+- [SMB & NetBIOS enumeration](/snippets/cybersecurity/enumeration-recon/smb-enumeration): what to do with the NetBIOS names
