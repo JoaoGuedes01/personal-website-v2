@@ -1,7 +1,7 @@
 ---
 title: "Wireshark & tshark: packet capture and analysis"
-description: "GUI and CLI packet analysis — capture filters, display filters, and common tshark one-liners."
-pubDate: 2026-08-01
+description: "GUI and CLI packet analysis."
+pubDate: 2026-11-10
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "bash"
@@ -9,7 +9,7 @@ tags: ["wireshark", "tshark", "packet-analysis"]
 draft: false
 ---
 
-Wireshark is the GUI protocol analyzer; `tshark` is the same engine from the command line, which is what you actually want over SSH or inside a script. Both understand the same display-filter syntax.
+Wireshark is the GUI protocol analyzer; `tshark` is the same engine from the command line, which is what you want over SSH or inside a script. Both understand the same display-filter syntax.
 
 ```bash
 # Wireshark
@@ -24,7 +24,7 @@ tcp.port == 443
 ```
 
 ```bash
-# tshark — same tool, CLI-driven
+# tshark
 tshark -r capture.pcap -c 100                          # first 100 packets
 tshark -r capture.pcap -q -z io,phs                     # protocol hierarchy statistics
 tshark -r capture.pcap -Y "http.request"                # only HTTP GET/POST requests
@@ -41,4 +41,4 @@ tshark -r capture.pcap -Y "eapol"                             # WPA handshake pa
 tshark -r capture.pcap -T fields -e wlan.ssid -e wlan.bssid
 ```
 
-Capture filters (`-f`, applied while capturing — e.g. `-f "port 80"`) reduce noise at capture time; display filters (`-Y` in tshark, the filter bar in Wireshark) filter an already-captured file. Promiscuous mode is on by default and will capture all traffic the interface can see, not just traffic to/from your own machine — always confirm you have authorization to capture on a given network segment before you start.
+Capture filters (`-f`, applied while capturing(`-f "port 80"`)) reduce noise at capture time; display filters (`-Y` in tshark or the filter bar in Wireshark) filter an already-captured file. Promiscuous mode is on by default and will capture all traffic the interface can see, not just traffic to/from your own machine. Always confirm you have authorization to capture on a given network segment before you start.

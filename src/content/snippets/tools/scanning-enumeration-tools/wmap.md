@@ -1,7 +1,7 @@
 ---
 title: "WMAP: web app scanning inside Metasploit"
-description: "Metasploit's built-in web vulnerability scanner plugin — enumerate a site and run modules against it without leaving msfconsole."
-pubDate: 2026-08-01
+description: "Metasploit's built-in web vulnerability scanner plugin."
+pubDate: 2026-11-10
 category: "Cybersecurity"
 source: "INE Certification"
 lang: "msfconsole"
@@ -9,7 +9,7 @@ tags: ["wmap", "metasploit", "web", "vulnerability-scanning"]
 draft: false
 ---
 
-WMAP is a Metasploit plugin, so scan results land directly in the same database as everything else you've enumerated — useful when you want web findings sitting alongside host/service data rather than in a separate report.
+WMAP is a Metasploit plugin, so scan results land directly in the same database as everything else you've enumerated. It's useful when you want web findings sitting alongside host/service data rather than in a separate report.
 
 ```bash
 load wmap                              # load the plugin
@@ -25,4 +25,4 @@ wmap_run -e                            # execute: run all enabled/applicable mod
 wmap_vulns -l                          # list everything WMAP found
 ```
 
-`wmap_run -t` before `-e` is worth doing out of habit — it tells you what's actually going to fire before you commit to running every applicable scanner module against the target.
+`wmap_run -t` before `-e` is worth doing out of habit as it tells you what's actually going to fire before you commit to running every applicable scanner module against the target.
