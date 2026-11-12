@@ -14,7 +14,7 @@ const featured = (await getCollection("projects"))
   .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
   .slice(0, 6);
 
-// Recent writing = blog + snippets, merged by date
+// Recent writing = the newest ramblings and the newest snippets, shown side by side
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
   .map((p) => ({
@@ -39,9 +39,13 @@ const snips = (await getCollection("snippets"))
     category: p.data.category as string | undefined,
     lang: p.data.lang as string | undefined,
   }));
-const recent = [...posts, ...snips]
-  .sort((a, b) => b.date.getTime() - a.date.getTime())
-  .slice(0, 4);
+const byNewest = (a: { date: Date }, b: { date: Date }) => b.date.getTime() - a.date.getTime();
+const recentPosts = posts.sort(byNewest).slice(0, 2);
+const recentSnips = snips.sort(byNewest).slice(0, 2);
+const recentGroups = [
+  { label: "Ramblings", all: "All ramblings", url: href("/blog"), items: recentPosts },
+  { label: "Snippets", all: "All snippets", url: href("/snippets"), items: recentSnips },
+].filter((g) => g.items.length > 0);
 ---
 
 <BaseLayout>
@@ -112,24 +116,36 @@ const recent = [...posts, ...snips]
 
   <!-- RECENT WRITING -->
   {
-    recent.length > 0 && (
+    recentGroups.length > 0 && (
       <section class="mx-auto mt-20 max-w-5xl px-4 sm:px-6">
         <div class="mb-8">
           <p class="eyebrow">Ramblings &amp; snippets</p>
           <h2 class="mt-2 text-3xl">Recently written</h2>
         </div>
-        <div class="grid gap-5 sm:grid-cols-2">
-          {recent.map((p) => (
-            <PostCard
-              url={p.url}
-              title={p.title}
-              description={p.description}
-              date={p.date}
-              readingTime={p.readingTime}
-              category={p.category}
-              tags={p.tags}
-              lang={p.lang}
-            />
+        <div class="space-y-10">
+          {recentGroups.map((g) => (
+            <div>
+              <div class="mb-4 flex items-baseline justify-between gap-4">
+                <h3 class="text-xl">{g.label}</h3>
+                <a href={g.url} class="text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline">
+                  {g.all} →
+                </a>
+              </div>
+              <div class="grid gap-5 sm:grid-cols-2">
+                {g.items.map((p) => (
+                  <PostCard
+                    url={p.url}
+                    title={p.title}
+                    description={p.description}
+                    date={p.date}
+                    readingTime={p.readingTime}
+                    category={p.category}
+                    tags={p.tags}
+                    lang={p.lang}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
