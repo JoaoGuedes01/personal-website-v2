@@ -12,7 +12,7 @@
 // type needs (mirroring src/content.config.ts), pre-fills the date where it
 // applies, and refuses to overwrite an existing file.
 // ---------------------------------------------------------------------------
-import { writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { writeFileSync, existsSync, mkdirSync, readFileSync, copyFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -61,11 +61,14 @@ function usage(msg) {
     --slug <slug>        override the auto-generated filename
     --group <slug>       snippet only: nest under src/content/snippets/<group>/
     --subgroup <slug>    snippet only: nest under <group>/<subgroup>/ (requires --group)
+    --template <name>    blog only: "showcase" = the "Everything a ramble can do" example post
+                         (every block + cover + gallery; its images are copied next to it)
     -h, --help           show this help
 
   Examples:
     node scripts/new-content.mjs project "Realtime Chat Service"
     node scripts/new-content.mjs blog "What the homelab taught me"
+    npm run new -- blog "Layout test" --template showcase
     npm run new -- snippet "Tail all compose logs"
     npm run new -- snippet "John the Ripper" --group tools --subgroup credential-attack-tools
 
@@ -105,7 +108,8 @@ table of contents.
 title: "${title}"
 description: "Shown in the list and used as the social description."
 pubDate: ${today}
-tags: []                      # each tag becomes a filter chip → /blog/tag/<tag>
+tags: []                      # each tag is a topic filter on /blog (→ /blog?tag=<tag>)
+featured: false               # true → pinned to the Featured block on /blog
 draft: false
 # updatedDate: ${today}
 # cover: ./cover.jpg          # optional hero image (co-located, optimized)
@@ -196,6 +200,7 @@ if (argv.includes("-h") || argv.includes("--help") || argv.length === 0) {
 let slugOverride = null;
 let group = null;
 let subgroup = null;
+let template = null;
 const positional = [];
 for (let i = 0; i < argv.length; i++) {
   if (argv[i] === "--slug") {
@@ -204,6 +209,10 @@ for (let i = 0; i < argv.length; i++) {
     group = argv[++i];
   } else if (argv[i] === "--subgroup") {
     subgroup = argv[++i];
+  } else if (argv[i] === "--template") {
+    template = (argv[++i] || "").toLowerCase();
+  } else if (argv[i] === "--example") {
+    template = "showcase";
   } else {
     positional.push(argv[i]);
   }
@@ -212,6 +221,9 @@ if (subgroup && !group) {
   usage("--subgroup requires --group.");
   process.exit(1);
 }
+
+const TEMPLATE_DIR = path.join(ROOT, "scripts", "templates");
+const TEMPLATES_FOR = { blog: ["showcase"] };
 
 const typeArg = (positional.shift() || "").toLowerCase();
 const type = ALIASES[typeArg];
@@ -246,7 +258,35 @@ if (existsSync(file)) {
   process.exit(1);
 }
 
+if (template && !(TEMPLATES_FOR[type] || []).includes(template)) {
+  const known = TEMPLATES_FOR[type];
+  usage(known ? `Unknown ${type} template "${template}". Available: ${known.join(", ")}.` : `--template isn't available for ${type}.`);
+  process.exit(1);
+}
+
 let body = TEMPLATES[type](title);
+const copied = [];
+if (type === "blog" && template === "showcase") {
+  // The showcase post uses co-located images; copy them next to it, prefixed
+  // with the slug so several showcase posts can coexist in the flat blog folder.
+  const imgDir = path.join(TEMPLATE_DIR, "blog-showcase");
+  const imgs = readdirSync(imgDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
+  const targets = imgs.map((f) => path.join(dir, `${slug}-${f}`));
+  const clash = targets.find((t) => existsSync(t));
+  if (clash) {
+    console.error(`\n  ✖ ${path.relative(ROOT, clash)} already exists — not overwriting.\n`);
+    process.exit(1);
+  }
+  body = readFileSync(path.join(TEMPLATE_DIR, "blog-showcase.md"), "utf8")
+    .replace(/\{\{title\}\}/g, title)
+    .replace(/\{\{date\}\}/g, today)
+    .replace(/\{\{slug\}\}/g, slug);
+  mkdirSync(dir, { recursive: true });
+  imgs.forEach((f, i) => {
+    copyFileSync(path.join(imgDir, f), targets[i]);
+    copied.push(path.relative(ROOT, targets[i]));
+  });
+}
 // paper template references the slug for the pdf hint
 body = body.replace(/\$\{slug\}/g, slug);
 
@@ -254,9 +294,9 @@ mkdirSync(dir, { recursive: true });
 writeFileSync(file, body, "utf8");
 
 console.log(`
-  ✔ Created ${path.relative(ROOT, file)}
+  ✔ Created ${path.relative(ROOT, file)}${copied.length ? `\n    + ${copied.length} images: ${copied.map((c) => path.basename(c)).join(", ")}` : ""}
 
   Next:
     • open it and replace the TODO / placeholder values
-    • run  npm run dev  and find it under /${type === "certification" ? "certifications" : type + "s"}
+    • run  npm run dev  and find it under /${{ blog: "blog", paper: "academia", certification: "certifications" }[type] ?? type + "s"}
 `);
