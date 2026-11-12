@@ -1,143 +1,314 @@
 ---
 /**
- * One page of the blog index: header, tag filter, search, grid of posts,
- * pagination. Shared by /blog, /blog/page/[page], and /blog/tag/<tag>.
- *
- * Tag chips are real navigation (each links to /blog or /blog/tag/<slug>), so
- * they play nice with pagination. The search box is a global fuzzy find.
+ * Ramblings listing: header, an optional "Featured" block, a visible topic bar
+ * (pills + search), then big cards. Filtering is client-side and self-contained
+ * (the topic bar replaces the dropdown FilterBar so topics are always visible):
+ * one topic at a time, stacked with search, mirrored to /blog?tag=<slug>. While
+ * nothing is filtered, featured posts live in the Featured block and are lifted
+ * out of the list; any filter hides the block and shows every match.
+ * Without JS the pills are plain links and the full list still renders.
  */
 import type { CollectionEntry } from "astro:content";
-import PostCard from "./PostCard.astro";
-import Pagination from "./Pagination.astro";
-import ListSearch from "./ListSearch.astro";
+import BlogPostCard from "./BlogPostCard.astro";
 import SystemIcon from "./SystemIcon.astro";
-import { readingTime } from "../utils/reading";
+import { PAGE_SIZE } from "../utils/paginate";
 import { href } from "../data/site";
 import { slugify } from "../data/taxonomy";
 
 interface Props {
-  all: CollectionEntry<"blog">[]; // all non-draft posts (chips + search)
-  items: CollectionEntry<"blog">[]; // current page
-  active: string; // "all" or a tag slug
-  current: number;
-  total: number;
-  base: string; // pagination base, already href()'d
-  activeLabel?: string; // original tag label when filtered
+  items: CollectionEntry<"blog">[]; // all non-draft posts, newest first
+  eyebrow: string;
+  title: string;
+  intro: string;
 }
-const { all, items, active, current, total, base, activeLabel } = Astro.props;
+const { items, eyebrow, title, intro } = Astro.props;
 
-// Distinct tags across all posts → filter chips.
+// Topics = tags, most-used first. The first VISIBLE show as pills; the rest sit
+// behind a "+N more" toggle so the bar never turns into a wall.
+const VISIBLE_TOPICS = 7;
 const tagMap = new Map<string, { label: string; count: number }>();
-for (const p of all) {
-  for (const t of p.data.tags) {
+for (const p of items) {
+  for (const t of new Set(p.data.tags)) {
     const slug = slugify(t);
     const e = tagMap.get(slug) ?? { label: t, count: 0 };
     e.count++;
     tagMap.set(slug, e);
   }
 }
-const chips = [
-  { label: "All", slug: "all", icon: "layers", href: href("/blog"), count: all.length },
-  ...[...tagMap.entries()]
-    .sort((a, b) => b[1].count - a[1].count || a[1].label.localeCompare(b[1].label))
-    .map(([slug, { label, count }]) => ({
-      label,
-      slug,
-      icon: "hash",
-      href: href(`/blog/tag/${slug}`),
-      count,
-    })),
-];
+const topics = [...tagMap.entries()]
+  .map(([slug, v]) => ({ slug, ...v }))
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+const shownTopics = topics.slice(0, VISIBLE_TOPICS);
+const moreTopics = topics.slice(VISIBLE_TOPICS);
 
-const filtered = active !== "all";
+// Featured: newest featured posts (max 3: one large, two beside it), shown above the list while unfiltered.
+const featured = items.filter((p) => p.data.featured).slice(0, 3);
+const featuredIds = new Set(featured.map((p) => p.id));
 
-const fmt = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-const searchItems = all.map((p) => ({
-  title: p.data.title,
-  url: href(`/blog/${p.id}`),
-  description: p.data.description,
-  meta: fmt(p.data.pubDate),
-  tags: p.data.tags,
+const cards = items.map((entry) => ({
+  entry,
+  isFeatured: featuredIds.has(entry.id),
+  tag: [...new Set(entry.data.tags.map(slugify))].join(" "),
+  search: [entry.data.title, entry.data.description, ...entry.data.tags].join(" ").toLowerCase(),
 }));
+
+const pillClass =
+  "topic-pill inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3 py-1.5 text-xs font-medium transition-colors";
 ---
 
-<section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
-  <p class="eyebrow">Things worth writing about</p>
-  <h1 class="mt-4 text-4xl sm:text-5xl">My Ramblings</h1>
-  <p class="mt-4 text-lg text-base-content/70">
-    {
-      filtered
-        ? `Pieces tagged “${activeLabel ?? active}”.`
-        : "Longer stories about whatever I've been up to. My projects, builds, adventures or simply things I couldn't stop thinking about."
-    }
-  </p>
+<section class="mx-auto max-w-4xl px-4 pt-16 sm:px-6 sm:pt-20" data-blog-list data-page-size={PAGE_SIZE}>
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="mt-4 text-4xl sm:text-5xl">{title}</h1>
+  <p class="mt-4 max-w-2xl text-lg text-base-content/70">{intro}</p>
 
-  <div class="mt-8">
-    <ListSearch
-      items={searchItems}
-      placeholder="Search posts…"
-      label="Search posts"
-      resultsGridClass="grid gap-5 sm:grid-cols-2"
-    >
-      <Fragment slot="filters">
-        {
-          tagMap.size > 0 ? (
-            <div class="flex flex-wrap gap-2" aria-label="Filter by tag">
-              {chips.map((c) => (
-                <a
-                  href={c.href}
-                  aria-current={c.slug === active ? "page" : undefined}
-                  class:list={[
-                    "filter-chip inline-flex items-center gap-1.5 rounded-field border border-base-300 px-3.5 py-1.5 text-xs font-medium transition-colors",
-                    c.slug === active && "is-active",
-                  ]}
-                >
-                  <SystemIcon name={c.icon} size={13} />
-                  {c.label} <span class="opacity-60">({c.count})</span>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <span />
-          )
-        }
-      </Fragment>
-
-      {total > 1 && <p class="mt-4 text-sm text-base-content/45">Page {current} of {total}</p>}
-
-      {
-        items.length > 0 ? (
-          <div class="mt-8 grid gap-5">
-            {items.map((p) => (
-              <PostCard
-                url={href(`/blog/${p.id}`)}
-                title={p.data.title}
-                description={p.data.description}
-                date={p.data.pubDate}
-                readingTime={readingTime(p.body).label}
-                tags={p.data.tags}
-                cover={p.data.cover}
-                coverAlt={p.data.coverAlt}
-              />
+  {
+    featured.length > 0 && (
+      <div id="featured-block" class="mt-10">
+        <p class="eyebrow">Featured</p>
+        <div class="mt-4">
+          <BlogPostCard entry={featured[0]} variant="spotlight" large />
+        </div>
+        {featured.length > 1 && (
+          <div class="mt-5 grid gap-5 sm:grid-cols-2">
+            {featured.slice(1).map((p) => (
+              <BlogPostCard entry={p} variant="spotlight" />
             ))}
           </div>
-        ) : (
-          <p class="mt-8 text-base-content/60">{filtered ? "No posts with this tag yet." : "First post coming soon."}</p>
-        )
-      }
+        )}
+      </div>
+    )
+  }
 
-      <Pagination base={base} current={current} total={total} />
-    </ListSearch>
-  </div>
+  {
+    items.length > 0 ? (
+      <div class:list={[featured.length > 0 ? "mt-12" : "mt-8"]}>
+        <!-- Topic bar -->
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div class="flex min-w-0 flex-wrap gap-2" role="group" aria-label="Filter by topic">
+            <a href={href("/blog")} data-topic="all" class={pillClass}>
+              All <span class="opacity-60">{items.length}</span>
+            </a>
+            {shownTopics.map((t) => (
+              <a href={`${href("/blog")}?tag=${t.slug}`} data-topic={t.slug} class={pillClass}>
+                {t.label} <span class="opacity-60">{t.count}</span>
+              </a>
+            ))}
+            {moreTopics.map((t) => (
+              <a href={`${href("/blog")}?tag=${t.slug}`} data-topic={t.slug} data-extra class={pillClass}>
+                {t.label} <span class="opacity-60">{t.count}</span>
+              </a>
+            ))}
+            {moreTopics.length > 0 && (
+              <button type="button" data-topic-more aria-expanded="false" class="px-2 py-1.5 text-xs text-base-content/55 transition-colors hover:text-primary">
+                + {moreTopics.length} more
+              </button>
+            )}
+          </div>
+
+          <div class="relative sm:w-56 sm:shrink-0">
+            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
+              <SystemIcon name="search" size={15} />
+            </span>
+            <input
+              type="search"
+              data-blog-search
+              aria-label="Search ramblings"
+              placeholder="Search ramblings…"
+              autocomplete="off"
+              spellcheck="false"
+              class="w-full rounded-field border border-base-300 bg-base-100 py-1.5 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-base-content/40 focus:border-primary"
+            />
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-base-content/45">
+          <p data-blog-count aria-live="polite">
+            {items.length} {items.length === 1 ? "ramble" : "ramblings"}
+          </p>
+          <button
+            type="button"
+            data-blog-reset
+            data-blog-clear
+            hidden
+            class="inline-flex items-center gap-1 rounded-field border border-base-300 px-2.5 py-0.5 text-xs text-base-content/70 transition-colors hover:border-primary hover:text-primary"
+          >
+            Clear filters <span aria-hidden="true">✕</span>
+          </button>
+
+          <div class="ml-auto hidden items-center gap-1 sm:flex" role="group" aria-label="Columns">
+            {[1, 2, 3].map((n) => (
+              <button
+                type="button"
+                data-cols-btn={n}
+                aria-pressed="false"
+                aria-label={`${n} ${n === 1 ? "column" : "columns"}`}
+                title={`${n} ${n === 1 ? "column" : "columns"}`}
+                class="cols-btn rounded-field border border-base-300 p-1.5 text-base-content/55 transition-colors hover:text-primary"
+              >
+                <svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor" aria-hidden="true">
+                  {n === 1 && <rect x="1" y="1" width="16" height="12" rx="1.5" />}
+                  {n === 2 && (<><rect x="1" y="1" width="7.2" height="12" rx="1.5" /><rect x="9.8" y="1" width="7.2" height="12" rx="1.5" /></>)}
+                  {n === 3 && (<><rect x="1" y="1" width="4.4" height="12" rx="1.2" /><rect x="6.8" y="1" width="4.4" height="12" rx="1.2" /><rect x="12.6" y="1" width="4.4" height="12" rx="1.2" /></>)}
+                </svg>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="post-grid mt-4 grid gap-5" data-blog-grid data-cols="2">
+          {cards.map((c) => (
+            <div data-post data-featured={c.isFeatured ? "" : undefined} data-tag={c.tag} data-search={c.search}>
+              <BlogPostCard entry={c.entry} />
+            </div>
+          ))}
+        </div>
+
+        <p data-blog-empty hidden class="py-12 text-center text-base-content/55">
+          Nothing matches that. <button type="button" data-blog-reset class="underline underline-offset-4 hover:text-primary">Clear filters</button>
+        </p>
+
+        <div data-blog-more-wrap hidden class="mt-8 flex justify-center">
+          <button type="button" data-blog-more class="btn btn-sm btn-outline rounded-field">Load more</button>
+        </div>
+      </div>
+    ) : (
+      <p class="mt-8 text-base-content/60">The first ramble is on its way.</p>
+    )
+  }
 </section>
 
 <style>
-  .filter-chip.is-active {
+  .topic-pill[aria-current="true"] {
     background: var(--color-primary);
     color: var(--color-primary-content);
     border-color: var(--color-primary);
   }
-  .filter-chip:not(.is-active):hover {
+  .topic-pill:not([aria-current="true"]):hover {
     border-color: color-mix(in oklch, var(--color-base-content) 30%, transparent);
   }
 </style>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector("[data-blog-list]");
+    if (!root) return;
+    var PAGE = parseInt(root.getAttribute("data-page-size"), 10) || 9;
+    var posts = [].slice.call(root.querySelectorAll("[data-post]"));
+    var pills = [].slice.call(root.querySelectorAll("[data-topic]"));
+    var extras = pills.filter(function (p) { return p.hasAttribute("data-extra"); });
+    var moreToggle = root.querySelector("[data-topic-more]");
+    var search = root.querySelector("[data-blog-search]");
+    var countEl = root.querySelector("[data-blog-count]");
+    var emptyEl = root.querySelector("[data-blog-empty]");
+    var moreWrap = root.querySelector("[data-blog-more-wrap]");
+    var moreBtn = root.querySelector("[data-blog-more]");
+    var clearBtn = root.querySelector("[data-blog-clear]");
+    var featured = document.getElementById("featured-block");
+    var known = {};
+    pills.forEach(function (p) { known[p.getAttribute("data-topic")] = true; });
+
+    var state = { tag: "all", q: "", shown: PAGE };
+    try {
+      var params = new URLSearchParams(location.search);
+      var t = params.get("tag");
+      if (t && known[t]) state.tag = t;
+      state.q = (params.get("q") || "").toLowerCase().trim();
+      if (search) search.value = params.get("q") || "";
+    } catch (e) {}
+
+    function setExtras(open) {
+      extras.forEach(function (p) { p.hidden = !open && p.getAttribute("data-topic") !== state.tag; });
+      if (moreToggle) {
+        moreToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        moreToggle.textContent = open ? "Show fewer" : "+ " + extras.length + " more";
+      }
+    }
+
+    function apply() {
+      var filtering = state.tag !== "all" || state.q.length > 0;
+      var toks = state.q.split(/\s+/).filter(Boolean);
+      var matched = [];
+      posts.forEach(function (el) {
+        var ok = true;
+        if (!filtering && el.hasAttribute("data-featured")) ok = false;
+        if (ok && state.tag !== "all") ok = (el.getAttribute("data-tag") || "").split(" ").indexOf(state.tag) !== -1;
+        if (ok && toks.length) {
+          var hay = el.getAttribute("data-search") || "";
+          ok = toks.every(function (tk) { return hay.indexOf(tk) !== -1; });
+        }
+        if (ok) matched.push(el);
+        else el.hidden = true;
+      });
+      matched.forEach(function (el, i) { el.hidden = i >= state.shown; });
+
+      var held = filtering ? 0 : posts.filter(function (el) { return el.hasAttribute("data-featured"); }).length;
+      var n = matched.length + held;
+      countEl.textContent = n + (n === 1 ? " ramble" : " ramblings");
+      emptyEl.hidden = matched.length !== 0 || (!filtering && held > 0);
+      var remaining = matched.length - Math.min(state.shown, matched.length);
+      moreWrap.hidden = remaining <= 0;
+      if (remaining > 0) moreBtn.textContent = "Load more (" + remaining + ")";
+      if (featured) featured.hidden = filtering;
+      if (clearBtn) clearBtn.hidden = !filtering;
+
+      pills.forEach(function (p) {
+        if (p.getAttribute("data-topic") === state.tag) p.setAttribute("aria-current", "true");
+        else p.removeAttribute("aria-current");
+      });
+      setExtras(moreToggle && moreToggle.getAttribute("aria-expanded") === "true");
+
+      try {
+        var u = new URLSearchParams();
+        if (state.tag !== "all") u.set("tag", state.tag);
+        if (state.q) u.set("q", state.q);
+        var qs = u.toString();
+        history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+      } catch (e) {}
+    }
+
+    pills.forEach(function (p) {
+      p.addEventListener("click", function (e) {
+        e.preventDefault();
+        state.tag = p.getAttribute("data-topic");
+        state.shown = PAGE;
+        apply();
+      });
+    });
+    if (moreToggle) {
+      moreToggle.addEventListener("click", function () {
+        setExtras(moreToggle.getAttribute("aria-expanded") !== "true");
+      });
+    }
+    if (search) {
+      search.addEventListener("input", function () {
+        state.q = search.value.toLowerCase().trim();
+        state.shown = PAGE;
+        apply();
+      });
+    }
+    moreBtn.addEventListener("click", function () { state.shown += PAGE; apply(); });
+    [].slice.call(root.querySelectorAll("[data-blog-reset]")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        state.tag = "all"; state.q = ""; state.shown = PAGE;
+        if (search) search.value = "";
+        apply();
+      });
+    });
+    // Column toggle (remembered per browser).
+    var grid = root.querySelector("[data-blog-grid]");
+    var colBtns = [].slice.call(root.querySelectorAll("[data-cols-btn]"));
+    function setCols(n, save) {
+      grid.setAttribute("data-cols", String(n));
+      colBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-cols-btn") === String(n) ? "true" : "false"); });
+      if (save) { try { localStorage.setItem("blog:cols", String(n)); } catch (e) {} }
+    }
+    var saved = "2";
+    try { saved = localStorage.getItem("blog:cols") || "2"; } catch (e) {}
+    setCols(["1", "2", "3"].indexOf(saved) !== -1 ? saved : "2", false);
+    colBtns.forEach(function (b) {
+      b.addEventListener("click", function () { setCols(b.getAttribute("data-cols-btn"), true); });
+    });
+
+    apply();
+  })();
+</script>

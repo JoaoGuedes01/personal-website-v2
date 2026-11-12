@@ -1,0 +1,30 @@
+---
+/** A blog entry rendered as a card (wires up URL, reading time, tag links). */
+import type { CollectionEntry } from "astro:content";
+import PostCard from "./PostCard.astro";
+import SpotlightCard from "./SpotlightCard.astro";
+import { readingTime } from "../utils/reading";
+import { href } from "../data/site";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+  // default: stacked card (cover on top) · spotlight: the Featured look (large = the lead)
+  variant?: "default" | "spotlight";
+  large?: boolean;
+}
+const { entry, variant = "default", large = false } = Astro.props;
+const d = entry.data;
+const common = {
+  url: href(`/blog/${entry.id}`),
+  title: d.title,
+  description: d.description,
+  date: d.pubDate,
+  readingTime: readingTime(entry.body).label,
+  tags: d.tags,
+  tagBase: href("/blog"),
+  cover: d.cover,
+  coverAlt: d.coverAlt,
+};
+---
+
+{variant === "spotlight" ? <SpotlightCard {...common} large={large} /> : <PostCard {...common} variant={variant} placeholder />}

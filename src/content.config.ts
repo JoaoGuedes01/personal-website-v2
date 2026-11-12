@@ -79,6 +79,8 @@ const blog = defineCollection({
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]),
+      // Pin to the featured block at the top of /blog (newest featured = the big hero).
+      featured: z.boolean().default(false),
       // Optional hero image (co-located, relative path) — optimized.
       cover: image().optional(),
       coverAlt: z.string().default(""),

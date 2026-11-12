@@ -581,3 +581,16 @@
 .callout-important { --cc: var(--color-primary); }
 .callout-security  { --cc: var(--color-secondary); }
 .callout-quote     { --cc: var(--color-secondary); }
+
+/* /blog column picker (desktop only; phones are always one column). Lives here,
+   not in the component's scoped <style>, so it applies reliably. */
+@media (min-width: 640px) {
+  .post-grid[data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+  .post-grid[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .post-grid[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.cols-btn[aria-pressed="true"] {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+}
