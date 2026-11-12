@@ -35,7 +35,7 @@ kilobytes of vanilla JS. It's designed to be forked and made your own.
   Gruvbox, Rosé Pine, Tokyo Night, Paper and Solarized.
 - 🔎 **Fuzzy search** on projects, certifications, snippets and the blog — a find box across from
   the filters, matching across everything in the section.
-- 🏷 **Real, paginated filters** — project types, blog tags and per-class snippet tags are actual
+- 🏷 **Real, paginated filters** — project types, per-class snippet tags are actual
   routes, so filtering and pagination coexist.
 - 🖼 **Optional galleries** on any detail page (projects, blog, experience, snippets) with a
   dependency-free lightbox, plus an on-page **table of contents** that tracks your reading.

@@ -62,6 +62,7 @@ let the generator do it for you:
 ```bash
 npm run new -- project     "Realtime Chat Service"
 npm run new -- blog        "What the homelab taught me"
+npm run new -- blog        "Layout test" --template showcase   # the "Everything a ramble can do" example
 npm run new -- snippet     "Tail all compose logs"
 npm run new -- experience  "Checkmarx"
 npm run new -- certification "AWS Solutions Architect"
@@ -101,15 +102,16 @@ Markdown body. Use `## Headings` — they build the page's table of contents.
 title: "My Post"
 description: "Shown in the list and as the social description."
 pubDate: 2026-06-01
-tags: ["backend", "notes"]    # each tag becomes a filter → /blog/tag/<tag>
+tags: ["backend", "notes"]    # each tag is a "Topic" filter → /blog?tag=<tag>
 draft: false
 # updatedDate: 2026-06-10
 # cover: ./cover.jpg / coverAlt: "…"   # optional hero (optimized)
 # gallery: [ … ]                       # optional image gallery
 ---
 ```
-Posts list newest-first. Tags are the blog's organization: each is a chip that links to a
-paginated `/blog/tag/<tag>` view. (Tags fit a blog better than rigid categories — posts read
+Posts list newest-first (the page is called **Ramblings**; the route and folder stay `blog`). Tags
+are the blog's organization: they fill the **Topic** dropdown on `/blog` and link to `/blog?tag=<tag>`.
+Each post ends with a "More like this" strip of posts sharing its tags. (Tags fit a blog better than rigid categories — posts read
 chronologically and often span topics.)
 
 ### A snippet — `src/content/snippets/my-tip.md`
@@ -191,13 +193,13 @@ a `link` adds **View page ↗**. Education (from `src/data/education.ts`) shows 
   `getStaticPaths` share the same helper, so URLs always agree.
 - **Filters are real routes** (so they work with pagination):
   - Projects → `/projects/type/<type>`
-  - Blog → `/blog/tag/<tag>`
+  - Blog → filtered client-side in the shared FilterBar: `/blog?tag=<tag>`
   - Snippets → `/snippets/<class>` and `/snippets/<class>/tag/<tag>`
   
   The chips on each listing are links to these.
 
 > Static route segments win over `[slug]`. So don't name a **project** `page`/`type`, a **blog
-> post** `page`/`tag`, or a **snippet** `page`/`tag`, or its detail URL collides with a list route.
+> post** `page`, or a **snippet** `page`/`tag`, or its detail URL collides with a list route.
 > (The generator refuses these names for you.)
 
 ---
