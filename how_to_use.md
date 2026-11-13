@@ -111,7 +111,14 @@ draft: false
 ```
 Posts list newest-first (the page is called **Ramblings**; the route and folder stay `blog`). Tags
 are the blog's organization: they fill the **Topic** dropdown on `/blog` and link to `/blog?tag=<tag>`.
-Each post ends with a "More like this" strip of posts sharing its tags. (Tags fit a blog better than rigid categories — posts read
+Each post ends with a "More like this" strip of posts sharing its tags.
+
+**Series.** For multi-part posts, add two fields to each part: `series: "homelab"` and `part: 2`. The key must
+exist in `src/data/series.ts`, which also lists the planned part titles, so unwritten parts read "coming soon" and
+the total ("Part 2 of 5") is known from the start. Series posts get a label under the back link, a small badge on
+the list cards, and an "In this series" box (all parts plus previous / next) in place of "More like this". Parts
+that are still `draft: true` show as "coming soon" for everyone else. Set `featured: true` on any one part to feature the whole series: it takes a single slot of the five in
+the Featured block (a "Series" card linking to part 1, with a closed-by-default "Parts" tab on its right that lists every part). Every part still appears in the list below as its own card. (Tags fit a blog better than rigid categories — posts read
 chronologically and often span topics.)
 
 ### A snippet — `src/content/snippets/my-tip.md`
@@ -228,8 +235,10 @@ It's automatic — just write headings. Component: `src/components/TableOfConten
 
 ## Images & galleries
 
-**Inline / cover images:** co-locate the file next to the entry and reference it relatively
-(`cover: ./cover.jpg`). These go through Astro's image pipeline (optimized, responsive).
+**Inline / cover images:** co-locate the files with the entry and reference them relatively. These go
+through Astro's image pipeline (optimized, responsive). Blog posts and projects keep theirs in an
+`img/<post-slug>/` folder next to the content (e.g. `src/content/blog/img/my-post/cover.jpg`, referenced as
+`cover: ./img/my-post/cover.jpg`); that folder is ignored by the content loader, so it never becomes an entry.
 
 **Galleries** are available on **any detail page** — projects, blog, snippets and experience. Add a
 `gallery` to the frontmatter, co-locating the images:
