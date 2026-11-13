@@ -1,0 +1,136 @@
+---
+/**
+ * A whole series as one Featured card (the series stands in for all its parts).
+ * The card body opens part 1. A "Parts" tab at the top right (closed by default,
+ * plain <details>, no JS) slides open a panel listing every part; unpublished
+ * parts show greyed out. Opening slides the panel in (CSS transition, honours
+ * reduced motion); Escape, tapping the dimmed card, or swiping right closes it.
+ */
+import SpotlightCard from "./SpotlightCard.astro";
+import { readingTime } from "../utils/reading";
+import { href } from "../data/site";
+import { seriesDef } from "../data/series";
+import type { FeaturedSlot } from "../utils/series";
+
+interface Props {
+  item: Extract<FeaturedSlot, { kind: "series" }>;
+  large?: boolean;
+}
+const { item, large = false } = Astro.props;
+const parts = item.parts;
+const first = parts[0];
+
+const minutes = parts.reduce((sum, p) => sum + readingTime(p.body).minutes, 0);
+const newest = parts.reduce((a, b) => (b.data.pubDate > a.data.pubDate ? b : a));
+const withCover = parts.find((p) => p.data.cover);
+
+// Most-used tags across the parts, so the card reads like the series, not one post.
+const counts = new Map<string, number>();
+for (const p of parts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 4).map(([t]) => t);
+
+const panelId = `parts-${item.key}`;
+const count = parts.length === item.total ? `${item.total} parts` : `${parts.length} of ${item.total} parts`;
+
+// One entry per part number, published or not.
+const planned = seriesDef(item.key)?.planned ?? [];
+const chips = Array.from({ length: item.total }, (_, i) => {
+  const n = i + 1;
+  const post = parts.find((p) => p.data.part === n);
+  return { n, title: post?.data.title ?? planned[n - 1] ?? `Part ${n}`, url: post ? href(`/blog/${post.id}`) : undefined };
+});
+---
+
+<SpotlightCard
+  url={href(`/blog/${first.id}`)}
+  title={`${item.title} series`}
+  description={item.blurb ?? first.data.description}
+  date={newest.data.pubDate}
+  readingTime={`${minutes} min total`}
+  tags={tags}
+  tagBase={href("/blog")}
+  cover={withCover?.data.cover}
+  coverAlt={withCover?.data.coverAlt}
+  series={`Series · ${count}`}
+  large={large}
+>
+  <div slot="aside" class="parts-card group">
+    <!-- Checkbox + labels: opens/closes with no JS, and both directions animate with plain CSS transitions.
+         (A <details> element can't animate closing.) The tiny script below only adds Escape and swipe-to-close. -->
+    <input type="checkbox" id={panelId} class="peer sr-only" aria-label={`Show the parts of the ${item.title} series`} />
+
+    <label
+      for={panelId}
+      class="absolute right-2 top-2 z-30 flex min-h-9 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border border-white/40 bg-black/55 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors before:absolute before:-inset-1.5 before:content-[''] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white [@media(hover:hover)]:hover:bg-black/75 [-webkit-tap-highlight-color:transparent]"
+    >
+      <span class="group-has-[:checked]:hidden">{chips.length} parts</span>
+      <span class="hidden group-has-[:checked]:inline">Close</span>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="transition-transform duration-300 group-has-[:checked]:rotate-180 motion-reduce:transition-none">
+        <path d="M6.5 1.5 3 5l3.5 3.5" />
+      </svg>
+    </label>
+
+    <!-- Scrim: tapping the dimmed card closes the panel instead of following the card's link. -->
+    <label
+      for={panelId}
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 z-[15] bg-black/45 opacity-0 transition-opacity duration-300 ease-out motion-reduce:transition-none peer-checked:pointer-events-auto peer-checked:opacity-100 [-webkit-tap-highlight-color:transparent]"
+    ></label>
+
+    <div
+      data-parts-panel
+      class="invisible absolute inset-y-0 right-0 z-20 flex w-[min(18rem,88%)] translate-x-full touch-pan-y flex-col overflow-y-auto overscroll-contain border-l border-white/20 bg-black/85 px-3 pb-4 pt-14 backdrop-blur-md transition-[translate,visibility] duration-300 ease-out motion-reduce:transition-none peer-checked:visible peer-checked:translate-x-0"
+    >
+      <p class="px-2 text-[10px] font-semibold uppercase tracking-wider text-white/60">{item.title} series</p>
+      <ol class="mt-2 flex flex-col" aria-label={`Parts of the ${item.title} series`}>
+        {
+          chips.map((c) =>
+            c.url ? (
+              <li>
+                <a
+                  href={c.url}
+                  class="flex min-h-11 items-center gap-3 rounded-field px-2 py-2.5 text-sm text-white transition-colors [-webkit-tap-highlight-color:transparent] active:bg-white/20 [@media(hover:hover)]:hover:bg-white/15"
+                >
+                  <span class="w-4 shrink-0 text-xs font-semibold text-white/60">{c.n}</span>
+                  <span>{c.title}</span>
+                </a>
+              </li>
+            ) : (
+              <li class="flex min-h-11 items-center gap-3 px-2 py-2.5 text-sm text-white/40">
+                <span class="w-4 shrink-0 text-xs font-semibold">{c.n}</span>
+                <span>{c.title} <span class="text-[10px] uppercase tracking-wide">· soon</span></span>
+              </li>
+            ),
+          )
+        }
+      </ol>
+    </div>
+  </div>
+</SpotlightCard>
+
+<script is:inline>
+  (function () {
+    if (window.__partsTabs) return;
+    window.__partsTabs = true;
+    function box(el) { return el.closest(".parts-card").querySelector('input[type="checkbox"]'); }
+    // Escape closes any open panel.
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      [].slice.call(document.querySelectorAll(".parts-card input:checked")).forEach(function (c) { c.checked = false; });
+    });
+    // Swipe right on the panel closes it (touch).
+    var x0 = null, y0 = null;
+    document.addEventListener("touchstart", function (e) {
+      var p = e.target.closest && e.target.closest("[data-parts-panel]");
+      if (!p) { x0 = null; return; }
+      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener("touchend", function (e) {
+      if (x0 === null) return;
+      var t = e.changedTouches[0], dx = t.clientX - x0, dy = Math.abs(t.clientY - y0);
+      var p = e.target.closest && e.target.closest("[data-parts-panel]");
+      x0 = null;
+      if (p && dx > 60 && dy < 40) box(p).checked = false;
+    }, { passive: true });
+  })();
+</script>

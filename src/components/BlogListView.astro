@@ -10,10 +10,12 @@
  */
 import type { CollectionEntry } from "astro:content";
 import BlogPostCard from "./BlogPostCard.astro";
+import FeaturedSeriesCard from "./FeaturedSeriesCard.astro";
 import SystemIcon from "./SystemIcon.astro";
 import { PAGE_SIZE } from "../utils/paginate";
 import { href } from "../data/site";
 import { slugify } from "../data/taxonomy";
+import { featuredSlots, seriesLabel } from "../utils/series";
 
 interface Props {
   items: CollectionEntry<"blog">[]; // all non-draft posts, newest first
@@ -41,15 +43,17 @@ const topics = [...tagMap.entries()]
 const shownTopics = topics.slice(0, VISIBLE_TOPICS);
 const moreTopics = topics.slice(VISIBLE_TOPICS);
 
-// Featured: newest featured posts (max 3: one large, two beside it), shown above the list while unfiltered.
-const featured = items.filter((p) => p.data.featured).slice(0, 3);
-const featuredIds = new Set(featured.map((p) => p.id));
+// Featured: up to 5 slots (one large lead, the rest in a two-column grid), shown above the list while unfiltered.
+// A featured series takes ONE slot for all its parts (see featuredSlots).
+const featured = featuredSlots(items, 5);
+// Single featured posts are lifted out of the list below; a featured series is NOT, so every part still has its own card there.
+const featuredIds = new Set(featured.flatMap((s) => (s.kind === "series" ? [] : [s.entry.id])));
 
 const cards = items.map((entry) => ({
   entry,
   isFeatured: featuredIds.has(entry.id),
   tag: [...new Set(entry.data.tags.map(slugify))].join(" "),
-  search: [entry.data.title, entry.data.description, ...entry.data.tags].join(" ").toLowerCase(),
+  search: [entry.data.title, entry.data.description, ...entry.data.tags, seriesLabel(entry.data) ?? ""].join(" ").toLowerCase(),
 }));
 
 const pillClass =
@@ -66,13 +70,17 @@ const pillClass =
       <div id="featured-block" class="mt-10">
         <p class="eyebrow">Featured</p>
         <div class="mt-4">
-          <BlogPostCard entry={featured[0]} variant="spotlight" large />
+          {featured[0].kind === "series" ? (
+            <FeaturedSeriesCard item={featured[0]} large />
+          ) : (
+            <BlogPostCard entry={featured[0].entry} variant="spotlight" large />
+          )}
         </div>
         {featured.length > 1 && (
           <div class="mt-5 grid gap-5 sm:grid-cols-2">
-            {featured.slice(1).map((p) => (
-              <BlogPostCard entry={p} variant="spotlight" />
-            ))}
+            {featured.slice(1).map((s) =>
+              s.kind === "series" ? <FeaturedSeriesCard item={s} /> : <BlogPostCard entry={s.entry} variant="spotlight" />,
+            )}
           </div>
         )}
       </div>
