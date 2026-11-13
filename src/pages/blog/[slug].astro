@@ -14,7 +14,9 @@ import { href } from "../../data/site";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   const visible = posts.filter((p) => !p.data.draft);
-  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry, visible } }));
+  // Drafts get a page in dev (so you can preview them) but are NOT built for production.
+  const routes = import.meta.env.PROD ? visible : posts;
+  return routes.map((entry) => ({ params: { slug: entry.id }, props: { entry, visible } }));
 }
 
 interface Props {
