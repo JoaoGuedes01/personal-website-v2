@@ -7,6 +7,8 @@ import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
 import SystemIcon from "../../components/SystemIcon.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
+import SeriesBox from "../../components/SeriesBox.astro";
+import { buildSeries } from "../../utils/series";
 import { slugify } from "../../data/taxonomy";
 import { readingTime } from "../../utils/reading";
 import { href } from "../../data/site";
@@ -16,14 +18,15 @@ export async function getStaticPaths() {
   const visible = posts.filter((p) => !p.data.draft);
   // Drafts get a page in dev (so you can preview them) but are NOT built for production.
   const routes = import.meta.env.PROD ? visible : posts;
-  return routes.map((entry) => ({ params: { slug: entry.id }, props: { entry, visible } }));
+  return routes.map((entry) => ({ params: { slug: entry.id }, props: { entry, visible, all: posts } }));
 }
 
 interface Props {
   entry: CollectionEntry<"blog">;
   visible: CollectionEntry<"blog">[];
+  all: CollectionEntry<"blog">[]; // includes drafts (series parts may still be drafts)
 }
-const { entry, visible } = Astro.props;
+const { entry, visible, all } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, cover, coverAlt, gallery } = entry.data;
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
@@ -40,6 +43,8 @@ const scored = others
 const hasRelated = scored.some((s) => s.n > 0);
 const related = (hasRelated ? scored.filter((s) => s.n > 0) : scored).slice(0, 2).map((s) => s.p);
 
+const series = buildSeries(all, entry);
+
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 ---
@@ -54,6 +59,24 @@ const fmt = (d: Date) =>
     <div class:list={["mt-6", hasToc && "lg:grid lg:grid-cols-[1fr_15rem] lg:gap-12"]}>
       <article class="min-w-0">
         <header>
+          {
+            series && (
+              <div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <a
+                  href="#series"
+                  class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary/15"
+                >
+                  <SystemIcon name="layers" size={13} />
+                  {series.title} series · Part {series.current} of {series.total}
+                </a>
+                {series.next?.id && series.next.state === "published" && (
+                  <a href={href(`/blog/${series.next.id}`)} class="text-xs font-medium text-base-content/60 transition-colors hover:text-primary">
+                    Next: {series.next.title} →
+                  </a>
+                )}
+              </div>
+            )
+          }
           <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-base-content/50">
             <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
             <span class="text-base-content/30">·</span>
@@ -113,8 +136,10 @@ const fmt = (d: Date) =>
           )
         }
 
+        {series && <SeriesBox series={series} />}
+
         {
-          related.length > 0 && (
+          !series && related.length > 0 && (
             <section class="mt-12 border-t border-base-300 pt-8" aria-labelledby="more-ramblings">
               <p class="eyebrow">{hasRelated ? "Keep reading" : "Latest"}</p>
               <h2 id="more-ramblings" class="mt-2 mb-5 text-2xl">

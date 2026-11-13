@@ -17,6 +17,8 @@ interface Props {
   source?: string;
   cover?: ImageMetadata;
   coverAlt?: string;
+  // e.g. "Homelab · Part 2" — shown as a small badge on series posts.
+  series?: string;
   // Posts with no cover get a gradient tile tinted by their first tag.
   placeholder?: boolean;
 }
@@ -33,6 +35,7 @@ const {
   source,
   cover,
   coverAlt = "",
+  series,
   placeholder = false,
 } = Astro.props;
 const dateStr = date.toLocaleDateString("en-US", {
@@ -87,6 +90,14 @@ const tile = tileGradient(seed);
               {readingTime}
             </span>
           </>
+        )
+      }
+      {
+        series && (
+          <span class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+            <SystemIcon name="layers" size={11} />
+            {series}
+          </span>
         )
       }
       {

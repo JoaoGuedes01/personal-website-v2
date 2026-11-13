@@ -7,6 +7,7 @@ import FaceIllustration from "../components/FaceIllustration.astro";
 import { readingTime } from "../utils/reading";
 import { href } from "../data/site";
 import { snippetUrl } from "../data/taxonomy";
+import { compareBlog } from "../utils/series";
 
 // Featured projects
 const featured = (await getCollection("projects"))
@@ -17,6 +18,7 @@ const featured = (await getCollection("projects"))
 // Recent writing = the newest ramblings and the newest snippets, shown side by side
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
+  .sort(compareBlog)
   .map((p) => ({
     url: href(`/blog/${p.id}`),
     title: p.data.title,

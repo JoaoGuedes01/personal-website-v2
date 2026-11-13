@@ -18,9 +18,10 @@ interface Props {
   tagBase?: string;
   cover?: ImageMetadata;
   coverAlt?: string;
+  series?: string; // e.g. "Homelab · Part 2"
   large?: boolean; // the lead card: taller, bigger title
 }
-const { url, title, description, date, readingTime, tags = [], tagBase, cover, coverAlt = "", large = false } = Astro.props;
+const { url, title, description, date, readingTime, tags = [], tagBase, cover, coverAlt = "", series, large = false } = Astro.props;
 const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 ---
 
@@ -49,6 +50,7 @@ const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "shor
   <div class:list={["flex flex-col", large ? "p-6 sm:p-9" : "p-6"]}>
     <div class="flex flex-wrap items-center gap-2 text-xs">
       <span class="rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-content">Featured</span>
+      {series && <span class="rounded-full bg-black/55 px-2.5 py-1 text-white backdrop-blur-sm">{series}</span>}
       <span class="inline-flex items-center gap-2 rounded-full bg-black/55 px-2.5 py-1 text-white backdrop-blur-sm">
         <time datetime={date.toISOString()}>{dateStr}</time>
         {readingTime && <><span class="text-white/50">·</span><span>{readingTime}</span></>}
@@ -82,4 +84,5 @@ const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "shor
       )
     }
   </div>
+  <slot name="aside" />
 </article>

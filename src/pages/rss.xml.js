@@ -1,11 +1,12 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import { site, href } from "../data/site";
+import { compareBlog } from "../utils/series";
 
 export async function GET(context) {
   const posts = (await getCollection("blog"))
     .filter((p) => !p.data.draft)
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+    .sort(compareBlog);
 
   return rss({
     title: `${site.name} — Ramblings`,

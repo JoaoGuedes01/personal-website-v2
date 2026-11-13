@@ -1,0 +1,94 @@
+---
+/**
+ * <SeriesBox /> — the "In this series" panel at the end of a multi-part post:
+ * every part in order (published ones link, the current one is marked, unwritten
+ * ones read "coming soon") plus previous / next buttons.
+ */
+import type { SeriesInfo } from "../utils/series";
+import SystemIcon from "./SystemIcon.astro";
+import { href } from "../data/site";
+
+interface Props {
+  series: SeriesInfo;
+}
+const { series } = Astro.props;
+const url = (id: string) => href(`/blog/${id}`);
+---
+
+<section id="series" class="mt-12 rounded-box border border-base-300 bg-base-100 p-6 sm:p-7" aria-labelledby="series-title">
+  <p class="eyebrow flex items-center gap-1.5">
+    <SystemIcon name="layers" size={14} /> In this series
+  </p>
+  <h2 id="series-title" class="mt-2 text-2xl">{series.title}</h2>
+  {series.blurb && <p class="mt-1 text-sm text-base-content/65">{series.blurb}</p>}
+
+  <ol class="mt-5 divide-y divide-base-300 border-y border-base-300">
+    {
+      series.parts.map((p) => (
+        <li class="flex items-center gap-4 py-3">
+          <span
+            class:list={[
+              "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
+              p.state === "current" ? "bg-primary text-primary-content" : "bg-base-200 text-base-content/60",
+            ]}
+          >
+            {p.part}
+          </span>
+          {p.state === "published" && p.id ? (
+            <a href={url(p.id)} class="min-w-0 flex-1 font-medium transition-colors hover:text-primary">
+              {p.title}
+            </a>
+          ) : (
+            <span class:list={["min-w-0 flex-1", p.state === "current" ? "font-medium" : "text-base-content/45"]}>
+              {p.title}
+            </span>
+          )}
+          {p.state === "current" && <span class="text-xs font-medium text-primary">You are here</span>}
+          {p.state === "upcoming" && <span class="text-xs text-base-content/40">Coming soon</span>}
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    (series.prev || series.next) && (
+      <div class="mt-5 grid gap-3 sm:grid-cols-2">
+        {series.prev?.id ? (
+          <a
+            href={url(series.prev.id)}
+            class="group flex items-center gap-3 rounded-field border border-base-300 px-4 py-3 transition-colors hover:border-primary/50"
+          >
+            <SystemIcon name="arrow-left" size={16} class="text-base-content/45 group-hover:text-primary" />
+            <span class="min-w-0">
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/45">Previous · Part {series.prev.part}</span>
+              <span class="block truncate font-medium">{series.prev.title}</span>
+            </span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {series.next?.state === "published" && series.next.id ? (
+          <a
+            href={url(series.next.id)}
+            class="group flex items-center justify-end gap-3 rounded-field border border-base-300 px-4 py-3 text-right transition-colors hover:border-primary/50"
+          >
+            <span class="min-w-0">
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/45">Next · Part {series.next.part}</span>
+              <span class="block truncate font-medium">{series.next.title}</span>
+            </span>
+            <SystemIcon name="arrow-right" size={16} class="text-base-content/45 group-hover:text-primary" />
+          </a>
+        ) : series.next ? (
+          <div class="flex items-center justify-end gap-3 rounded-field border border-dashed border-base-300 px-4 py-3 text-right">
+            <span class="min-w-0">
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/40">Next · Part {series.next.part}</span>
+              <span class="block truncate text-base-content/55">{series.next.title} <span class="text-xs">(coming soon)</span></span>
+            </span>
+          </div>
+        ) : (
+          <span />
+        )}
+      </div>
+    )
+  }
+</section>
