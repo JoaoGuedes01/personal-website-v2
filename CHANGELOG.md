@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.9.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.8.0...guedes-site-v0.9.0) (2026-11-13)
+
+
+### ✨ Features
+
+* **blog:** add multi-part series ([52bcd0f](https://github.com/JoaoGuedes01/personal-website-v2/commit/52bcd0f591b8375e429e61f4165cb695d4181a5d))
+* **blog:** add reading progress, clickable tags and related posts ([be418fc](https://github.com/JoaoGuedes01/personal-website-v2/commit/be418fca30a60a5e2ca97a8b8e449748a18b8ee8))
+* **blog:** feature a whole series as one card ([80e5548](https://github.com/JoaoGuedes01/personal-website-v2/commit/80e55489c7f06b90bbc944129f0b96dd4b2100ca))
+* **blog:** redesign the ramblings list ([b7e4367](https://github.com/JoaoGuedes01/personal-website-v2/commit/b7e436755004ba86430b0a0195bff3a38030f1fd))
+* **home:** show recent ramblings and snippets separately ([0fb7262](https://github.com/JoaoGuedes01/personal-website-v2/commit/0fb726216340d42f9393dab894f8073f8bcc6533))
+* **scripts:** add a showcase blog template to npm run new ([ce8c35f](https://github.com/JoaoGuedes01/personal-website-v2/commit/ce8c35f6e81efc6ba434675052c301490495e2b9))
+
+
+### 🐛 Bug Fixes
+
+* **blog:** do not build draft posts for production ([a9028d0](https://github.com/JoaoGuedes01/personal-website-v2/commit/a9028d080b12c5fff649555ee5f127914a2d4f9e))
+* **rss:** rename the feed to Ramblings ([a10114c](https://github.com/JoaoGuedes01/personal-website-v2/commit/a10114c3095f7ab1072aa69bbb1577def1a5f499))
+* **scripts:** put showcase images under img/&lt;slug&gt;/ ([3d44832](https://github.com/JoaoGuedes01/personal-website-v2/commit/3d44832a0af13ab6ba1c7fb1c1ed548815e7fe84))
+
+
+### 📝 Content
+
+* **blog:** add the five-part homelab series ([c02ec48](https://github.com/JoaoGuedes01/personal-website-v2/commit/c02ec48c5d2ef31f5265a1675755fdbe6ff9eb82))
+
 ## [0.8.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.7.0...guedes-site-v0.8.0) (2026-11-11)
 
 
