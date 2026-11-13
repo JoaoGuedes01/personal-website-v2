@@ -62,7 +62,7 @@ function usage(msg) {
     --group <slug>       snippet only: nest under src/content/snippets/<group>/
     --subgroup <slug>    snippet only: nest under <group>/<subgroup>/ (requires --group)
     --template <name>    blog only: "showcase" = the "Everything a ramble can do" example post
-                         (every block + cover + gallery; its images are copied next to it)
+                         (every block + cover + gallery; images go to src/content/blog/img/<slug>/)
     -h, --help           show this help
 
   Examples:
@@ -267,11 +267,12 @@ if (template && !(TEMPLATES_FOR[type] || []).includes(template)) {
 let body = TEMPLATES[type](title);
 const copied = [];
 if (type === "blog" && template === "showcase") {
-  // The showcase post uses co-located images; copy them next to it, prefixed
-  // with the slug so several showcase posts can coexist in the flat blog folder.
+  // The showcase post uses co-located images; copy them into
+  // src/content/blog/img/<slug>/ (the same img/<id>/ convention as projects).
   const imgDir = path.join(TEMPLATE_DIR, "blog-showcase");
   const imgs = readdirSync(imgDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
-  const targets = imgs.map((f) => path.join(dir, `${slug}-${f}`));
+  const destDir = path.join(dir, "img", slug);
+  const targets = imgs.map((f) => path.join(destDir, f));
   const clash = targets.find((t) => existsSync(t));
   if (clash) {
     console.error(`\n  ✖ ${path.relative(ROOT, clash)} already exists — not overwriting.\n`);
@@ -281,6 +282,7 @@ if (type === "blog" && template === "showcase") {
     .replace(/\{\{title\}\}/g, title)
     .replace(/\{\{date\}\}/g, today)
     .replace(/\{\{slug\}\}/g, slug);
+  mkdirSync(destDir, { recursive: true });
   mkdirSync(dir, { recursive: true });
   imgs.forEach((f, i) => {
     copyFileSync(path.join(imgDir, f), targets[i]);
@@ -294,7 +296,7 @@ mkdirSync(dir, { recursive: true });
 writeFileSync(file, body, "utf8");
 
 console.log(`
-  ✔ Created ${path.relative(ROOT, file)}${copied.length ? `\n    + ${copied.length} images: ${copied.map((c) => path.basename(c)).join(", ")}` : ""}
+  ✔ Created ${path.relative(ROOT, file)}${copied.length ? `\n    + ${copied.length} images in ${path.dirname(copied[0])}/` : ""}
 
   Next:
     • open it and replace the TODO / placeholder values

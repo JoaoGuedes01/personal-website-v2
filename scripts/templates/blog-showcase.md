@@ -5,12 +5,12 @@ pubDate: {{date}}
 tags: ["example"]               # each tag is a topic on /blog (→ /blog?tag=<tag>)
 draft: false
 featured: false               # true → pinned to the Featured block on /blog
-cover: ./{{slug}}-cover.jpg
+cover: ./img/{{slug}}/cover.jpg
 coverAlt: "An abstract purple-to-coral gradient with concentric circles."
 gallery:
-  - { src: ./{{slug}}-shot-1.jpg, alt: "Teal gradient", caption: "First frame: a calm teal." }
-  - { src: ./{{slug}}-shot-2.jpg, alt: "Amber gradient", caption: "Second frame: warm amber." }
-  - { src: ./{{slug}}-shot-3.jpg, alt: "Blue gradient", caption: "Third frame: cool blue." }
+  - { src: ./img/{{slug}}/shot-1.jpg, alt: "Teal gradient", caption: "First frame: a calm teal." }
+  - { src: ./img/{{slug}}/shot-2.jpg, alt: "Amber gradient", caption: "Second frame: warm amber." }
+  - { src: ./img/{{slug}}/shot-3.jpg, alt: "Blue gradient", caption: "Third frame: cool blue." }
 ---
 
 Most of what I write down never gets read twice, including by me. So this post exists for one
@@ -152,7 +152,7 @@ And a wider one, to see how overflow is handled:
 
 An inline image, written as plain markdown and optimized at build time:
 
-![A teal-to-green gradient with concentric circles](./{{slug}}-shot-1.jpg)
+![A teal-to-green gradient with concentric circles](./img/{{slug}}/shot-1.jpg)
 
 Images straight from markdown carry no caption, so a long-form post sometimes wants more than
 that. The gallery at the bottom of the page covers the "look at these several things" case.
