@@ -21,13 +21,13 @@ const skillGroups = Object.entries(profile.skills);
 ---
 
 <BaseLayout title="About" description="Who João Guedes is: backend engineer, ex-security, homelab tinkerer and motorcyclist in Porto.">
-  <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
+  <section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
     <p class="eyebrow">The man of the hour</p>
     <h1 class="mt-4 text-4xl sm:text-5xl">About</h1>
 
     <!-- Hero: portrait + intro -->
-    <div class="mt-10 grid gap-8 md:grid-cols-[1fr_17rem] md:items-start">
-      <div class="prose order-2 md:order-1">
+    <div class="mt-10 grid gap-8 md:grid-cols-[1fr_17rem] md:items-start lg:gap-12">
+      <div class="prose order-2 max-w-none md:order-1 lg:text-[1.125rem]">
         <p>
           Hey! I'm João. I'm a backend software engineer at Uphold, based in Braga, Portugal. I love to problem solve, tinker and develop new solutions for problems people don't even realize they have. Above all I love to learn and grow and the tech sector allows me to do that daily. One of my biggest passions is software development, creating things, out of seemengly nothing, fulfills me in ways that few other things can. On the other half of the coin there is security that aims to completely break my thoughtfully crafted software which deeply fascinates me.
         </p>
@@ -72,7 +72,7 @@ const skillGroups = Object.entries(profile.skills);
       <span class="h-px flex-1 bg-base-300"></span>
     </div>
 
-    <div class="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+    <div class="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         skillGroups.map(([group, list]) => (
           <div>
@@ -131,7 +131,7 @@ const skillGroups = Object.entries(profile.skills);
       <span class="h-px flex-1 bg-base-300"></span>
     </div>
 
-    <section aria-label="Experience timeline" class="mt-8">
+    <section aria-label="Experience timeline" class="mt-8 max-w-4xl">
       <h2 class="text-2xl">Where I've been</h2>
       {
         timeline.length > 0 ? (
