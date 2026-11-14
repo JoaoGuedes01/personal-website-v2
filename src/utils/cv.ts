@@ -55,7 +55,7 @@ export function readMeta(raw: Record<string, string>): CvMeta {
 export interface CvContext {
   name: string;
   title: string;
-  contact: { website: [string, string]; github: [string, string]; phone: string; homeServer: [string, string]; linkedin: [string, string]; email: string };
+  contact: { location: string; website: [string, string]; github: [string, string]; phone: string; homeServer: [string, string]; linkedin: [string, string]; email: string };
   experience: { role: string; company: string; start: string; end: string; type: string; bullets: string[] }[];
   education: { degree: string; school: string; start: string; end: string; location?: string }[];
   certifications: { name: string; issuer: string; issued: string; featured: boolean }[];
@@ -74,6 +74,7 @@ export function expandCv(md: string, c: CvContext): string {
       [
         `| :user: ${link(c.contact.website)} | :github: ${link(c.contact.github)} | :phone: ${c.contact.phone} |`,
         `| :home: ${link(c.contact.homeServer)} | :linkedin: ${link(c.contact.linkedin)} | :mail: [${c.contact.email}](mailto:${c.contact.email}) |`,
+        `| :map-pin: ${esc(c.contact.location)} | | |`,
       ].join("\n"),
     experience: () =>
       c.experience

@@ -38,6 +38,7 @@ fit: one-page      # one-page = shrink the font until it fits, flow = let it run
 **Security:** SAST, DAST, IAC, SCA, AppSec, Pentesting (Burp, ZAP, Nmap, Metasploit), Secure Coding, OWASP Top 10
 **Networking:** TCP/IP, VPNs (OpenVPN, Tailscale), DNS, Reverse Proxies, Load Balancing, Firewalls
 **Other:** REST, GraphQL, gRPC, WebSockets, Git, Power BI, Excel Automation, AWS
+**Spoken Languages:** Portuguese (Native), English (Fluent)
 
 ## Certifications
 {{certifications}}

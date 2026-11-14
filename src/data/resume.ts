@@ -48,6 +48,7 @@ export const resume = {
 
   // Contact block of the generated CV: [label shown, link].
   contact: {
+    location: profile.location,
     website: ["Personal Website", "https://joaoguedes.net"] as [string, string],
     github: ["JoaoGuedes01", "https://github.com/JoaoGuedes01"] as [string, string],
     phone: "(+351) 926909235",
