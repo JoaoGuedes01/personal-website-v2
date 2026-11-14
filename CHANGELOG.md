@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.10.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.9.0...guedes-site-v0.10.0) (2026-11-14)
+
+
+### ✨ Features
+
+* **resume:** add location and spoken languages to the CV ([1252361](https://github.com/JoaoGuedes01/personal-website-v2/commit/1252361a27d23fe800023505f6fbd01b967480ce))
+* **resume:** generate the CV as a PDF from the site's content ([578f620](https://github.com/JoaoGuedes01/personal-website-v2/commit/578f62037e56a3c8e5b66b830862f52a75cfdf88))
+* **theme:** dark oil-blue Ink theme and Geist typography ([c25b0b7](https://github.com/JoaoGuedes01/personal-website-v2/commit/c25b0b7f89851aca495ab4160b142fe4cf1cd5ac))
+
+
+### 🐛 Bug Fixes
+
+* **deps:** add the @emnapi/runtime entry npm ci expects on Linux ([757e2a7](https://github.com/JoaoGuedes01/personal-website-v2/commit/757e2a7eee3b4f29feadd22983487801df2ac082))
+* **deps:** restore optional dependencies missing from the lockfile ([dee4a45](https://github.com/JoaoGuedes01/personal-website-v2/commit/dee4a4569f77cab4087d832aa2012233cbb74a68))
+
+
+### 📝 Content
+
+* remove em dashes from the site's text ([9843999](https://github.com/JoaoGuedes01/personal-website-v2/commit/984399952abd29ef03ec0d14b096d53677300bdc))
+
 ## [0.9.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.8.0...guedes-site-v0.9.0) (2026-11-13)
 
 
