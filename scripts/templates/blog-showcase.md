@@ -1,6 +1,6 @@
 ---
 title: "{{title}}"
-description: "A deliberately over-stuffed test post that exercises every block a ramble can use — headings, code, callouts, tables, images and a gallery — so I can judge the reading experience."
+description: "A deliberately over-stuffed test post that exercises every block a ramble can use: headings, code, callouts, tables, images and a gallery — so I can judge the reading experience."
 pubDate: {{date}}
 tags: ["example"]               # each tag is a topic on /blog (→ /blog?tag=<tag>)
 draft: false
@@ -41,7 +41,7 @@ Here's a second, ordered list, because those render differently:
 4. Publish before you talk yourself out of it.
 
 > The best way to find out whether you understand something is to try to explain it to
-> someone who doesn't — and the second best is to write it down and wait a week.
+> someone who doesn't, and the second best is to write it down and wait a week.
 
 That blockquote is a plain markdown one. For deliberate pull-quotes, there's a callout version below.
 

@@ -29,7 +29,7 @@ crackmapexec winrm <target> -u <username> -p <password> -x "whoami"   # run a co
 
 | Flag | Meaning |
 | --- | --- |
-| `-u` / `-p` | Username/password — accepts a single string or a file |
+| `-u` / `-p` | Username/password: accepts a single string or a file |
 | `-H` | Authenticate with an NTLM hash directly (pass-the-hash) |
 | `-x` | Execute a command once authentication succeeds |
 
@@ -37,8 +37,8 @@ Supported protocols: `smb`, `winrm`, `ssh`, `mssql`, `ftp`, `ldap`, `rdp`. Flags
 
 ## Related
 
-- [Hydra](/snippets/cybersecurity/tools/credential-attack-tools/hydra) — the general-purpose brute-forcer when you don't already have creds to pivot with
-- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash) — where the NTLM hashes fed into `-H` usually come from
-- [Mimikatz & Kiwi](/snippets/cybersecurity/tools/credential-attack-tools/mimikatz) — another source of dumped credentials to spray with CrackMapExec
-- [SMB & NetBIOS enumeration](/snippets/cybersecurity/enumeration-recon/smb-enumeration) — confirm shares and sessions before brute-forcing SMB
-- [WinRM exploitation](/snippets/cybersecurity/exploitation/remote-service-exploitation/winrm-exploitation) — CrackMapExec as the brute-force step ahead of evil-winrm
+- [Hydra](/snippets/cybersecurity/tools/credential-attack-tools/hydra): the general-purpose brute-forcer when you don't already have creds to pivot with
+- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash): where the NTLM hashes fed into `-H` usually come from
+- [Mimikatz & Kiwi](/snippets/cybersecurity/tools/credential-attack-tools/mimikatz): another source of dumped credentials to spray with CrackMapExec
+- [SMB & NetBIOS enumeration](/snippets/cybersecurity/enumeration-recon/smb-enumeration): confirm shares and sessions before brute-forcing SMB
+- [WinRM exploitation](/snippets/cybersecurity/exploitation/remote-service-exploitation/winrm-exploitation): CrackMapExec as the brute-force step ahead of evil-winrm

@@ -38,8 +38,8 @@ Both tools need elevated (SYSTEM/admin-equivalent) privileges to read LSASS at a
 
 ## Related
 
-- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash) — the full workflow this tool feeds into
-- [CrackMapExec](/snippets/cybersecurity/tools/credential-attack-tools/crackmapexec) — spray the dumped hashes across the network via pass-the-hash
-- [Hashcat](/snippets/cybersecurity/tools/credential-attack-tools/hashcat) and [John the Ripper](/snippets/cybersecurity/tools/credential-attack-tools/john-the-ripper) — crack the dumped hashes instead of passing them
-- [Windows persistence](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-persistence) — keep access once these credentials are captured
-- [Meterpreter essentials](/snippets/cybersecurity/tools/exploitation-frameworks/meterpreter) — where the `load kiwi` command is run from
+- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash): the full workflow this tool feeds into
+- [CrackMapExec](/snippets/cybersecurity/tools/credential-attack-tools/crackmapexec): spray the dumped hashes across the network via pass-the-hash
+- [Hashcat](/snippets/cybersecurity/tools/credential-attack-tools/hashcat) and [John the Ripper](/snippets/cybersecurity/tools/credential-attack-tools/john-the-ripper): crack the dumped hashes instead of passing them
+- [Windows persistence](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-persistence): keep access once these credentials are captured
+- [Meterpreter essentials](/snippets/cybersecurity/tools/exploitation-frameworks/meterpreter): where the `load kiwi` command is run from

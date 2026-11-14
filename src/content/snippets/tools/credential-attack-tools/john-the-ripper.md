@@ -39,6 +39,6 @@ Same underlying idea as Hashcat: you need the right `--format` for the hash type
 
 ## Related
 
-- [Hashcat](/snippets/cybersecurity/tools/credential-attack-tools/hashcat) — switch to it once you're throwing GPU horsepower at a larger set
-- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash) — source of the NTLM hashes cracked here
-- [Linux password hash dumping & cracking](/snippets/cybersecurity/exploitation/post-exploitation-persistence/linux-hash-dumping) — source of the shadow hashes cracked here
+- [Hashcat](/snippets/cybersecurity/tools/credential-attack-tools/hashcat): switch to it once you're throwing GPU horsepower at a larger set
+- [Windows hash dumping and pass-the-hash](/snippets/cybersecurity/exploitation/post-exploitation-persistence/windows-hash-dump-pass-the-hash): source of the NTLM hashes cracked here
+- [Linux password hash dumping & cracking](/snippets/cybersecurity/exploitation/post-exploitation-persistence/linux-hash-dumping): source of the shadow hashes cracked here

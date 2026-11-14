@@ -42,7 +42,7 @@ curl -X PUT <target_ip>             # test if uploads are accepted (misconfigure
 
 ```bash
 whatweb <target_ip>                     # fingerprint the stack (server, CMS, JS libs)
-http <target_ip>                        # httpie — curl-like syntax, nicer output
+http <target_ip>                        # httpie - curl-like syntax, nicer output
 browsh --startup-url http://<target_ip>   # full terminal browser when you need rendered JS
 ```
 

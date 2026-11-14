@@ -18,7 +18,7 @@ const {
   wide = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString();
 const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
 ---
@@ -50,11 +50,11 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={`${site.name} — Blog`}
+      title={`${site.name} · Blog`}
       href="/rss.xml"
     />
 
-    <!-- Fonts: self-hosted variable woff2 (see @font-face in global.css) — no
+    <!-- Fonts: self-hosted variable woff2 (see @font-face in global.css), no
          external requests. Preload the default (Inter) so first paint has it;
          Space Grotesk / JetBrains Mono load on demand when their typeface is
          picked. The "System" typeface loads nothing. -->

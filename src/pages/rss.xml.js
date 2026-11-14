@@ -9,7 +9,7 @@ export async function GET(context) {
     .sort(compareBlog);
 
   return rss({
-    title: `${site.name} — Ramblings`,
+    title: `${site.name} · Ramblings`,
     description: site.description,
     site: context.site,
     items: posts.map((post) => ({

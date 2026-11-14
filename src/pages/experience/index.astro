@@ -15,7 +15,7 @@ const relatedCount = (company: string) =>
 
 <BaseLayout
   title="Experience"
-  description="Where João Guedes has worked — backend engineering at Uphold, a cybersecurity chapter before that, and the projects that came out of each."
+  description="Where João Guedes has worked: backend engineering at Uphold, a cybersecurity chapter before that, and the projects that came out of each."
 >
   <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
     <p class="eyebrow">The road so far</p>
@@ -39,7 +39,7 @@ const relatedCount = (company: string) =>
                     {e.data.role} <span class="text-primary">· {e.data.company}</span>
                   </h2>
                   <span class="shrink-0 text-xs text-base-content/50">
-                    {e.data.start} — {e.data.end}
+                    {e.data.start} - {e.data.end}
                   </span>
                 </div>
                 {e.data.location && (

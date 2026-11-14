@@ -45,8 +45,8 @@ const items = (await getCollection("snippets"))
 ---
 
 <BaseLayout
-  title={`${subgroup.label} snippets — ${category.label}`}
-  description={`${subgroup.label} snippets by João Guedes — ${subgroup.blurb}`}
+  title={`${subgroup.label} snippets · ${category.label}`}
+  description={`${subgroup.label} snippets by João Guedes: ${subgroup.blurb}`}
 >
   <SnippetListView
     icon={subgroup.icon}

@@ -20,7 +20,7 @@ const timeline = await Promise.all(
 const skillGroups = Object.entries(profile.skills);
 ---
 
-<BaseLayout title="About" description="Who João Guedes is — backend engineer, ex-security, homelab tinkerer and motorcyclist in Porto.">
+<BaseLayout title="About" description="Who João Guedes is: backend engineer, ex-security, homelab tinkerer and motorcyclist in Porto.">
   <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
     <p class="eyebrow">The man of the hour</p>
     <h1 class="mt-4 text-4xl sm:text-5xl">About</h1>
@@ -146,7 +146,7 @@ const skillGroups = Object.entries(profile.skills);
                     </a>
                   </h3>
                   <span class="text-xs text-base-content/50">
-                    {item.data.start} — {item.data.end}
+                    {item.data.start} - {item.data.end}
                   </span>
                 </div>
                 {item.data.location && (

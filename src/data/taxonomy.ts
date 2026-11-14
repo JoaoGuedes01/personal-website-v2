@@ -28,7 +28,7 @@ export const SNIPPET_CATEGORIES: Taxon[] = [
     label: "Systems",
     slug: "systems",
     icon: "cpu",
-    blurb: "The machine underneath — OS, processes, networking, performance.",
+    blurb: "The machine underneath: OS, processes, networking, performance.",
   },
   {
     label: "DevOps",
