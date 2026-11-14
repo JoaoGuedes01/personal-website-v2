@@ -19,7 +19,7 @@ const cover = projectCover(entry.id);
 
 // Keep the card balanced: show the first few technologies (authored order) and
 // fold the rest into a "+N more" hint — the full stack lives on the detail page.
-const CARD_STACK_LIMIT = 6;
+const CARD_STACK_LIMIT = 4;
 const shownStack = stack.slice(0, CARD_STACK_LIMIT);
 const moreCount = stack.length - shownStack.length;
 ---
@@ -65,7 +65,7 @@ const moreCount = stack.length - shownStack.length;
         )
       }
     </p>
-    {year && <span class="text-xs text-base-content/40">{year}</span>}
+    {year && <span class="text-xs text-base-content/64">{year}</span>}
   </div>
 
   <h3 class="font-display text-xl leading-snug">
@@ -75,11 +75,11 @@ const moreCount = stack.length - shownStack.length;
   <p class="mt-2 text-sm leading-relaxed text-base-content/70">{summary}</p>
 
   <div class="mt-4 flex flex-wrap items-center gap-1.5">
-    <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{category}</span>
-    {shownStack.map((s) => <TechBadge tech={s} />)}
+    <span class="chip chip-solid">{category}</span>
+    {shownStack.map((s) => <TechBadge tech={s} icon={false} />)}
     {
       moreCount > 0 && (
-        <span class="rounded-full px-2 py-0.5 text-[11px] text-base-content/45">+{moreCount} more</span>
+        <span class="chip chip-more">+{moreCount}</span>
       )
     }
   </div>
@@ -88,17 +88,17 @@ const moreCount = stack.length - shownStack.length;
     (repo || demo || video) && (
       <div class="relative z-10 mt-4 flex flex-wrap gap-4 text-xs">
         {repo && (
-          <a href={repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+          <a href={repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/64 underline-offset-4 hover:text-primary hover:underline">
             Repository <SystemIcon name="arrow-up-right" size={12} />
           </a>
         )}
         {demo && (
-          <a href={demo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+          <a href={demo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/64 underline-offset-4 hover:text-primary hover:underline">
             Live demo <SystemIcon name="arrow-up-right" size={12} />
           </a>
         )}
         {video && (
-          <a href={video} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/55 underline-offset-4 hover:text-primary hover:underline">
+          <a href={video} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-base-content/64 underline-offset-4 hover:text-primary hover:underline">
             <SystemIcon name="circle-play" size={12} /> Video
           </a>
         )}

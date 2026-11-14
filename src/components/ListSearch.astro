@@ -52,7 +52,7 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
     <div class="order-2 min-w-0 sm:order-1"><slot name="filters" /></div>
     <div class="order-1 sm:order-2 sm:w-64 sm:shrink-0">
       <div class="relative">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/64">
           <SystemIcon name="search" size={15} />
         </span>
         <input
@@ -62,14 +62,14 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
           placeholder={placeholder}
           autocomplete="off"
           spellcheck="false"
-          class="w-full rounded-field border border-base-300 bg-base-100 py-1.5 pl-9 pr-8 text-sm outline-none transition-colors placeholder:text-base-content/40 focus:border-primary"
+          class="w-full rounded-field border border-base-300 bg-base-100 py-1.5 pl-9 pr-8 text-sm outline-none transition-colors placeholder:text-base-content/64 focus:border-primary"
         />
         <button
           type="button"
           data-search-clear
           hidden
           aria-label="Clear search"
-          class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/40 transition-colors hover:text-base-content"
+          class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-base-content/64 transition-colors hover:text-base-content"
         >
           <SystemIcon name="x" size={14} />
         </button>
@@ -80,9 +80,9 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
   <div data-search-browse><slot /></div>
 
   <div data-search-results hidden>
-    <p data-search-count class="mb-5 mt-8 text-sm text-base-content/50"></p>
+    <p data-search-count class="mb-5 mt-8 text-sm text-base-content/64"></p>
     <div data-search-grid class:list={[resultsGridClass, "pb-4"]}></div>
-    <p data-search-empty hidden class="py-12 text-center text-base-content/55">
+    <p data-search-empty hidden class="py-12 text-center text-base-content/64">
       No matches. Try fewer or different words.
     </p>
   </div>
@@ -160,10 +160,10 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
           return '<li><span class="text-base-content/25">#</span>' + esc(t) + "</li>";
         })
         .join("");
-      if (extra > 0) tagsHtml += '<li class="text-base-content/35">+' + extra + "</li>";
+      if (extra > 0) tagsHtml += '<li class="text-base-content/64">+' + extra + "</li>";
       return (
         '<article class="card-lift group relative flex h-full flex-col rounded-box border border-base-300 bg-base-100 p-6 hover:border-primary/40">' +
-        '<div class="flex items-center gap-2 text-xs text-base-content/45">' +
+        '<div class="flex items-center gap-2 text-xs text-base-content/64">' +
         (it.lang
           ? '<span class="rounded-md bg-base-200 px-2 py-0.5 font-mono text-[11px] text-base-content/70">' + esc(it.lang) + "</span>"
           : "") +
@@ -174,11 +174,11 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
         '" class="after:absolute after:inset-0 group-hover:text-primary">' +
         esc(it.title) +
         "</a></h3>" +
-        (it.meta ? '<p class="mt-1 text-xs text-base-content/45">' + esc(it.meta) + "</p>" : "") +
+        (it.meta ? '<p class="mt-1 text-xs text-base-content/64">' + esc(it.meta) + "</p>" : "") +
         (it.description
           ? '<p class="mt-1.5 text-sm leading-relaxed text-base-content/70">' + esc(it.description) + "</p>"
           : "") +
-        (tagsHtml ? '<ul class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/45">' + tagsHtml + "</ul>" : "") +
+        (tagsHtml ? '<ul class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/64">' + tagsHtml + "</ul>" : "") +
         "</article>"
       );
     }
@@ -188,7 +188,7 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
         .slice(0, 6)
         .map(function (t) {
           return (
-            '<li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">' +
+            '<li class="chip">' +
             esc(t) +
             "</li>"
           );
@@ -204,7 +204,7 @@ const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
       return (
         '<article class="card-lift relative flex h-full flex-col rounded-box border border-base-300 bg-base-100 p-6">' +
         titleHtml +
-        (it.meta ? '<p class="mt-1 text-xs text-base-content/45">' + esc(it.meta) + "</p>" : "") +
+        (it.meta ? '<p class="mt-1 text-xs text-base-content/64">' + esc(it.meta) + "</p>" : "") +
         (it.description
           ? '<p class="mt-2 text-sm text-base-content/70">' + esc(it.description) + "</p>"
           : "") +

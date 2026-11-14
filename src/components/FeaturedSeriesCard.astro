@@ -61,7 +61,7 @@ const chips = Array.from({ length: item.total }, (_, i) => {
 
     <label
       for={panelId}
-      class="absolute right-2 top-2 z-30 flex min-h-9 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border border-white/40 bg-black/55 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors before:absolute before:-inset-1.5 before:content-[''] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white [@media(hover:hover)]:hover:bg-black/75 [-webkit-tap-highlight-color:transparent]"
+      class="absolute right-2 top-2 z-30 flex min-h-9 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-selector)] border border-white/45 bg-black/55 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors before:absolute before:-inset-1.5 before:content-[''] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white [@media(hover:hover)]:hover:bg-black/75 [-webkit-tap-highlight-color:transparent]"
     >
       <span class="group-has-[:checked]:hidden">{chips.length} parts</span>
       <span class="hidden group-has-[:checked]:inline">Close</span>

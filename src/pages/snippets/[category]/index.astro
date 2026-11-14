@@ -44,7 +44,7 @@ const groups = groupSlugs.map((slug) => {
   {
     groups.length > 0 ? (
       <section class="mx-auto max-w-4xl px-4 pt-14 sm:px-6 sm:pt-20">
-        <a href={href("/snippets")} class="text-sm text-base-content/55 transition-colors hover:text-primary">
+        <a href={href("/snippets")} class="text-sm text-base-content/64 transition-colors hover:text-primary">
           ← All snippets
         </a>
 
@@ -59,7 +59,7 @@ const groups = groupSlugs.map((slug) => {
           <TaxonCardGrid cards={groups} />
         </div>
 
-        <p class="mt-8 text-sm text-base-content/50">
+        <p class="mt-8 text-sm text-base-content/64">
           {inCat.length} {inCat.length === 1 ? "snippet" : "snippets"} across {groups.length}{" "}
           {groups.length === 1 ? "group" : "groups"}.
         </p>

@@ -32,7 +32,7 @@ const showDesktop = variant === "desktop" || variant === "both";
       <details class="toc-mobile group rounded-field border border-base-300 bg-base-100">
         <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-2.5 text-sm font-medium">
           <span class="inline-flex items-center gap-2 text-base-content/80">On this page</span>
-          <svg class="h-4 w-4 text-base-content/50 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="h-4 w-4 text-base-content/64 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m6 9 6 6 6-6" />
           </svg>
         </summary>
@@ -42,7 +42,7 @@ const showDesktop = variant === "desktop" || variant === "both";
               <a
                 href={`#${h.slug}`}
                 class:list={[
-                  "toc-link block rounded px-2 py-1 text-sm text-base-content/65 transition-colors hover:text-primary",
+                  "toc-link block rounded px-2 py-1 text-sm text-base-content/68 transition-colors hover:text-primary",
                   h.depth === 3 && "pl-5",
                 ]}
                 data-slug={h.slug}
@@ -67,7 +67,7 @@ const showDesktop = variant === "desktop" || variant === "both";
             <a
               href={`#${h.slug}`}
               class:list={[
-                "toc-link -ml-px block border-l border-transparent py-1 pl-4 text-sm text-base-content/60 transition-colors hover:text-primary",
+                "toc-link -ml-px block border-l border-transparent py-1 pl-4 text-sm text-base-content/66 transition-colors hover:text-primary",
                 h.depth === 3 && "pl-7",
               ]}
               data-slug={h.slug}

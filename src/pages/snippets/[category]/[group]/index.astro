@@ -57,7 +57,7 @@ const subgroups = subgroupSlugs.map((slug) => {
       <section class="mx-auto max-w-4xl px-4 pt-14 sm:px-6 sm:pt-20">
         <a
           href={href(`/snippets/${categorySlug}`)}
-          class="text-sm text-base-content/55 transition-colors hover:text-primary"
+          class="text-sm text-base-content/64 transition-colors hover:text-primary"
         >
           ← {category.label}
         </a>
@@ -73,7 +73,7 @@ const subgroups = subgroupSlugs.map((slug) => {
           <TaxonCardGrid cards={subgroups} />
         </div>
 
-        <p class="mt-8 text-sm text-base-content/50">
+        <p class="mt-8 text-sm text-base-content/64">
           {inGroup.length} {inGroup.length === 1 ? "snippet" : "snippets"} across {subgroups.length}{" "}
           {subgroups.length === 1 ? "group" : "groups"}.
         </p>

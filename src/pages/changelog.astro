@@ -38,19 +38,19 @@ const hasOlder = releases.length > MAX_RELEASES;
                       class="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
                     >
                       v{r.version}
-                      <SystemIcon name="external-link" size={14} class="text-base-content/40" />
+                      <SystemIcon name="external-link" size={14} class="text-base-content/64" />
                     </a>
                   ) : (
                     <span>v{r.version}</span>
                   )}
                 </h2>
                 {i === 0 && (
-                  <span class="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                  <span class="chip chip-solid">
                     Current
                   </span>
                 )}
                 {r.date && (
-                  <span class="ml-auto inline-flex items-center gap-1.5 text-sm text-base-content/50">
+                  <span class="ml-auto inline-flex items-center gap-1.5 text-sm text-base-content/64">
                     <SystemIcon name="calendar" size={13} />
                     {formatReleaseDate(r.date)}
                   </span>
@@ -73,7 +73,7 @@ const hasOlder = releases.length > MAX_RELEASES;
                                   href={it.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  class="ml-1.5 font-mono text-xs text-base-content/40 underline-offset-2 hover:text-primary hover:underline"
+                                  class="ml-1.5 font-mono text-xs text-base-content/64 underline-offset-2 hover:text-primary hover:underline"
                                 >
                                   {it.hash?.slice(0, 7)}
                                 </a>
@@ -86,19 +86,19 @@ const hasOlder = releases.length > MAX_RELEASES;
                   ))}
                 </div>
               ) : (
-                <p class="mt-4 text-sm text-base-content/50">No notable changes recorded.</p>
+                <p class="mt-4 text-sm text-base-content/64">No notable changes recorded.</p>
               )}
             </li>
           ))}
         </ol>
       ) : (
-        <p class="mt-8 text-base-content/60">No releases yet.</p>
+        <p class="mt-8 text-base-content/66">No releases yet.</p>
       )
     }
 
     <div class="mt-14 border-t border-base-300 pt-6">
       {hasOlder && (
-        <p class="mb-2 text-sm text-base-content/50">
+        <p class="mb-2 text-sm text-base-content/64">
           Showing the latest {MAX_RELEASES} releases.
         </p>
       )}

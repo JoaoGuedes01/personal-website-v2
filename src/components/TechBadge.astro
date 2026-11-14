@@ -13,17 +13,18 @@ interface Props {
   tech: string | ResolvedTech;
   href?: string; // when set, the chip is a link (e.g. filter by this tech)
   class?: string;
+  icon?: boolean; // show the technology's icon (off on cards, on for detail pages)
 }
-const { tech, href, class: cls = "" } = Astro.props;
+const { tech, href, class: cls = "", icon = true } = Astro.props;
 const t: ResolvedTech = typeof tech === "string" ? resolveTech(tech) : tech;
 
 const Tag = href ? "a" : "span";
 const base =
-  "inline-flex items-center gap-1.5 rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60";
+  "inline-flex items-center gap-1.5 chip";
 const interactive = href ? "transition-colors hover:border-primary hover:text-primary" : "";
 ---
 
 <Tag class:list={[base, interactive, cls]} {...href ? { href } : {}}>
-  <TechIcon tech={t} />
+  {icon && <TechIcon tech={t} />}
   <span>{t.label}</span>
 </Tag>

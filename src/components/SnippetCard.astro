@@ -22,7 +22,7 @@ const extra = tags.length - shown.length;
 ---
 
 <article class="card-lift group relative flex flex-col rounded-box border border-base-300 bg-base-100 p-6 hover:border-primary/40">
-  <div class="flex items-center gap-2 text-xs text-base-content/45">
+  <div class="flex items-center gap-2 text-xs text-base-content/64">
     {lang && <span class="rounded-md bg-base-200 px-2 py-0.5 font-mono text-[11px] text-base-content/70">{lang}</span>}
     {
       readingTime && (
@@ -47,14 +47,14 @@ const extra = tags.length - shown.length;
 
   {
     shown.length > 0 && (
-      <ul class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/45">
+      <ul class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/64">
         {shown.map((t) => (
           <li>
             <span class="text-base-content/25">#</span>
             {t}
           </li>
         ))}
-        {extra > 0 && <li class="text-base-content/35">+{extra}</li>}
+        {extra > 0 && <li class="text-base-content/64">+{extra}</li>}
       </ul>
     )
   }

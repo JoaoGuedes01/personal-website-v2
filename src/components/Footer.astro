@@ -10,8 +10,8 @@ const year = new Date().getFullYear();
     <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
       <div class="max-w-sm">
         <p class="font-display text-lg font-semibold">{site.name}</p>
-        <p class="mt-1 text-sm text-base-content/60">{site.role} · Braga, Portugal</p>
-        <p class="mt-3 text-sm leading-relaxed text-base-content/55">
+        <p class="mt-1 text-sm text-base-content/66">{site.role} · Braga, Portugal</p>
+        <p class="mt-3 text-sm leading-relaxed text-base-content/64">
           Built with Astro and DaisyUI. Thanks for stopping by.
         </p>
         <p class="mt-5 text-xs leading-relaxed text-base-content/30">100% Human made</p>
@@ -24,7 +24,7 @@ const year = new Date().getFullYear();
             {
               nav.slice(0, 5).map((item) => (
                 <li>
-                  <a href={href(item.path)} class="text-sm text-base-content/65 transition-colors hover:text-primary">
+                  <a href={href(item.path)} class="text-sm text-base-content/68 transition-colors hover:text-primary">
                     {item.label}
                   </a>
                 </li>
@@ -41,10 +41,10 @@ const year = new Date().getFullYear();
                 <li>
                   <a
                     href={s.href}
-                    class="inline-flex items-center gap-2 text-sm text-base-content/65 transition-colors hover:text-primary"
+                    class="inline-flex items-center gap-2 text-sm text-base-content/68 transition-colors hover:text-primary"
                     {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
-                    <SystemIcon name={s.icon} size={15} class="text-base-content/50" stroke={s.stroke} fill={s.fill} />
+                    <SystemIcon name={s.icon} size={15} class="text-base-content/64" stroke={s.stroke} fill={s.fill} />
                     {s.label}
                   </a>
                 </li>
@@ -55,11 +55,11 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-base-300/60 pt-6 text-xs text-base-content/45">
+    <div class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-base-300/60 pt-6 text-xs text-base-content/64">
       <span>© {year} {site.name}</span>
       <a
         href={href("/changelog")}
-        class="inline-flex items-center gap-1.5 rounded-full border border-base-300 px-2.5 py-1 font-mono text-[11px] text-base-content/55 transition-colors hover:border-primary hover:text-primary"
+        class="chip"
         title="What's new: release notes"
       >
         <SystemIcon name="rocket" size={12} />

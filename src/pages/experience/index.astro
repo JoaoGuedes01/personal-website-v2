@@ -38,12 +38,12 @@ const relatedCount = (company: string) =>
                   <h2 class="font-display text-xl leading-snug group-hover:text-primary">
                     {e.data.role} <span class="text-primary">· {e.data.company}</span>
                   </h2>
-                  <span class="shrink-0 text-xs text-base-content/50">
+                  <span class="shrink-0 text-xs text-base-content/64">
                     {e.data.start} - {e.data.end}
                   </span>
                 </div>
                 {e.data.location && (
-                  <p class="mt-0.5 inline-flex items-center gap-1 text-xs text-base-content/45">
+                  <p class="mt-0.5 inline-flex items-center gap-1 text-xs text-base-content/64">
                     <SystemIcon name="map-pin" size={12} /> {e.data.location}
                   </p>
                 )}
@@ -53,7 +53,7 @@ const relatedCount = (company: string) =>
                 {e.data.tags.length > 0 && (
                   <ul class="mt-3 flex flex-wrap gap-1.5">
                     {e.data.tags.map((t) => (
-                      <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">
+                      <li class="chip">
                         {t}
                       </li>
                     ))}
@@ -61,7 +61,7 @@ const relatedCount = (company: string) =>
                 )}
                 <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                   Details
-                  {count > 0 && <span class="text-base-content/50">· {count} related {count === 1 ? "project" : "projects"}</span>}
+                  {count > 0 && <span class="text-base-content/64">· {count} related {count === 1 ? "project" : "projects"}</span>}
                   <SystemIcon name="arrow-right" size={14} class="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </a>
@@ -69,11 +69,11 @@ const relatedCount = (company: string) =>
           })}
         </div>
       ) : (
-        <p class="mt-8 text-base-content/60">Timeline coming soon.</p>
+        <p class="mt-8 text-base-content/66">Timeline coming soon.</p>
       )
     }
 
-    <p class="mt-10 text-sm text-base-content/60">
+    <p class="mt-10 text-sm text-base-content/66">
       <span class="mr-1">For a more compact version refer to</span>
       <a href={href("/resume")} class="text-primary underline underline-offset-4">my resume →</a>
     </p>

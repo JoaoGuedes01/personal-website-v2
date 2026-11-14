@@ -69,7 +69,7 @@ const tile = tileGradient(seed);
             <span aria-hidden="true" class="pointer-events-none absolute -right-2 -top-6 select-none font-display text-[7rem] leading-none text-white/15">
               {seed.charAt(0).toUpperCase()}
             </span>
-            <span aria-hidden="true" class="absolute bottom-3 left-3 rounded-full bg-black/25 px-2.5 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
+            <span aria-hidden="true" class="absolute bottom-3 left-3 rounded-[var(--radius-selector)] bg-black/35 px-2 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
               {tags[0] ?? "rambling"}
             </span>
           </>
@@ -79,7 +79,7 @@ const tile = tileGradient(seed);
   }
 
   <div class="flex min-w-0 flex-1 flex-col p-6">
-    <div class="mb-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-base-content/45">
+    <div class="mb-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-base-content/64">
       <time datetime={dateISO}>{dateStr}</time>
       {
         readingTime && (
@@ -94,7 +94,7 @@ const tile = tileGradient(seed);
       }
       {
         series && (
-          <span class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+          <span class="chip chip-solid">
             <SystemIcon name="layers" size={11} />
             {series}
           </span>
@@ -102,21 +102,21 @@ const tile = tileGradient(seed);
       }
       {
         category && (
-          <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+          <span class="chip chip-solid">
             {category}
           </span>
         )
       }
       {
         lang && !category && (
-          <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">
+          <span class="chip chip-solid">
             {lang}
           </span>
         )
       }
       {
         source && (
-          <span class="inline-flex items-center gap-1 rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">
+          <span class="chip">
             <SystemIcon name="book-open" size={11} />
             {source}
           </span>
@@ -138,12 +138,12 @@ const tile = tileGradient(seed);
               {tagBase ? (
                 <a
                   href={`${tagBase}?tag=${slugify(t)}`}
-                  class="relative z-10 inline-block rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55 transition-colors hover:border-primary/40 hover:text-primary"
+                  class="relative z-10 chip"
                 >
                   {t}
                 </a>
               ) : (
-                <span class="inline-block rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/55">{t}</span>
+                <span class="chip">{t}</span>
               )}
             </li>
           ))}

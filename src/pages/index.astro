@@ -57,8 +57,8 @@ const recentGroups = [
       <div class="reveal order-2 lg:order-1">
         <p class="eyebrow">Software Engineering · Cybersecurity · DevOps</p>
         <h1 class="mt-5 text-balance text-4xl leading-[1.08] sm:text-5xl md:text-[3.4rem]">
-          Hi there, nice to meet you, I'm
-          <span class="italic text-primary"> Guedes</span>
+          Hi there, nice to meet you, I'm{" "}
+          <span class="text-primary">Guedes</span>
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-base-content/70">
           My name is João Guedes, I'm a backend engineer with a background in security currently working at Uphold. Welcome to my corner of the web, this is the portal to everything Guedes. It's where I keep my work, the snippets I don't want to google twice and the odd ramblings about whatever project or adventure I've dragged myself into lately. Stay as long as you want!
@@ -68,7 +68,7 @@ const recentGroups = [
           <a href={href("/blog")} class="btn btn-ghost rounded-field">Read my ramblings</a>
           <a
             href={href("/about")}
-            class="text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
+            class="text-sm text-base-content/66 underline-offset-4 hover:text-primary hover:underline"
           >
             About me →
           </a>
@@ -90,7 +90,7 @@ const recentGroups = [
       </div>
       <a
         href={href("/projects")}
-        class="hidden shrink-0 text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline sm:block"
+        class="hidden shrink-0 text-sm text-base-content/66 underline-offset-4 hover:text-primary hover:underline sm:block"
       >
         All projects →
       </a>
@@ -104,13 +104,13 @@ const recentGroups = [
           ))}
         </div>
       ) : (
-        <p class="text-base-content/60">No featured projects yet.</p>
+        <p class="text-base-content/66">No featured projects yet.</p>
       )
     }
 
     <a
       href={href("/projects")}
-      class="mt-6 inline-block text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline sm:hidden"
+      class="mt-6 inline-block text-sm text-base-content/66 underline-offset-4 hover:text-primary hover:underline sm:hidden"
     >
       All projects →
     </a>
@@ -129,7 +129,7 @@ const recentGroups = [
             <div>
               <div class="mb-4 flex items-baseline justify-between gap-4">
                 <h3 class="text-xl">{g.label}</h3>
-                <a href={g.url} class="text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline">
+                <a href={g.url} class="text-sm text-base-content/66 underline-offset-4 hover:text-primary hover:underline">
                   {g.all} →
                 </a>
               </div>

@@ -77,7 +77,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
         <p class="eyebrow">Resume</p>
         <h1 class="mt-3 text-4xl sm:text-5xl">{resume.name}</h1>
         <p class="mt-2 text-lg text-base-content/80">{resume.title}</p>
-        <p class="text-sm text-base-content/50">{resume.location}</p>
+        <p class="text-sm text-base-content/64">{resume.location}</p>
       </div>
       <div class="no-print flex shrink-0 gap-2">
         <a
@@ -115,12 +115,12 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                   <h3 class="font-display text-lg">
                     {job.role} <span class="text-primary">· {job.company}</span>
                   </h3>
-                  <span class="text-xs text-base-content/50">
+                  <span class="text-xs text-base-content/64">
                     {job.start} - {job.end}
                   </span>
                 </div>
                 {job.location && (
-                  <p class="text-xs text-base-content/45">{job.location}</p>
+                  <p class="text-xs text-base-content/64">{job.location}</p>
                 )}
                 {job.summary && (
                   <p class="mt-2 text-sm text-base-content/70">{job.summary}</p>
@@ -139,7 +139,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
             ))}
           </div>
         ) : (
-          <p class="mt-4 text-sm text-base-content/55">
+          <p class="mt-4 text-sm text-base-content/64">
             No experience entries yet.
           </p>
         )
@@ -166,14 +166,14 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                       {p.data.title}
                     </a>
                     {showOrg(p.data.type) && p.data.org && (
-                      <span class="text-sm font-normal text-base-content/55">
+                      <span class="text-sm font-normal text-base-content/64">
                         {" "}
                         · {p.data.org}
                       </span>
                     )}
                   </h3>
                   {p.data.year && (
-                    <span class="text-xs text-base-content/45">
+                    <span class="text-xs text-base-content/64">
                       {p.data.year}
                     </span>
                   )}
@@ -198,7 +198,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
               <p class="eyebrow mb-2">{group}</p>
               <ul class="flex flex-wrap gap-1.5">
                 {list.map((s) => (
-                  <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">
+                  <li class="chip chip-lg">
                     {s}
                   </li>
                 ))}
@@ -216,7 +216,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                 <p class="eyebrow mb-2">Soft skills</p>
                 <ul class="flex flex-wrap gap-1.5">
                   {resume.softSkills.map((s) => (
-                    <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-xs text-base-content/75">
+                    <li class="chip chip-lg">
                       {s}
                     </li>
                   ))}
@@ -230,7 +230,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                   {resume.languages.map((l) => (
                     <li>
                       <span class="font-medium">{l.name}</span>
-                      <span class="text-base-content/55"> · {l.level}</span>
+                      <span class="text-base-content/64"> · {l.level}</span>
                     </li>
                   ))}
                 </ul>
@@ -253,18 +253,18 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
             <article>
               <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 class="font-display text-lg">{ed.degree}</h3>
-                <span class="text-xs text-base-content/50">
+                <span class="text-xs text-base-content/64">
                   {ed.start} - {ed.end}
                 </span>
               </div>
               <p class="text-sm text-base-content/70">
                 {ed.school}
                 {ed.location && (
-                  <span class="text-base-content/45"> · {ed.location}</span>
+                  <span class="text-base-content/64"> · {ed.location}</span>
                 )}
               </p>
               {ed.detail && (
-                <p class="mt-1 text-sm text-base-content/60">{ed.detail}</p>
+                <p class="mt-1 text-sm text-base-content/66">{ed.detail}</p>
               )}
             </article>
           ))
@@ -283,7 +283,7 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
             <h2 class="text-2xl">Certifications</h2>
             <a
               href={href("/certifications")}
-              class="no-print shrink-0 text-sm text-base-content/55 underline-offset-4 hover:text-primary hover:underline"
+              class="no-print shrink-0 text-sm text-base-content/64 underline-offset-4 hover:text-primary hover:underline"
             >
               All certifications →
             </a>
@@ -296,9 +296,9 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
                   <li class="flex items-baseline justify-between gap-4 text-sm">
                     <span>
                       <span class="font-medium">{c.name}</span>
-                      <span class="text-base-content/60"> · {c.issuer}</span>
+                      <span class="text-base-content/66"> · {c.issuer}</span>
                     </span>
-                    <span class="text-xs text-base-content/50">{c.issued}</span>
+                    <span class="text-xs text-base-content/64">{c.issued}</span>
                   </li>
                 ))}
           </ul>

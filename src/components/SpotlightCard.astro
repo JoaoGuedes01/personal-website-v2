@@ -49,9 +49,9 @@ const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "shor
 
   <div class:list={["flex flex-col", large ? "p-6 sm:p-9" : "p-6"]}>
     <div class="flex flex-wrap items-center gap-2 text-xs">
-      <span class="rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-content">Featured</span>
-      {series && <span class="rounded-full bg-black/55 px-2.5 py-1 text-white backdrop-blur-sm">{series}</span>}
-      <span class="inline-flex items-center gap-2 rounded-full bg-black/55 px-2.5 py-1 text-white backdrop-blur-sm">
+      <span class="rounded-[var(--radius-selector)] bg-primary px-2 py-1 font-mono text-[10px] font-semibold text-primary-content">Featured</span>
+      {series && <span class="rounded-[var(--radius-selector)] bg-black/55 px-2 py-1 font-mono text-[11px] text-white backdrop-blur-sm">{series}</span>}
+      <span class="inline-flex items-center gap-2 rounded-[var(--radius-selector)] bg-black/55 px-2 py-1 font-mono text-[11px] text-white backdrop-blur-sm">
         <time datetime={date.toISOString()}>{dateStr}</time>
         {readingTime && <><span class="text-white/50">·</span><span>{readingTime}</span></>}
       </span>
@@ -71,12 +71,12 @@ const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "shor
               {tagBase ? (
                 <a
                   href={`${tagBase}?tag=${slugify(t)}`}
-                  class="relative z-10 inline-block rounded-full border border-white/40 bg-black/30 px-2.5 py-0.5 text-[11px] text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+                  class="relative z-10 inline-block rounded-[var(--radius-selector)] border border-white/45 bg-black/35 px-2 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/25"
                 >
                   {t}
                 </a>
               ) : (
-                <span class="inline-block rounded-full border border-white/40 bg-black/30 px-2.5 py-0.5 text-[11px] text-white">{t}</span>
+                <span class="inline-block rounded-[var(--radius-selector)] border border-white/45 bg-black/35 px-2 py-1 font-mono text-[11px] font-medium text-white">{t}</span>
               )}
             </li>
           ))}

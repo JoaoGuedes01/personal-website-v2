@@ -69,18 +69,18 @@ const searchItems = snips.map((s) => {
               categories.length > 0 ? (
                 <TaxonCardGrid cards={categories} />
               ) : (
-                <p class="text-base-content/60">No snippets yet.</p>
+                <p class="text-base-content/66">No snippets yet.</p>
               )
             }
 
-            <p class="mt-8 text-sm text-base-content/50">
+            <p class="mt-8 text-sm text-base-content/64">
               {total} {total === 1 ? "snippet" : "snippets"} across {categories.length}{" "}
               {categories.length === 1 ? "class" : "classes"}.
             </p>
           </ListSearch>
         </div>
       ) : (
-        <p class="mt-8 text-base-content/60">No snippets yet.</p>
+        <p class="mt-8 text-base-content/66">No snippets yet.</p>
       )
     }
   </section>

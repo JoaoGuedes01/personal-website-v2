@@ -57,7 +57,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
 
 <BaseLayout title={title} description={summary}>
   <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
-    <a href={href("/projects")} class="inline-flex items-center gap-1 text-sm text-base-content/55 transition-colors hover:text-primary">
+    <a href={href("/projects")} class="inline-flex items-center gap-1 text-sm text-base-content/64 transition-colors hover:text-primary">
       <SystemIcon name="arrow-left" size={14} /> Projects
     </a>
 
@@ -97,13 +97,13 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
               }
             </span>
             <span class="text-base-content/30">·</span>
-            <span class="rounded-full bg-base-200 px-2.5 py-0.5 text-[11px] text-base-content/60">{category}</span>
-            {year && <span class="text-xs text-base-content/45">{year}</span>}
+            <span class="chip chip-solid">{category}</span>
+            {year && <span class="text-xs text-base-content/64">{year}</span>}
           </div>
 
           <h1 class="mt-3 text-4xl leading-tight sm:text-5xl">{title}</h1>
           <p class="mt-4 text-lg text-base-content/70">{summary}</p>
-          <p class="mt-2 text-sm text-base-content/45">{rt.label}</p>
+          <p class="mt-2 text-sm text-base-content/64">{rt.label}</p>
 
           {
             groupedStack.length > 0 && (
@@ -148,7 +148,7 @@ const techHref = (id: string) => `${href("/projects")}?stack=${id}`;
                 {showExpLink && (
                   <a
                     href={expHref}
-                    class="inline-flex items-center gap-1.5 text-sm text-base-content/60 underline-offset-4 hover:text-primary hover:underline"
+                    class="inline-flex items-center gap-1.5 text-sm text-base-content/66 underline-offset-4 hover:text-primary hover:underline"
                   >
                     <SystemIcon name="building-2" size={14} />
                     Part of my work at {expCompany}

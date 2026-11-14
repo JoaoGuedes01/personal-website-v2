@@ -20,7 +20,7 @@ const url = (id: string) => href(`/blog/${id}`);
     <SystemIcon name="layers" size={14} /> In this series
   </p>
   <h2 id="series-title" class="mt-2 text-2xl">{series.title}</h2>
-  {series.blurb && <p class="mt-1 text-sm text-base-content/65">{series.blurb}</p>}
+  {series.blurb && <p class="mt-1 text-sm text-base-content/68">{series.blurb}</p>}
 
   <ol class="mt-5 divide-y divide-base-300 border-y border-base-300">
     {
@@ -29,7 +29,7 @@ const url = (id: string) => href(`/blog/${id}`);
           <span
             class:list={[
               "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-              p.state === "current" ? "bg-primary text-primary-content" : "bg-base-200 text-base-content/60",
+              p.state === "current" ? "bg-primary text-primary-content" : "bg-base-200 text-base-content/66",
             ]}
           >
             {p.part}
@@ -39,12 +39,12 @@ const url = (id: string) => href(`/blog/${id}`);
               {p.title}
             </a>
           ) : (
-            <span class:list={["min-w-0 flex-1", p.state === "current" ? "font-medium" : "text-base-content/45"]}>
+            <span class:list={["min-w-0 flex-1", p.state === "current" ? "font-medium" : "text-base-content/64"]}>
               {p.title}
             </span>
           )}
           {p.state === "current" && <span class="text-xs font-medium text-primary">You are here</span>}
-          {p.state === "upcoming" && <span class="text-xs text-base-content/40">Coming soon</span>}
+          {p.state === "upcoming" && <span class="text-xs text-base-content/64">Coming soon</span>}
         </li>
       ))
     }
@@ -58,9 +58,9 @@ const url = (id: string) => href(`/blog/${id}`);
             href={url(series.prev.id)}
             class="group flex items-center gap-3 rounded-field border border-base-300 px-4 py-3 transition-colors hover:border-primary/50"
           >
-            <SystemIcon name="arrow-left" size={16} class="text-base-content/45 group-hover:text-primary" />
+            <SystemIcon name="arrow-left" size={16} class="text-base-content/64 group-hover:text-primary" />
             <span class="min-w-0">
-              <span class="block text-[11px] uppercase tracking-wide text-base-content/45">Previous · Part {series.prev.part}</span>
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/64">Previous · Part {series.prev.part}</span>
               <span class="block truncate font-medium">{series.prev.title}</span>
             </span>
           </a>
@@ -73,16 +73,16 @@ const url = (id: string) => href(`/blog/${id}`);
             class="group flex items-center justify-end gap-3 rounded-field border border-base-300 px-4 py-3 text-right transition-colors hover:border-primary/50"
           >
             <span class="min-w-0">
-              <span class="block text-[11px] uppercase tracking-wide text-base-content/45">Next · Part {series.next.part}</span>
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/64">Next · Part {series.next.part}</span>
               <span class="block truncate font-medium">{series.next.title}</span>
             </span>
-            <SystemIcon name="arrow-right" size={16} class="text-base-content/45 group-hover:text-primary" />
+            <SystemIcon name="arrow-right" size={16} class="text-base-content/64 group-hover:text-primary" />
           </a>
         ) : series.next ? (
           <div class="flex items-center justify-end gap-3 rounded-field border border-dashed border-base-300 px-4 py-3 text-right">
             <span class="min-w-0">
-              <span class="block text-[11px] uppercase tracking-wide text-base-content/40">Next · Part {series.next.part}</span>
-              <span class="block truncate text-base-content/55">{series.next.title} <span class="text-xs">(coming soon)</span></span>
+              <span class="block text-[11px] uppercase tracking-wide text-base-content/64">Next · Part {series.next.part}</span>
+              <span class="block truncate text-base-content/64">{series.next.title} <span class="text-xs">(coming soon)</span></span>
             </span>
           </div>
         ) : (

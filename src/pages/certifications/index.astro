@@ -81,18 +81,18 @@ const searchItems = certs.map((c) => ({
                     </div>
                   </div>
 
-                  <p class="mt-3 text-sm text-base-content/55">
+                  <p class="mt-3 text-sm text-base-content/64">
                     Issued {c.data.issued}
-                    {c.data.expires && <span class="text-base-content/45"> · expires {c.data.expires}</span>}
+                    {c.data.expires && <span class="text-base-content/64"> · expires {c.data.expires}</span>}
                   </p>
                   {c.data.credentialId && (
-                    <p class="mt-1 text-xs text-base-content/45">Credential ID: {c.data.credentialId}</p>
+                    <p class="mt-1 text-xs text-base-content/64">Credential ID: {c.data.credentialId}</p>
                   )}
 
                   {c.data.skills.length > 0 && (
                     <ul class="mt-3 flex flex-wrap gap-1.5">
                       {c.data.skills.map((s) => (
-                        <li class="rounded-full border border-base-300 px-2.5 py-0.5 text-[11px] text-base-content/60">{s}</li>
+                        <li class="chip">{s}</li>
                       ))}
                     </ul>
                   )}
@@ -111,13 +111,13 @@ const searchItems = certs.map((c) => ({
               ))}
             </div>
 
-            <p id="cert-empty" class="hidden py-10 text-center text-base-content/50">
+            <p id="cert-empty" class="hidden py-10 text-center text-base-content/64">
               Nothing from this provider yet.
             </p>
           </ListSearch>
         </div>
       ) : (
-        <p class="mt-8 text-base-content/60">
+        <p class="mt-8 text-base-content/66">
           No certifications yet. Add one by dropping a markdown file in
           <code class="rounded bg-base-200 px-1.5 py-0.5 text-[13px]">src/content/certifications/</code>.
         </p>
