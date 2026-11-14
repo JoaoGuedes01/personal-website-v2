@@ -12,8 +12,8 @@
 //                                                  at the bottom of this file.
 //
 // So: touch nothing and the résumé builds itself. Fill an override array below
-// and that section uses your verbatim version instead. Drop your real CV pdf at
-// public/resume/joaoguedes_cv.pdf.
+// and that section uses your verbatim version instead. The CV PDF is generated
+// from src/data/cv/cv.md.
 // ---------------------------------------------------------------------------
 
 import { profile } from "./profile";
@@ -42,8 +42,19 @@ export const resume = {
   // Education comes from its own file (shared with /academia).
   education,
 
-  // Where the "Download PDF" button points. Drop the file in public/resume/.
+  // Where the "Formal CV" button points. The PDF is generated at build time from
+  // src/data/cv/ (see cv.md), so there is no file to drop in public/.
   pdfPath: "/resume/joaoguedes_cv.pdf",
+
+  // Contact block of the generated CV: [label shown, link].
+  contact: {
+    website: ["Personal Website", "https://joaoguedes.net"] as [string, string],
+    github: ["JoaoGuedes01", "https://github.com/JoaoGuedes01"] as [string, string],
+    phone: "(+351) 926909235",
+    homeServer: ["Home Server", "https://uptime.joaoguedes.net"] as [string, string],
+    linkedin: ["joaom-guedes", "https://www.linkedin.com/in/joaom-guedes"] as [string, string],
+    email: "joaoguedes.cjp@gmail.com",
+  },
 
   // ----- OVERRIDES (leave empty to auto-generate) ----------------------------
   // Fill any of these to override that section verbatim.

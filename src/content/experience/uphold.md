@@ -11,6 +11,14 @@ highlights:
   - "Actively contribute to Uphold's complex Backend and tech stack"
   - "Help modernize the Backend's tech stack and services' code bases"
   - "Work on new initiatives that will help Uphold differentiate from the market"
+cv:
+  type: "Full Time"
+  bullets:
+    - "Develop and ship features for Manager Tool, the internal platform Uphold's account agents rely on."
+    - "Work across Uphold's backend and its microservices stack (event-driven, gRPC, GraphQL, REST, Kubernetes)."
+    - "Help modernize the backend's tech stack and the code bases of existing services."
+    - "Work on new initiatives that help Uphold differentiate in the crypto and fintech market."
+
 order: 5
 draft: false
 # gallery:

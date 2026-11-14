@@ -171,6 +171,16 @@ const experience = defineCollection({
           }),
         )
         .default([]),
+      // Optional overrides for the generated PDF CV (src/data/cv/). Everything else
+      // is taken from the fields above.
+      cv: z
+        .object({
+          role: z.string().optional(), // title as it should read on the CV
+          type: z.string().optional(), // "Full Time" (default), "Internship", …
+          bullets: z.array(z.string()).optional(), // short CV bullets (default: highlights)
+          hide: z.boolean().default(false), // leave this role off the CV
+        })
+        .optional(),
       // Sort order — most recent should have the highest number.
       order: z.number().default(0),
       draft: z.boolean().default(false),

@@ -11,6 +11,16 @@ highlights:
   - "Research on new vulnerabilities for new queries and detection methods"
   - "Started development on intneral tools and software for the AppSec department"
   - "Designed, developed and delivered result comparison project C-LAB"
+cv:
+  type: "Full Time"
+  bullets:
+    - "Analyze and triage complex vulnerabilities across multiple languages within large-scale codebases."
+    - "Conduct vulnerability research and exploit replication to validate and contextualize findings."
+    - "Develop and maintain internal tooling to automate security analysis and reporting."
+    - "Design, deploy, and maintain internal AppSec infrastructure with Docker, Nginx, and Traefik on Linux environments."
+    - "Build Python-based automations and Power BI dashboards for large-scale data analysis and reporting."
+    - "Participate in offensive security initiatives (e.g., CVE hunts) using tools like Burp Suite, Nmap, and Metasploit."
+
 order: 4
 draft: false
 # gallery:

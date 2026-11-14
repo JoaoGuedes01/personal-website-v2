@@ -11,6 +11,10 @@ highlights:
   - "Quality partner of SAST engine teams reviewing work items and their regressions"
   - "Maintain and iterate leagacy regression detection software"
   - "Building new automation software and workflows for the QA department"
+cv:
+  type: "Internship"
+  hide: true   # the internship is left off the CV (it is covered by the role that followed it)
+
 order: 1
 ---
 

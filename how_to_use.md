@@ -370,8 +370,49 @@ certifications: []  // [] → from src/content/certifications/*
 projects: []        // [] → every project with resume:true (or list ids to pick/order)
 ```
 
-The page has **Download PDF** (point `pdfPath` at your file in `public/resume/`) and **Print**
-(with a clean print stylesheet). There's no on-page filtering — it's a clean, printable document.
+The page has **Formal CV** (the generated PDF below) and **Print** (with a clean print stylesheet).
+There's no on-page filtering — it's a clean, printable document.
+
+### The PDF CV — generated at build time
+
+The "Formal CV" PDF is built from `src/data/cv/` on every build, so it is never out of date. It is
+deliberately plain: Helvetica, black on white, one A4 page, no colour or icons.
+
+| File | What it is |
+| --- | --- |
+| `src/data/cv/cv.md` | **Your CV, in your words.** Write anything; drop in `{{placeholders}}` where you want live site data. |
+| `src/data/cv/cv.auto.md` | The fully automatic CV: nothing but placeholders. |
+
+The front matter of `cv.md` sets `use: manual` (publish `cv.md`) or `use: auto` (publish `cv.auto.md`),
+the page size, font size and margin, and `fit: one-page` (shrink the font, down to `min-font`, until it
+fits) or `fit: flow` (let it run onto more pages). Both versions are always built, whichever is published:
+
+- `/resume/joaoguedes_cv.pdf` — the published one (what the site links to)
+- `/resume/joaoguedes_cv-manual.pdf` and `/resume/joaoguedes_cv-auto.pdf` — to compare them
+
+**Syntax.** One line is one line (nothing merges). `# Name` is the centred title, `## Section` a heading
+with a rule, `- text` a bullet, `**bold**`, `[text](url)` (clickable, stays black). A line starting with
+`|` is an **aligned row**: first cell on the left, last on the right, the ones between centred
+(4 cells: left, left, centred, right), e.g. `| **Role** | **Company** | **2024 - 2026** | **Full Time** |`.
+A literal `|` inside a cell is written `\|`.
+Icons: `:name:` before text in a row draws a small vector icon (any name from the site's icon set, e.g. `:github:`,
+`:mail:`, `:phone:`); `{{contact}}` already uses them.
+
+**Placeholders** (anything else is yours):
+
+| Placeholder | Fills in |
+| --- | --- |
+| `{{name}}`, `{{title}}` | From `src/data/profile.ts` |
+| `{{contact}}` | The two contact rows, from `contact` in `src/data/resume.ts` |
+| `{{experience}}` | Every non-draft role, newest first, with its bullets |
+| `{{education}}` | From `src/data/education.ts` |
+| `{{certifications}}` / `{{certifications: all}}` | Featured certifications / all of them |
+| `{{skills}}` / `{{skills: Languages, Databases}}` | Every skill group / only those groups, in that order |
+
+**Per-role overrides** (optional `cv:` block in an experience file): `bullets` (short CV bullets; default is
+`highlights`), `role` (the title as it should read on the CV), `type` ("Full Time" by default) and `hide: true`
+to leave a role off the CV. To hand-write the whole experience section, just write the rows and bullets
+yourself instead of `{{experience}}`.
 
 ---
 
