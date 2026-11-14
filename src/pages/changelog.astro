@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SystemIcon from "../components/SystemIcon.astro";
-import { releases, version, formatReleaseDate } from "../utils/changelog";
+import { releases, version, formatReleaseDate, type ChangelogKind } from "../utils/changelog";
 
 const repoUrl = "https://github.com/JoaoGuedes01/personal-website-v2";
 
@@ -9,26 +9,39 @@ const repoUrl = "https://github.com/JoaoGuedes01/personal-website-v2";
 const MAX_RELEASES = 12;
 const shown = releases.slice(0, MAX_RELEASES);
 const hasOlder = releases.length > MAX_RELEASES;
+
+// Long groups (e.g. a dozen "add X snippets") fold behind a "show more".
+const VISIBLE_ITEMS = 6;
+
+// Group colour: a semantic daisyUI token per kind.
+const tone: Record<ChangelogKind, string> = {
+  feature: "var(--color-primary)",
+  fix: "var(--color-error)",
+  content: "var(--color-accent)",
+  docs: "var(--color-info)",
+  other: "var(--color-secondary)",
+};
 ---
 
 <BaseLayout
   title="Changelog"
   description={`What's new on joaoguedes.net, current version is v${version}`}
 >
-  <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
+  <section class="mx-auto max-w-4xl px-4 pt-16 sm:px-6 sm:pt-20">
     <p class="eyebrow">Release notes</p>
     <h1 class="mt-4 text-4xl sm:text-5xl">Changelog</h1>
     <p class="mt-4 max-w-2xl text-lg text-base-content/70">
       Every shiny new feature on the site. Currently on
-      <span class="font-mono text-base-content/90 ml-1">v{version}</span>.
+      <span class="ml-1 font-mono text-base-content/90">v{version}</span>.
     </p>
 
     {
       releases.length > 0 ? (
-        <ol class="mt-12 space-y-12">
+        <ol class="mt-12">
           {shown.map((r, i) => (
-            <li class="relative border-t border-base-300 pt-8 first:border-t-0 first:pt-0">
-              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+            <li class="grid gap-x-10 gap-y-4 border-t border-base-300 py-10 first:border-t-0 first:pt-2 md:grid-cols-[10rem_minmax(0,1fr)]">
+              <!-- Version, date -->
+              <div class="md:sticky md:top-24 md:self-start">
                 <h2 class="font-display text-2xl">
                   {r.url ? (
                     <a
@@ -44,50 +57,74 @@ const hasOlder = releases.length > MAX_RELEASES;
                     <span>v{r.version}</span>
                   )}
                 </h2>
-                {i === 0 && (
-                  <span class="chip chip-solid">
-                    Current
-                  </span>
-                )}
-                {r.date && (
-                  <span class="ml-auto inline-flex items-center gap-1.5 text-sm text-base-content/64">
-                    <SystemIcon name="calendar" size={13} />
-                    {formatReleaseDate(r.date)}
-                  </span>
-                )}
+                <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 md:flex-col md:items-start">
+                  {r.date && (
+                    <span class="inline-flex items-center gap-1.5 text-sm text-base-content/64">
+                      <SystemIcon name="calendar" size={13} />
+                      {formatReleaseDate(r.date)}
+                    </span>
+                  )}
+                  {i === 0 && <span class="chip chip-solid">Current</span>}
+                </div>
               </div>
 
-              {r.groups.length > 0 ? (
-                <div class="mt-5 space-y-5">
-                  {r.groups.map((g) => (
-                    <div>
-                      <p class="eyebrow">{g.title}</p>
-                      <ul class="mt-2.5 space-y-1.5">
-                        {g.items.map((it) => (
-                          <li class="flex gap-2.5 text-sm leading-relaxed text-base-content/75">
-                            <span aria-hidden="true" class="mt-2 h-1 w-1 shrink-0 rounded-full bg-base-content/25" />
-                            <span>
-                              {it.text}
+              <!-- Changes -->
+              <div class="min-w-0 space-y-7">
+                {r.groups.length > 0 ? (
+                  r.groups.map((g) => {
+                    const head = g.items.slice(0, VISIBLE_ITEMS);
+                    const rest = g.items.slice(VISIBLE_ITEMS);
+                    return (
+                      <div>
+                        <p class="flex items-center gap-2">
+                          <span class="chip chip-tone chip-lg" style={`--tone:${tone[g.kind]}`}>{g.title}</span>
+                          <span class="text-xs text-base-content/64">{g.items.length}</span>
+                        </p>
+                        <ul class="changelog-list mt-3">
+                          {head.map((it) => (
+                            <li class="changelog-item">
+                              <span class="changelog-text">
+                                {it.scope && <span class="chip changelog-scope">{it.scope}</span>}
+                                <span set:html={it.html} />
+                              </span>
                               {it.url && (
-                                <a
-                                  href={it.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  class="ml-1.5 font-mono text-xs text-base-content/64 underline-offset-2 hover:text-primary hover:underline"
-                                >
+                                <a href={it.url} target="_blank" rel="noopener noreferrer" class="changelog-hash" aria-label={`Commit ${it.hash?.slice(0, 7)}`}>
                                   {it.hash?.slice(0, 7)}
                                 </a>
                               )}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p class="mt-4 text-sm text-base-content/64">No notable changes recorded.</p>
-              )}
+                            </li>
+                          ))}
+                        </ul>
+                        {rest.length > 0 && (
+                          <details class="changelog-more mt-1">
+                            <summary>
+                              <span class="more-closed">Show {rest.length} more</span>
+                              <span class="more-open">Show fewer</span>
+                            </summary>
+                            <ul class="changelog-list mt-1">
+                              {rest.map((it) => (
+                                <li class="changelog-item">
+                                  <span class="changelog-text">
+                                    {it.scope && <span class="chip changelog-scope">{it.scope}</span>}
+                                    <span set:html={it.html} />
+                                  </span>
+                                  {it.url && (
+                                    <a href={it.url} target="_blank" rel="noopener noreferrer" class="changelog-hash" aria-label={`Commit ${it.hash?.slice(0, 7)}`}>
+                                      {it.hash?.slice(0, 7)}
+                                    </a>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p class="text-sm text-base-content/64">No notable changes recorded.</p>
+                )}
+              </div>
             </li>
           ))}
         </ol>
@@ -96,7 +133,7 @@ const hasOlder = releases.length > MAX_RELEASES;
       )
     }
 
-    <div class="mt-14 border-t border-base-300 pt-6">
+    <div class="mt-6 border-t border-base-300 pt-6">
       {hasOlder && (
         <p class="mb-2 text-sm text-base-content/64">
           Showing the latest {MAX_RELEASES} releases.
@@ -114,3 +151,56 @@ const hasOlder = releases.length > MAX_RELEASES;
     </div>
   </section>
 </BaseLayout>
+
+<style is:global>
+  .changelog-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 9%, transparent);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: color-mix(in oklch, var(--color-base-content) 86%, transparent);
+  }
+  .changelog-list > .changelog-item:last-child { border-bottom: 0; }
+  .changelog-text code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 0.1em 0.35em;
+    border-radius: var(--radius-selector);
+    background: var(--color-base-200);
+  }
+  .changelog-text a { color: var(--color-primary); text-underline-offset: 3px; }
+  .changelog-text a:hover { text-decoration: underline; }
+  .changelog-scope {
+    margin-right: 0.5rem;
+    padding: 0.18rem 0.4rem;
+    font-size: 0.6875rem;
+    vertical-align: 0.06em;
+  }
+  .changelog-hash {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: color-mix(in oklch, var(--color-base-content) 64%, transparent);
+    text-decoration: none;
+  }
+  .changelog-hash:hover { color: var(--color-primary); text-decoration: underline; }
+
+  .changelog-more summary {
+    display: inline-flex;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    cursor: pointer;
+    list-style: none;
+  }
+  .changelog-more summary::-webkit-details-marker { display: none; }
+  .changelog-more summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .changelog-more .more-open { display: none; }
+  .changelog-more[open] .more-open { display: inline; }
+  .changelog-more[open] .more-closed { display: none; }
+</style>

@@ -12,17 +12,25 @@ import pkg from "../../package.json";
 export const version: string = pkg.version;
 
 export interface ChangelogItem {
-  /** Change description with the trailing commit link stripped off. */
+  /** Conventional-commit scope, e.g. "snippets" (from a leading `**scope:**`). */
+  scope?: string;
+  /** Change description with the commit link and scope stripped, first letter capitalised. */
   text: string;
+  /** `text` as safe inline HTML: `code`, **bold**, [links](url). Use with set:html. */
+  html: string;
   /** Short commit hash, when release-please linked one. */
   hash?: string;
   /** Commit URL, when present. */
   url?: string;
 }
 
+export type ChangelogKind = "feature" | "fix" | "content" | "docs" | "other";
+
 export interface ChangelogGroup {
-  /** Section heading as written, emoji and all (e.g. "✨ Features"). */
+  /** Section heading with emoji and symbols stripped (e.g. "Features"). */
   title: string;
+  /** Normalised category, used for colour. */
+  kind: ChangelogKind;
   items: ChangelogItem[];
 }
 
@@ -44,6 +52,26 @@ const GROUP_RE = /^###\s+(.+?)\s*$/;
 const ITEM_RE = /^\s*[*-]\s+(.+?)\s*$/;
 // Trailing `([abc1234](url))` commit reference on a bullet.
 const COMMIT_RE = /\s*\(\[([0-9a-f]{6,40})\]\(([^)]+)\)\)\s*$/i;
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/** Tiny, safe inline-markdown renderer (HTML is escaped first, then `code`, **bold** and links are re-added). */
+export function inlineMd(src: string): string {
+  return escapeHtml(src)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+
+function kindOf(title: string): ChangelogKind {
+  const t = title.toLowerCase();
+  if (/feature|add/.test(t)) return "feature";
+  if (/fix|bug/.test(t)) return "fix";
+  if (/content/.test(t)) return "content";
+  if (/doc/.test(t)) return "docs";
+  return "other";
+}
 
 function parse(md: string): ChangelogRelease[] {
   const releases: ChangelogRelease[] = [];
@@ -67,7 +95,9 @@ function parse(md: string): ChangelogRelease[] {
 
     const grp = GROUP_RE.exec(line);
     if (grp) {
-      group = { title: grp[1], items: [] };
+      // Drop the leading emoji/symbols release-please adds ("✨ Features" -> "Features").
+      const title = grp[1].replace(/^[^\p{L}\p{N}]+/u, "").trim();
+      group = { title, kind: kindOf(title), items: [] };
       release.groups.push(group);
       continue;
     }
@@ -75,8 +105,15 @@ function parse(md: string): ChangelogRelease[] {
     const item = ITEM_RE.exec(line);
     if (item && group) {
       const commit = COMMIT_RE.exec(item[1]);
+      let text = commit ? item[1].replace(COMMIT_RE, "").trim() : item[1];
+      // A leading "**scope:**" becomes its own field.
+      const sc = /^\*\*([^*]+?):\*\*\s*/.exec(text);
+      if (sc) text = text.slice(sc[0].length);
+      text = text.charAt(0).toUpperCase() + text.slice(1);
       group.items.push({
-        text: commit ? item[1].replace(COMMIT_RE, "").trim() : item[1],
+        scope: sc?.[1],
+        text,
+        html: inlineMd(text),
         hash: commit?.[1],
         url: commit?.[2],
       });
