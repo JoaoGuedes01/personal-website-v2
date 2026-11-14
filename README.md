@@ -31,7 +31,7 @@ kilobytes of vanilla JS. It's designed to be forked and made your own.
   markdown files with typed frontmatter. Drop a file in, it shows up — sorted, linked and paginated.
 - 🧾 **A résumé that writes itself.** `/resume` is generated from your experience, projects and
   certifications, and every section can be overridden by hand when you want it to differ.
-- 🎨 **7 themes × 4 typefaces**, switched at runtime and remembered — Slate (default), Nord,
+- 🎨 **8 themes × 6 typefaces**, switched at runtime and remembered — Ink (default), Slate, Nord,
   Gruvbox, Rosé Pine, Tokyo Night, Paper and Solarized.
 - 🔎 **Fuzzy search** on projects, certifications, snippets and the blog — a find box across from
   the filters, matching across everything in the section.

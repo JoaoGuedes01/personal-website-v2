@@ -431,15 +431,15 @@ skills/soft-skills/languages. Edit `profile.ts` once and both pages update.
 
 ## Themes & typefaces
 
-**7 themes** — Slate (**default**), Nord, Gruvbox, Rosé Pine, Tokyo Night, Paper, Solarized — and
-**4 typefaces** — Inter (default), System, Space Grotesk, JetBrains Mono. Switch them at runtime
+**8 themes**: Ink (**default**, dark oil blue), Slate, Nord, Gruvbox, Rosé Pine, Tokyo Night, Paper, Solarized, and
+**7 typefaces**: Geist (default), Manrope, IBM Plex, Inter, System, Space Grotesk, JetBrains Mono. Switch them at runtime
 from the **palette button** in the header; the choice is saved in `localStorage` and restored
 before first paint (no flash).
 
 Themes are daisyUI theme tokens in `src/styles/global.css`. The dark ones are listed in the
 no-flash script in `BaseLayout.astro` **and** in `ThemePicker.astro` — keep those two lists in
 sync if you add or remove a dark theme. To change the default, edit the fallback in the
-`BaseLayout.astro` no-flash script (currently `"slate"`).
+`BaseLayout.astro` no-flash script (currently `"ink"`).
 
 ---
 

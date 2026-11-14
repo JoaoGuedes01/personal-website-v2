@@ -12,16 +12,43 @@
 /* ===========================================================================
    THEMES
    ---------------------------------------------------------------------------
-   Off-colour, developer-flavoured palettes. `slate` is a calm neutral of my
-   own; the rest are the schemes I actually live in inside my editor/terminal.
+   Off-colour, developer-flavoured palettes. `ink` (dark oil blue) and `paper` are the
+   site's own pair; `slate` is the original dark; the rest are schemes I actually live in inside my editor/terminal.
    Only the core colours are set — daisyUI 5 auto-derives the *-content
    foregrounds it needs (primary-content is pinned so buttons stay legible).
    =========================================================================== */
 
-/* --- slate · dark · default (neutral off-black, clean blue) --------------- */
+/* --- ink · dark · default (dark oil blue, light blue accent) -------------- */
+@plugin "daisyui/theme" {
+  name: "ink";
+  default: true;
+  color-scheme: dark;
+  --color-base-100: #0a1320;
+  --color-base-200: #0f1b2b;
+  --color-base-300: #1d2d42;
+  --color-base-content: #d3dcea;
+  --color-primary: #6aa6ff;
+  --color-primary-content: #0b1220;
+  --color-secondary: #8b93a7;
+  --color-accent: #5cc8c2;
+  --color-neutral: #1d2d42;
+  --color-info: #6aa6ff;
+  --color-success: #6bcb8b;
+  --color-warning: #e4b96b;
+  --color-error: #e86a6a;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* --- slate · dark (the original neutral off-black, same blue) -------------- */
 @plugin "daisyui/theme" {
   name: "slate";
-  default: true;
   color-scheme: dark;
   --color-base-100: #14161b;
   --color-base-200: #1c1f26;
@@ -36,9 +63,9 @@
   --color-success: #6bcb8b;
   --color-warning: #e4b96b;
   --color-error: #e86a6a;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -63,9 +90,9 @@
   --color-success: #a3be8c;
   --color-warning: #ebcb8b;
   --color-error: #bf616a;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -90,9 +117,9 @@
   --color-success: #b8bb26;
   --color-warning: #fabd2f;
   --color-error: #fb4934;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -117,9 +144,9 @@
   --color-success: #9ccfd8;
   --color-warning: #f6c177;
   --color-error: #eb6f92;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -144,9 +171,9 @@
   --color-success: #9ece6a;
   --color-warning: #e0af68;
   --color-error: #f7768e;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -154,7 +181,7 @@
   --noise: 0;
 }
 
-/* --- paper · light (cool, crisp professional — NOT cream) ----------------- */
+/* --- paper · light (cool, crisp professional, same blue family) ----------- */
 @plugin "daisyui/theme" {
   name: "paper";
   color-scheme: light;
@@ -162,18 +189,18 @@
   --color-base-200: #edeff3;
   --color-base-300: #dce1e8;
   --color-base-content: #1b2027;
-  --color-primary: #3b6edb;
+  --color-primary: #2f62d4;
   --color-primary-content: #ffffff;
   --color-secondary: #5b6472;
   --color-accent: #0e9aa7;
   --color-neutral: #2a3039;
-  --color-info: #3b6edb;
+  --color-info: #2f62d4;
   --color-success: #1e9e6a;
   --color-warning: #c98a1b;
   --color-error: #d64545;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -198,9 +225,9 @@
   --color-success: #859900;
   --color-warning: #b58900;
   --color-error: #dc322f;
-  --radius-selector: 0.4rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.9rem;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3rem;
+  --radius-box: 0.55rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -219,6 +246,62 @@
    weight ranges cover every weight the typefaces below ask for. Inter ships an
    italic face too; Space Grotesk and JetBrains Mono are roman-only here.
    =========================================================================== */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/geist-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/manrope-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("/fonts/ibm-plex-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("/fonts/ibm-plex-sans-latin-wght-italic.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+}
 @font-face {
   font-family: "Inter";
   font-style: normal;
@@ -261,14 +344,41 @@
   --font-mono: var(--font-mono-active);
 }
 
-/* Default (== inter) so things render even before the picker script runs. */
+/* Default (== geist) so things render even before the picker script runs. */
 :root {
+  --heading-weight-soft: 600;
+  --font-sans-active: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display-active: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono-active: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --heading-weight: 650;
+  --heading-tracking: -0.025em;
+}
+
+[data-font="geist"] {
+  --heading-weight-soft: 600;
+  --font-sans-active: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display-active: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono-active: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --heading-weight: 650;
+  --heading-tracking: -0.025em;
+}
+
+[data-font="manrope"] {
   --heading-weight-soft: 700;
-  --font-sans-active: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display-active: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans-active: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display-active: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-mono-active: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --heading-weight: 800;
-  --heading-tracking: -0.022em;
+  --heading-tracking: -0.03em;
+}
+
+[data-font="plex"] {
+  --heading-weight-soft: 600;
+  --font-sans-active: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display-active: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono-active: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --heading-weight: 600;
+  --heading-tracking: -0.018em;
 }
 
 [data-font="inter"] {
@@ -353,14 +463,57 @@
    UTILITIES
    =========================================================================== */
 
-/* Quiet eyebrow / section label */
+/* Section label: a small accent-coloured line of text. Inside cards it is muted meta. */
 .eyebrow,
 .kicker {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--color-primary);
+}
+.card-lift .eyebrow,
+.callout .eyebrow {
+  font-weight: 500;
+  color: color-mix(in oklch, var(--color-base-content) 68%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   CHIPS: tags, stack, topics. Squared, mono, outlined by default. `chip-solid`
+   is the filled variant (categories / the active state). Links get a hover.
+   --------------------------------------------------------------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid color-mix(in oklch, var(--color-base-content) 32%, transparent);
+  border-radius: var(--radius-selector);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: color-mix(in oklch, var(--color-base-content) 82%, transparent);
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+a.chip:hover,
+button.chip:hover {
+  border-color: var(--color-primary);
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+}
+.chip-lg {
+  padding: 0.42rem 0.7rem;
+  font-size: 0.8125rem;
+}
+.chip-solid {
+  background: color-mix(in oklch, var(--color-primary) 16%, var(--color-base-100));
+  border-color: color-mix(in oklch, var(--color-primary) 45%, transparent);
+  color: var(--color-primary);
+}
+.chip-more {
+  border-style: dashed;
   color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
 }
 
@@ -383,6 +536,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .card-lift:hover {
     transform: translateY(-2px);
+    border-color: color-mix(in oklch, var(--color-primary) 55%, var(--color-base-300));
     box-shadow: 0 12px 30px -18px color-mix(in oklch, var(--color-base-content) 45%, transparent);
   }
 }

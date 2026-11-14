@@ -24,7 +24,7 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
 ---
 
 <!doctype html>
-<html lang={site.locale} data-theme="slate" data-font="inter" class="dark">
+<html lang={site.locale} data-theme="ink" data-font="geist" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -55,12 +55,12 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
     />
 
     <!-- Fonts: self-hosted variable woff2 (see @font-face in global.css), no
-         external requests. Preload the default (Inter) so first paint has it;
-         Space Grotesk / JetBrains Mono load on demand when their typeface is
+         external requests. Preload the default (Geist) so first paint has it;
+         the other typefaces load on demand when their typeface is
          picked. The "System" typeface loads nothing. -->
     <link
       rel="preload"
-      href="/fonts/inter-latin-wght-normal.woff2"
+      href="/fonts/geist-latin-wght-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -72,10 +72,10 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
       (function () {
         try {
           var root = document.documentElement;
-          var DARK = { slate: 1, nord: 1, gruvbox: 1, "rose-pine": 1, "tokyo-night": 1 };
+          var DARK = { ink: 1, slate: 1, nord: 1, gruvbox: 1, "rose-pine": 1, "tokyo-night": 1 };
           var theme = localStorage.getItem("guedes-theme");
-          if (!theme) theme = "slate";
-          var font = localStorage.getItem("guedes-font") || "inter";
+          if (!theme) theme = "ink";
+          var font = localStorage.getItem("guedes-font") || "geist";
           root.setAttribute("data-theme", theme);
           root.setAttribute("data-font", font);
           if (DARK[theme]) root.classList.add("dark");
