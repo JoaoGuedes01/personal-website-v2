@@ -58,14 +58,17 @@ branch and deploys it to a Cloudflare Pages preview URL.
 3. Merging that pull request publishes a GitHub release.
 4. The `deploy` workflow runs on the published release and uploads `dist` to Cloudflare Pages.
 
-Nothing reaches the live site until that release pull request is merged.
+> [!IMPORTANT]
+> Nothing reaches the live site until that release pull request is merged.
 
 The workflows need three repository secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` and
 `RELEASE_PLEASE_TOKEN`.
 
 ## Dependencies
 
-CI installs with `npm ci` on Linux, and it fails if `package-lock.json` is out of sync. After
-adding or changing a dependency, check that `npm ci` still succeeds on the same Node version as CI
-(24). A lockfile written on macOS once dropped optional packages and broke both the preview and
-the deploy.
+CI installs with `npm ci` on Linux, and it fails if `package-lock.json` is out of sync.
+
+> [!WARNING]
+> After adding or changing a dependency, check that `npm ci` still succeeds on the same Node
+> version as CI (24). A lockfile written on macOS once dropped optional packages and broke both the
+> preview and the deploy.

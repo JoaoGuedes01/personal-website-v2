@@ -7,6 +7,23 @@ The site has two kinds of input. Content is markdown in `src/content`, one file 
 TypeScript data files in `src/data` hold the things that are not entries, like your name, skills
 and navigation. Everything else is generated from those two at build time.
 
+## Contents
+
+- [Setup and commands](#setup-and-commands)
+- [Layout](#layout)
+- [Adding content](#adding-content): [projects](#projects), [blog posts](#blog-posts), [snippets](#snippets), [experience](#experience), [certifications](#certifications), [papers](#papers-and-theses)
+- [Projects and roles](#projects-and-roles)
+- [Lists, filters and search](#lists-filters-and-search)
+- [Images and galleries](#images-and-galleries)
+- [Callouts](#callouts)
+- [Resume and CV](#resume-and-cv)
+- [Data files](#data-files)
+- [Themes and typefaces](#themes-and-typefaces)
+- [Icons](#icons) and [branding files](#branding-files)
+- [Changelog and releases](#changelog-and-releases)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+
 ## Setup and commands
 
 Node 24 is required (see `.nvmrc`).
@@ -76,9 +93,12 @@ A few rules apply to every collection:
   subfolders, except snippets (see below).
 - Frontmatter is validated against `src/content.config.ts`. A wrong or missing field fails the
   build with the file and field named.
-- `draft: true` keeps an entry out of lists, feeds and the sitemap, and out of the build. Blog drafts
-  still get a page under `npm run dev` so you can preview them.
+- `draft: true` keeps an entry out of lists, feeds and the sitemap, and out of the build.
 - Reading time and the table of contents are computed automatically.
+
+> [!TIP]
+> Blog drafts still get a page under `npm run dev`, so you can preview an unfinished post at its
+> normal URL. They are never built for production.
 
 ### Projects
 
@@ -398,9 +418,11 @@ the default is `highlights`), `role` (the title as it should read), `type` (Full
 and `hide: true` to leave the role out. To write the experience section by hand, put your own rows
 and bullets in `cv.md` instead of `{{experience}}`.
 
-The generator is `src/utils/cv.ts` and the route is `src/pages/resume/[file].pdf.ts`. The PDF uses
-the standard Helvetica fonts, which only cover Latin-1 characters, so symbols outside that range are
-dropped.
+The generator is `src/utils/cv.ts` and the route is `src/pages/resume/[file].pdf.ts`.
+
+> [!NOTE]
+> The PDF uses the standard Helvetica fonts, which only cover Latin-1 characters, so symbols outside
+> that range are dropped.
 
 ## Data files
 
@@ -443,8 +465,12 @@ in `src/data/tech.ts`.
 ## Changelog and releases
 
 `/changelog` is built from `CHANGELOG.md`, which release-please writes, and the version number comes
-from `package.json`. Do not edit either by hand. How commits turn into releases is described in
+from `package.json`. How commits turn into releases is described in
 [commit_guide.md](commit_guide.md).
+
+> [!WARNING]
+> Do not edit `CHANGELOG.md` or the version in `package.json` by hand. release-please owns both, and
+> a manual change will conflict with the next release pull request.
 
 ## Deployment
 
