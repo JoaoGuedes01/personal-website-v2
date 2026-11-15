@@ -32,12 +32,12 @@ fit: one-page      # one-page = shrink the font until it fits, flow = let it run
 
 ## Skills
 **Languages:** JavaScript, Python, Go, Java, Kotlin, C#, R, SQL
-**Frameworks/Libraries:** Express, React, Flask, Django, Spring Boot, Gin, ASP.NET, Pandas, Jupyter, Matplotlib
+**Frameworks/Libraries:** Express, Koa, Apollo GraphQL, React, Flask, Django, Spring Boot, Gin, ASP.NET, Pandas, Jupyter, Matplotlib
 **Databases:** MongoDB, PostgreSQL, MySQL, DynamoDB, Redis, SQLite, Elasticsearch
-**DevOps & Tools:** Docker, Nginx, Traefik, Jenkins, GitHub Actions, Linux, PowerShell, Bash, Proxmox, Azure DevOps, RabbitMQ
+**DevOps & Tools:** Docker, Kubernetes, Nginx, Traefik, Jenkins, GitHub Actions, Linux, PowerShell, Bash, Proxmox, Azure DevOps, RabbitMQ
 **Security:** SAST, DAST, IAC, SCA, AppSec, Pentesting (Burp, ZAP, Nmap, Metasploit), Secure Coding, OWASP Top 10
 **Networking:** TCP/IP, VPNs (OpenVPN, Tailscale), DNS, Reverse Proxies, Load Balancing, Firewalls
-**Other:** REST, GraphQL, gRPC, WebSockets, Git, Power BI, Excel Automation, AWS
+**Other:** REST, GraphQL, gRPC, NSQ, Temporal, WebSockets, Git, Power BI, Excel Automation, AWS
 **Spoken Languages:** Portuguese (Native), English (Fluent)
 
 ## Certifications
