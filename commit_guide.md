@@ -1,39 +1,71 @@
-# Commit & Release Playbook
+# Commit guide
 
-Version bump rules stay standard regardless of this config:
-- `fix`, `content`, `chore`, `docs`, etc. → patch bump (`0.4.0` → `0.4.1`)
-- `feat` → minor bump (`0.4.1` → `0.5.0`)
-- `!` after the type, or a `BREAKING CHANGE:` footer → major bump (`0.5.0` → `1.0.0`), and always gets its own "⚠ BREAKING CHANGES" section regardless of config
+Commit messages here follow [Conventional Commits](https://www.conventionalcommits.org). They are not
+only history: release-please reads them on `main` to decide the next version and to write
+`CHANGELOG.md`, which the site also shows at `/changelog`.
 
----
+## Format
 
-## 2. Commit type reference
+```
+type: short description in the imperative
+type(scope): the same, with the area it touches
+```
 
-| Type | Use for | Branch or direct to `main`? |
-|---|---|---|
-| `feat:` | New capability — search, RSS feed, dark mode toggle, new page type | Branch + PR, preview first |
-| `fix:` | Something was broken and now isn't | Branch for anything non-trivial; direct for a one-line trivial fix |
-| `content:` | Blog posts, new pages of writing, images added to a post | Direct to `main` if confident; branch if you want to preview rendering |
-| `perf:` | Made something faster (image optimization, reduced JS, faster build) | Branch if it touches code; direct if it's a config tweak |
-| `refactor:` | Restructured code with no behavior change (reorganized components, renamed files) | Branch — worth a preview to confirm nothing broke |
-| `style:` | Visual/CSS/design tweaks that aren't a new feature (spacing, colors, fonts) | Branch if broad; direct if tiny |
-| `docs:` | Changes to **project** docs — README, this playbook, contributing notes (not blog content) | Direct to `main` |
-| `build:` | Astro config, `package.json`, dependency version pins, build tooling | Direct, unless risky — then branch |
-| `ci:` | Changes to `.github/workflows/*` | Direct — but watch the Actions tab after pushing to confirm it still runs |
-| `chore:` | Routine maintenance not covered above — dependency bumps, `.gitignore` tweaks | Direct to `main` |
-| `test:` | If you ever add tests | Direct or branch depending on size |
-| `revert:` | Undoing a previous commit | Direct — `git revert <sha>` generates this automatically |
+For example `feat(blog): add multi-part series` or `fix(rss): rename the feed to Ramblings`. The
+scope is optional. Put `!` after the type (`feat!:`) or add a `BREAKING CHANGE:` footer for a change
+that breaks existing behaviour.
 
-Format for all of them: `type: short imperative description`, optionally
-`type(scope): description` if you want to note *where* (e.g.
-`fix(nav): broken mobile link`). Scope is optional flavor, not required.
+## Types
 
----
+| Type | Use it for |
+| --- | --- |
+| `feat` | something new for a visitor: a page, a filter, a feature |
+| `fix` | something that was broken and now works |
+| `content` | writing and data: posts, snippets, projects, images added to them |
+| `perf` | making something faster or lighter |
+| `style` | how it looks, with no new capability: spacing, colours, fonts |
+| `refactor` | restructuring code without changing behaviour |
+| `docs` | the project's own documentation (README, guides), not site content |
+| `build` | Astro config, `package.json`, dependencies, build tooling |
+| `ci` | anything in `.github/workflows` |
+| `chore` | routine upkeep that fits nowhere else |
+| `test` | tests, if there ever are any |
+| `revert` | undoing an earlier commit (`git revert` writes this for you) |
 
-## 5. Quick decision guide
-- **Is it writing/content?** → `content:`
-- **Does it change what the site *does* for a visitor?** → `feat:` (new) or `fix:` (repaired)
-- **Does it change how something *looks* without adding capability?** → `style:`
-- **Does it change *how the code is organized* with no visible effect?** → `refactor:`
-- **Is it about the project itself, not the site's content?** → `docs:` (writing about it) or `chore:`/`build:`/`ci:` (mechanics of it)
-- **Not sure if it needs a branch?** If you'd feel nervous seeing it break live, branch it and preview first. If you'd shrug, push straight to `main`.
+Only `feat`, `fix`, `content` and `perf` are listed in the changelog. The rest are valid and stay
+out of the release notes.
+
+If you are unsure, ask what changed for the visitor. New capability is `feat`, repaired is `fix`,
+only the look is `style`, only the writing is `content`. If nothing visible changed, it is
+`refactor`, `build`, `ci` or `chore`.
+
+## Versions
+
+release-please picks the next version from the commits since the last release. A breaking change
+bumps the major version, `feat` the minor, and `fix` the patch.
+
+## Branches and previews
+
+Small changes can go straight to `main`. If a change could break the live site, or you want to see
+it rendered first, put it on a branch and open a pull request: the `preview` workflow builds the
+branch and deploys it to a Cloudflare Pages preview URL.
+
+## Releasing
+
+1. Commits land on `main`.
+2. release-please opens, or updates, a pull request called `chore(main): release guedes-site X.Y.Z`.
+   It contains the version bump in `package.json` and the new `CHANGELOG.md` entry.
+3. Merging that pull request publishes a GitHub release.
+4. The `deploy` workflow runs on the published release and uploads `dist` to Cloudflare Pages.
+
+Nothing reaches the live site until that release pull request is merged.
+
+The workflows need three repository secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` and
+`RELEASE_PLEASE_TOKEN`.
+
+## Dependencies
+
+CI installs with `npm ci` on Linux, and it fails if `package-lock.json` is out of sync. After
+adding or changing a dependency, check that `npm ci` still succeeds on the same Node version as CI
+(24). A lockfile written on macOS once dropped optional packages and broke both the preview and
+the deploy.

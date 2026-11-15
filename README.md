@@ -1,103 +1,65 @@
-<div align="center">
+# personal-website-v2
 
-<img src="public/logo.svg" alt="Guedes logo" width="72" height="72" />
+The source of [joaoguedes.net](https://joaoguedes.net): my projects, professional experience, certifications,
+code snippets, my blog and a CV generator.
 
-# João Guedes — Personal Website
+It is a static content-base application built with Astro. Everything on it comes from markdown files in `src/content`
+and a few small data files in `src/data`; lists, filters, search and the PDF CV are generated from
+those at build time.
 
-**A fast, static personal site for a backend engineer** — projects, experience, snippets,
-a blog, certifications, academia and a résumé that builds itself.
-Dark-developer aesthetic, content-driven, zero client-side framework.
+## Stack
 
-[![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![daisyUI](https://img.shields.io/badge/daisyUI-5-1AD1A5?logo=daisyui&logoColor=white)](https://daisyui.com)
-![Static](https://img.shields.io/badge/output-100%25%20static-14161b)
-![Themes](https://img.shields.io/badge/themes-7-6aa6ff)
+- [Astro](https://astro.build) 7 with MDX and content collections
+- [Tailwind CSS](https://tailwindcss.com) 4 and [daisyUI](https://daisyui.com) 5 for styling and themes
+- [pdfkit](https://pdfkit.org) to build the CV PDF during the build
+- Hosted on Cloudflare Pages, deployed from GitHub Actions, versioned with
+  [release-please](https://github.com/googleapis/release-please)
 
-</div>
+## Running it locally
 
----
-
-## What this is
-
-A personal website built the way a backend engineer would want one: **all content is just
-markdown**, every list is generated from it, and there's no framework shipping to the browser —
-the little interactivity there is (theme switch, search, galleries, table-of-contents) is a few
-kilobytes of vanilla JS. It's designed to be forked and made your own.
-
-### Highlights
-
-- 🗂 **Everything is content.** Projects, blog posts, snippets, roles, certs and papers are
-  markdown files with typed frontmatter. Drop a file in, it shows up — sorted, linked and paginated.
-- 🧾 **A résumé that writes itself.** `/resume` is generated from your experience, projects and
-  certifications, and every section can be overridden by hand when you want it to differ.
-- 🎨 **8 themes × 6 typefaces**, switched at runtime and remembered — Ink (default), Slate, Nord,
-  Gruvbox, Rosé Pine, Tokyo Night, Paper and Solarized.
-- 🔎 **Fuzzy search** on projects, certifications, snippets and the blog — a find box across from
-  the filters, matching across everything in the section.
-- 🏷 **Real, paginated filters** — project types, per-class snippet tags are actual
-  routes, so filtering and pagination coexist.
-- 🖼 **Optional galleries** on any detail page (projects, blog, experience, snippets) with a
-  dependency-free lightbox, plus an on-page **table of contents** that tracks your reading.
-- 📣 **Callouts & disclaimers** — flag a note, warning, or security caveat in any markdown body with
-  a `:::warning[Title] … :::` block (or a `<Callout>` on a page); nine semantic types that recolour
-  with the active theme.
-- ⚡ **Fast & accessible by default** — optimized images, semantic HTML, keyboard-friendly,
-  great Lighthouse scores, SEO tags, sitemap and RSS out of the box.
-- 🧰 **A content generator** — `npm run new -- project "My Thing"` scaffolds a ready-to-edit file.
-
----
-
-## Quick start
+Node 24 is requited (see `.nvmrc`).
 
 ```bash
-# Node 22+ (see .nvmrc)
 npm install
-npm run dev            # http://localhost:4321
+npm run dev        # http://localhost:4321
 ```
+
+Other commands:
 
 ```bash
-npm run build          # static site → ./dist
-npm run new -- blog "My first post"   # scaffold new content
+npm run build      # static site in ./dist
+npm run preview    # serve the production build
+npm run check      # type and template diagnostics
+npm run new -- blog "Post title"   # scaffold a content file; -h lists the types
 ```
 
-Then edit **`src/data/site.ts`** (name, nav, socials) and **`src/data/profile.ts`** (bio, skills,
-interests), drop your content in `src/content/**`, and you're most of the way there.
+## Layout
 
-📖 **Full guide:** see **[`how_to_use.md`](how_to_use.md)** — it walks through the content model,
-every frontmatter field, theming, the résumé, deployment and more.
+```
+src/content/      markdown for projects, blog, snippets, experience, certifications, papers
+src/data/         hand-edited data like site, profile, education, resume, series, CV source
+src/pages/        routes
+src/components/   Astro components
+src/styles/       global.css (Tailwind, daisyUI themes)
+src/utils/        build-time helpers (CV generator, changelog parser, series, reading time)
+scripts/          the content generator
+public/           static files served as they are
+docs/             design notes
+```
 
----
+## Documentation
 
-## Tech
+- [how_to_use.md](how_to_use.md): adding content, frontmatter for each collection, and how the
+  generated pages work.
+- [commit_guide.md](commit_guide.md): commit message format and how releases are made.
 
-Built with **[Astro](https://astro.build)** (static output, MDX, content collections),
-**[Tailwind CSS v4](https://tailwindcss.com)** and **[daisyUI v5](https://daisyui.com)** for theming,
-and the `@tailwindcss/typography` plugin for prose. Deploys anywhere static — the included GitHub
-Actions workflow publishes to GitHub Pages.
+## Deployment
 
----
+Pushing to `main` does not deploy. release-please keeps a release pull request open, and publishing
+that release runs the deploy workflow, which uploads `dist` to Cloudflare Pages. Pull requests
+against `main` get a preview deployment. Details are in [commit_guide.md](commit_guide.md).
 
-## Make it yours 💛
+## License
 
-**You're welcome to use this project as the basis for your own personal site.** Fork it, swap in
-your content, restyle it, ship it — that's what it's for, and I'd be glad to see it put to use.
-
-**One ask: give credit.** If you build your site on this, please keep a visible attribution — a
-line in your site footer and/or your repo's README pointing back to this project and to me
-(**João Guedes**, [github.com/JoaoGuedes01](https://github.com/JoaoGuedes01)). Something like:
-
-> Built on [João Guedes' personal-site project](https://github.com/JoaoGuedes01).
-
-That's the whole deal. A couple of things that aren't OK: passing this off as your own template to
-sell or redistribute, or implying I endorse your site. Otherwise — go for it, and have fun with it.
-
-If you'd like formal terms, add a `LICENSE` file (MIT with an attribution note, or CC-BY-4.0, both
-fit this spirit). Until then this is shared as-is, without warranty. Questions or want to show me
-what you made? Reach out via the links on the site. 🙂
-
----
-
-<div align="center">
-<sub>Made by João Guedes · backend engineer · ex-security · homelab tinkerer</sub>
-</div>
+[MIT](LICENSE). You are welcome to use this as the starting point for your own site. If you do,
+please keep a visible credit linking back to this repository, for example in your footer or README.

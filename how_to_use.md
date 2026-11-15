@@ -1,495 +1,468 @@
 # How to use this site
 
-Everything here is driven by **markdown content** and a handful of small **data files**. Add a file,
-it shows up. This guide covers the whole thing: the content model, every frontmatter field, the
-generated résumé, search, theming, and deployment.
+This is the operating manual: how to add content, what each frontmatter field does, and how the
+generated pages work. For a short overview of the project see [README.md](README.md).
 
-> New here? The short version: run `npm install && npm run dev`, edit `src/data/site.ts` and
-> `src/data/profile.ts`, drop content into `src/content/**`, and use `npm run new` to scaffold files.
+The site has two kinds of input. Content is markdown in `src/content`, one file per entry. Small
+TypeScript data files in `src/data` hold the things that are not entries, like your name, skills
+and navigation. Everything else is generated from those two at build time.
 
----
+## Setup and commands
 
-## Quick start
-
-Requires **Node 22+** (see `.nvmrc`).
+Node 24 is required (see `.nvmrc`).
 
 ```bash
 npm install
-npm run dev          # http://localhost:4321  (live reload)
-npm run build        # static site → ./dist
-npm run preview      # serve the built site locally
-npm run check        # astro type/diagnostic check
-npm run new -- <type> "<Title>"   # scaffold a new content file (see below)
+npm run dev        # http://localhost:4321, reloads on change
+npm run build      # static site in ./dist
+npm run preview    # serve the production build
+npm run check      # Astro type and template diagnostics
 ```
 
----
-
-## Project structure
+## Layout
 
 ```
 src/
-  content/              ← ALL your content, as markdown (see "Adding content")
-    projects/  blog/  snippets/  experience/  certifications/  papers/
-  content.config.ts     ← the schema (frontmatter shape) for each collection
-
-  data/                 ← small config/data files you edit by hand
-    site.ts             ← name, nav, socials, the href() base helper
-    profile.ts          ← bio, skills, soft skills, interests  (About + Résumé)
-    education.ts        ← your education                        (Academia + Résumé)
-    resume.ts           ← résumé pdf path + per-section overrides
-    taxonomy.ts         ← snippet classes + project types (labels, slugs, icons)
-
-  pages/                ← routes (see "Routing")
-  components/           ← Header, Footer, cards, Gallery, ListSearch, TableOfContents…
-  layouts/BaseLayout.astro   ← <head>, header/footer, theme no-flash script
-  icons/index.ts        ← the inline SVG icon set
-  styles/global.css     ← Tailwind + daisyUI theme tokens
-  utils/                ← paginate.ts (PAGE_SIZE = 9), reading.ts
-
-scripts/new-content.mjs ← the content generator behind `npm run new`
-public/                 ← static assets served as-is
-  logo.svg  guedes-vector.svg  guedes_profile.png  og-default.png
-  resume/   ← drop your CV PDF here          papers/   ← drop paper PDFs here
+  content/            one folder per collection
+    projects/ blog/ snippets/ experience/ certifications/ papers/
+  content.config.ts   frontmatter schema for each collection
+  data/
+    site.ts           name, nav, social links, the href() helper
+    profile.ts        bio, skills, interests (About page and resume)
+    education.ts      education (Academia page and resume)
+    resume.ts         resume overrides, CV contact details
+    series.ts         definitions for multi-part blog series
+    taxonomy.ts       project types, snippet categories, slug helpers
+    snippetGroups.ts  labels and icons for snippet groups
+    tech.ts           icons and labels for technologies in project stacks
+    callouts.mjs      callout types and aliases
+    cv/               source files for the generated PDF CV
+  pages/              routes
+  components/         Astro components
+  layouts/            BaseLayout.astro (head, header, footer, theme script)
+  icons/index.ts      icon set
+  plugins/            remark plugin for callouts
+  styles/global.css   Tailwind, daisyUI themes, typefaces
+  utils/              CV generator, changelog parser, series helpers, reading time
+scripts/new-content.mjs   the generator behind `npm run new`
+public/               served as is: logo, portrait, og image, fonts, paper PDFs
 ```
-
----
 
 ## Adding content
 
-Every collection is a folder under `src/content/`. To add an entry, drop in a markdown file — or
-let the generator do it for you:
+Create a markdown file in the right folder, or let the generator do it:
 
 ```bash
-npm run new -- project     "Realtime Chat Service"
-npm run new -- blog        "What the homelab taught me"
-npm run new -- blog        "Layout test" --template showcase   # the "Everything a ramble can do" example
-npm run new -- snippet     "Tail all compose logs"
-npm run new -- experience  "Checkmarx"
+npm run new -- project "Realtime Chat Service"
+npm run new -- blog "What the homelab taught me"
+npm run new -- snippet "Tail all compose logs"
+npm run new -- experience "Checkmarx"
 npm run new -- certification "AWS Solutions Architect"
-npm run new -- paper       "My thesis title"
-# options:  --slug <custom-slug>   |   -h / --help
+npm run new -- paper "My thesis title"
 ```
 
-It writes `src/content/<collection>/<slug>.md` with every field that type needs (pre-filling the
-date and a few defaults), and refuses to overwrite an existing file. Then you just replace the
-`TODO` placeholders. The frontmatter for each type:
+The generator writes `src/content/<collection>/<slug>.md` with every field for that type, fills in
+the date and a few defaults, and will not overwrite an existing file. Replace the `TODO`
+placeholders afterwards. Options:
 
-### A project — `src/content/projects/my-thing.md`
+- `--slug <slug>` to choose the filename instead of deriving it from the title
+- `--group <group>` and `--subgroup <subgroup>` for snippets, to nest them in folders
+- `--template showcase` for a blog post that exercises every block the blog supports, handy for
+  checking a layout change
+
+A few rules apply to every collection:
+
+- The entry id is the filename without its extension, and ids must be flat. Do not put entries in
+  subfolders, except snippets (see below).
+- Frontmatter is validated against `src/content.config.ts`. A wrong or missing field fails the
+  build with the file and field named.
+- `draft: true` keeps an entry out of lists, feeds and the sitemap, and out of the build. Blog drafts
+  still get a page under `npm run dev` so you can preview them.
+- Reading time and the table of contents are computed automatically.
+
+### Projects
+
+`src/content/projects/my-thing.md`
+
 ```md
 ---
 title: "My Thing"
-summary: "One or two lines for the card and the page."
-type: "Personal"              # Personal | Academic | Professional
-category: "Software"          # Software | Web | Data & ML | Networking | Systems | Games
+summary: "One or two lines, shown on the card and the page."
+type: "Personal"                 # Personal | Academic | Professional
+category: "Web"                  # see the list below
 stack: ["TypeScript", "Postgres"]
-featured: false               # surface on the homepage / top of the list
-resume: false                 # include on the auto-generated /resume
-order: 100                    # lower sorts first within a group
+year: 2026
+featured: false                  # appears on the home page
+resume: false                    # appears on /resume
+order: 100                       # lower sorts first
 draft: false
-# org: "Uphold"               # Professional/Academic: the employer (see Experience linking)
+# org: "Uphold"                  # employer, for Professional projects
 # orgUrl: "https://uphold.com"
-# experience: "uphold"        # pin to a specific role by id — only if MULTIPLE roles at one company
-# repo / demo / year          # optional
-# cover: ./cover.jpg          # optional cover (optimized); add coverAlt too
-# gallery: [ … ]              # optional image gallery (see "Images & galleries")
+# experience: "uphold"           # pin to a specific role, see "Projects and roles"
+# repo: "https://github.com/..." # also demo: and video:
+# gallery: [ ... ]               # see "Images and galleries"
 ---
-Markdown body. Use `## Headings` — they build the page's table of contents.
+Markdown body. `##` headings become the table of contents.
 ```
 
-### A blog post — `src/content/blog/my-post.md`
+Categories are `Web`, `Backend & Systems Architecture`, `Devops & Infrastructure`,
+`Data Science & ML` and `Game Development`.
+
+The card and page cover is found by convention. Put an image called `cover.png` (or jpg, jpeg,
+webp, avif) in `src/content/projects/img/<project-id>/` and it is used automatically; there is no
+frontmatter field for it. Gallery images live in the same folder.
+
+Each item in `stack` is looked up in `src/data/tech.ts` to get its label and icon. A name that is not
+there still renders, with a generic icon for its kind. Add an entry to `tech.ts` when you want a
+specific icon.
+
+### Blog posts
+
+`src/content/blog/my-post.md`. The blog is called Ramblings on the site, but the route and folder
+are still `blog`.
+
 ```md
 ---
 title: "My Post"
 description: "Shown in the list and as the social description."
 pubDate: 2026-06-01
-tags: ["backend", "notes"]    # each tag is a "Topic" filter → /blog?tag=<tag>
+tags: ["homelab", "proxmox"]
+featured: false
 draft: false
 # updatedDate: 2026-06-10
-# cover: ./cover.jpg / coverAlt: "…"   # optional hero (optimized)
-# gallery: [ … ]                       # optional image gallery
+# cover: ./img/my-post/cover.jpg
+# coverAlt: "What the image shows"
+# gallery: [ ... ]
+# series: "homelab"
+# part: 2
 ---
 ```
-Posts list newest-first (the page is called **Ramblings**; the route and folder stay `blog`). Tags
-are the blog's organization: they fill the **Topic** dropdown on `/blog` and link to `/blog?tag=<tag>`.
-Each post ends with a "More like this" strip of posts sharing its tags.
 
-**Series.** For multi-part posts, add two fields to each part: `series: "homelab"` and `part: 2`. The key must
-exist in `src/data/series.ts`, which also lists the planned part titles, so unwritten parts read "coming soon" and
-the total ("Part 2 of 5") is known from the start. Series posts get a label under the back link, a small badge on
-the list cards, and an "In this series" box (all parts plus previous / next) in place of "More like this". Parts
-that are still `draft: true` show as "coming soon" for everyone else. Set `featured: true` on any one part to feature the whole series: it takes a single slot of the five in
-the Featured block (a "Series" card linking to part 1, with a closed-by-default "Parts" tab on its right that lists every part). Every part still appears in the list below as its own card. (Tags fit a blog better than rigid categories — posts read
-chronologically and often span topics.)
+Posts are listed newest first. Tags are the blog's only organisation: each tag becomes a topic pill
+on `/blog` and links to `/blog?tag=<tag>`. A post ends with a "More like this" list of posts that
+share its tags.
 
-### A snippet — `src/content/snippets/my-tip.md`
+Images for a post live in `src/content/blog/img/<post-id>/`. That folder is ignored by the content
+loader, so it never turns into entries. Reference the files relatively, as in `cover` above.
+
+Posts with `featured: true` appear in the Featured block at the top of `/blog`, up to five. The
+newest gets the large card.
+
+#### Series
+
+A series is a set of posts that read in order. Define it once in `src/data/series.ts`:
+
+```ts
+homelab: {
+  title: "Homelab",
+  blurb: "One sentence about the series.",
+  planned: ["The Frankenlab", "The Rebuild", "..."],
+},
+```
+
+Then give each post `series: "homelab"` and its `part` number. The `planned` titles let the site
+show the full list, with parts you have not written yet marked as coming soon, and the total
+("Part 2 of 5") before the series is finished.
+
+A series post gets a label above its title, a "Next" link, and an "In this series" box in place of
+"More like this". Every part keeps its own card in the list. Setting `featured: true` on any one
+part features the whole series as a single card in the Featured block, with a collapsible list of
+its parts, so a long series does not use up all the slots. A part still marked `draft: true` shows
+as coming soon to everyone else.
+
+### Snippets
+
+`src/content/snippets/my-tip.md`
+
 ```md
 ---
-title: "My Tip"
+title: "Tail all compose logs"
 description: "What it does, in one line."
 pubDate: 2026-06-01
-category: "Software Engineering"   # Software Engineering | Systems | DevOps | Cybersecurity | Data
-lang: "shell"                      # primary language/tool, shown as a label
-tags: ["git"]                      # tool tags → filter within the class
+category: "DevOps"      # Software Engineering | Systems | DevOps | Cybersecurity | Data
+lang: "shell"           # shown as a label, defaults to shell
+tags: ["docker"]
 draft: false
-# gallery: [ … ]                   # optional image gallery
+# source: "INE course"  # where it came from, shown as a small badge
 ---
 ```
-Snippets are grouped into **classes** (the `category`) on `/snippets`. Within a class, the `tags`
-become a filter that links to `/snippets/<class>/tag/<tag>`.
 
-### A role — `src/content/experience/company.md`
+`category` decides the top-level section on `/snippets`. Groups and subgroups inside a category come
+from the folder structure, not from frontmatter:
+
+```
+src/content/snippets/tools/credential-attack-tools/hydra.md
+```
+
+is the `hydra` snippet in the `credential-attack-tools` subgroup of the `tools` group, under
+`/snippets/cybersecurity/tools/credential-attack-tools/hydra`. A snippet placed directly in
+`src/content/snippets` has no group. Labels, icons and descriptions for groups are optional and
+live in `src/data/snippetGroups.ts`; a group missing there gets a title-cased folder name.
+
+### Experience
+
+`src/content/experience/company.md`
+
 ```md
 ---
 company: "Uphold"
 role: "Backend Software Engineer"
-start: "2023"
-end: "Present"                 # omit → defaults to "Present"
-location: "Porto, Portugal"
-tags: ["Backend", "Go", "Postgres"]
-summary: "One line for the experience list card."
-highlights:                    # bullets — power the role page AND the auto /resume
+start: "2026"
+end: "Present"            # defaults to Present
+location: "Braga, Portugal"
+tags: ["Backend", "Node.js"]
+summary: "One line for the experience list."
+highlights:
   - "Something you shipped or owned."
-  - "Impact, ideally with a number."
-order: 10                      # most recent = HIGHEST number
+order: 5                  # highest number is the most recent
 draft: false
-# gallery: [ … ]               # optional image gallery
+# cv:                     # overrides for the generated CV, see below
+#   role: "..."
+#   type: "Full Time"
+#   bullets: ["..."]
+#   hide: false
 ---
-Markdown body about the role. `## Headings` build a table of contents on longer entries.
+Markdown body about the role.
 ```
 
-### A certification — `src/content/certifications/my-cert.md`
+### Certifications
+
+`src/content/certifications/aws-cloud-practitioner.md`
+
 ```md
 ---
 name: "AWS Certified Cloud Practitioner"
-issuer: "AWS"                  # the provider filter (and search) group by this
-issued: "2024"                 # freeform: "2024" or "Mar 2024"
-skills: ["Cloud", "IAM"]       # shown as tags; also searchable
-featured: false
+issuer: "AWS"             # certifications are grouped and filtered by issuer
+issued: "2024"            # free text, "2024" or "Mar 2024"
+skills: ["Cloud", "IAM"]
+featured: false           # sorts first, and is listed on the CV
 order: 100
 draft: false
 # expires: "2027"
-# url: "https://…"             # verification link ("Verify")
-# credentialId: "…"
+# url: "https://..."      # verification link
+# credentialId: "..."
 ---
 ```
 
-### A thesis / paper — `src/content/papers/thing.md` (shown on /academia)
+### Papers and theses
+
+`src/content/papers/my-paper.md`, shown on `/academia`.
+
 ```md
 ---
-title: "Paper Title"
-kind: "Paper"                  # Paper | Thesis
+title: "Paper title"
+kind: "Paper"             # Paper | Thesis
 authors: ["João Guedes"]
-venue: "Conference / Journal"
+venue: "Conference or journal"
 year: 2022
-abstract: "The abstract or a short summary."
-# link: "https://…"           # external page / DOI / repository → "View page"
-# pdf: "/papers/thing.pdf"     # a file in public/papers/ → "Open PDF" + "Download"
+abstract: "A short summary."
+# link: "https://..."     # external page or DOI
+# pdf: "/papers/my-paper.pdf"   # a file in public/papers
 ---
 ```
-On `/academia`, a paper with a `pdf` shows **Open PDF** (opens in the browser) and **Download**;
-a `link` adds **View page ↗**. Education (from `src/data/education.ts`) shows at the top of the page.
 
----
+With a `pdf` the paper gets Open PDF and Download buttons. A `link` adds a link to the external page.
+Education from `src/data/education.ts` is shown at the top of the same page.
 
-## Routing & pagination
+## Projects and roles
 
-- **Detail pages use a single `[slug]`** (e.g. `projects/[slug].astro`), so content ids must be
-  **flat** — one file per entry, no sub-folders. The id is the filename without extension.
-- **Lists are paginated**: page 1 is the section's `index.astro`; pages 2..N live at
-  `…/page/[page].astro`. `PAGE_SIZE` (9) lives in `src/utils/paginate.ts`. `<Pagination />` and
-  `getStaticPaths` share the same helper, so URLs always agree.
-- **Filters are real routes** (so they work with pagination):
-  - Projects → `/projects/type/<type>`
-  - Blog → filtered client-side in the shared FilterBar: `/blog?tag=<tag>`
-  - Snippets → `/snippets/<class>` and `/snippets/<class>/tag/<tag>`
-  
-  The chips on each listing are links to these.
+A project can be linked to a role so the role page lists it under related projects and the project
+links back to it.
 
-> Static route segments win over `[slug]`. So don't name a **project** `page`/`type`, a **blog
-> post** `page`, or a **snippet** `page`/`tag`, or its detail URL collides with a list route.
-> (The generator refuses these names for you.)
+With one role at a company, set the project's `org` to the exact `company` of the experience entry
+(case-insensitive) and that is enough.
 
----
+With several roles at the same company, give each role its own file with the same `company` and a
+different id, then pin each project to the role it belongs to:
 
-## Search
+```md
+org: "Checkmarx"
+experience: "checkmarx-swe"
+# experience: ["checkmarx-swe", "checkmarx-appsec"]   # or several
+```
 
-Projects, certifications, snippets and the blog each have a **fuzzy find** box (top-right, across
-from the filters). Typing searches across **everything in that section** — not just the current
-page or filter — and renders result cards; clearing the box restores the normal browse view.
+A project with `experience` set appears only on those role pages. A bare `org` is ambiguous when the
+company has more than one role, so pin it.
 
-It's the `<ListSearch>` component (`src/components/ListSearch.astro`): dependency-free, a few KB of
-vanilla JS, matching title/description/tags/meta with substring + token + subsequence scoring.
-Press <kbd>Esc</kbd> to clear. The dataset is built from the collection in each listing, so it
-stays in sync automatically — nothing to maintain.
+## Lists, filters and search
 
----
+Projects, snippets and the blog show nine entries at a time with a Load more button; the size is
+`PAGE_SIZE` in `src/utils/paginate.ts`. Certifications show everything. Filtering and search run in
+the browser over the full list, so they cover every entry and not only the visible ones.
 
-## Reading: table of contents
+- Projects have Type, Category and Stack dropdowns and a search box.
+- Snippets have a Tag dropdown and a search box.
+- Certifications have a button per issuer and a search box.
+- The blog has topic pills (one per tag), a search box, and a column picker for the card grid.
 
-Any detail page (projects, blog, snippets, experience) with **two or more `##`/`###` headings**
-gets an on-page table of contents: a **sticky sidebar** on desktop and a **collapsible "On this
-page"** panel at the top of the article on mobile. The current section highlights as you scroll.
-It's automatic — just write headings. Component: `src/components/TableOfContents.astro`.
+The blog keeps its filter in the URL (`/blog?tag=homelab`, `?q=term`), so a filtered view can be
+linked. The search itself is a small dependency-free script, `src/components/ListSearch.astro`.
 
----
+## Images and galleries
 
-## Images & galleries
+Images referenced from frontmatter or from the markdown body go through Astro's image pipeline, so
+they are resized and converted at build time. Keep them next to the content and reference them with
+a relative path.
 
-**Inline / cover images:** co-locate the files with the entry and reference them relatively. These go
-through Astro's image pipeline (optimized, responsive). Blog posts and projects keep theirs in an
-`img/<post-slug>/` folder next to the content (e.g. `src/content/blog/img/my-post/cover.jpg`, referenced as
-`cover: ./img/my-post/cover.jpg`); that folder is ignored by the content loader, so it never becomes an entry.
-
-**Galleries** are available on **any detail page** — projects, blog, snippets and experience. Add a
-`gallery` to the frontmatter, co-locating the images:
+A gallery can be added to any detail page (projects, blog, snippets, experience):
 
 ```md
 gallery:
-  - { src: ./shot-1.png, alt: "Dashboard", caption: "The overview." }
-  - { src: ./shot-2.png, alt: "Detail view" }
+  - { src: ./img/my-post/shot-1.png, alt: "Dashboard", caption: "The overview." }
+  - { src: ./img/my-post/shot-2.png, alt: "Detail view" }
 ```
 
-They render as a responsive grid with a **dependency-free lightbox** (click to zoom, arrow keys /
-swipe to move, Esc to close). Component: `src/components/Gallery.astro`.
+It renders as a grid with a lightbox that opens on click, moves with the arrow keys or a swipe, and
+closes with Escape. Files that are not content, like the favicon or the social card, go in `public/`
+and are referenced by absolute path.
 
-Purely static images (favicons, the OG card) live in `public/` and are referenced by absolute path.
+## Callouts
 
----
-
-## Callouts / disclaimers
-
-Highlight a note, warning, or disclaimer in **any markdown body** (projects, blog, snippets,
-experience) with a `:::type[Title] … :::` block. No import, no frontmatter — just write it:
+Any markdown body can contain a callout:
 
 ```md
-:::warning[Demo Offline]
-The live demo is down while I move it to a new host. The repo still builds locally.
-:::
-
-:::info
-Anything between the fences is normal markdown — **bold**, [links](/), `code`, lists.
+:::warning[Demo offline]
+The demo is down while I move it to a new host.
 :::
 ```
 
-The `[Title]` is optional; leave it off and the type's default label is used. Types (accent colour
-in brackets — pulled from the active theme, so they adapt everywhere):
+The title in brackets is optional. The types are `note`, `info`, `tip`, `success`, `warning`,
+`danger`, `important`, `security` and `quote`, and each has a few aliases (`hint` for `tip`,
+`caution` for `danger`, and so on; the full list is in `src/data/callouts.mjs`). Colours come from
+the active theme, so callouts follow the theme picker.
 
-| Type | For | Alias |
-|------|-----|-------|
-| `note` | a neutral aside | |
-| `info` | context / FYI (info) | `information` |
-| `tip` | a helpful trick (accent) | `hint` |
-| `success` | a positive outcome (success) | |
-| `warning` | a heads-up (warning) | `warn`, `attention` |
-| `danger` | serious / breaking (error) | `caution`, `error` |
-| `important` | must-read (primary) | |
-| `security` | a security note (secondary) | |
-| `quote` | an intentional pull-quote (secondary) | `quotation` |
-
-**On a page (`.astro` / `.mdx`)** use the component instead — same look, same types:
+In an `.astro` or `.mdx` file use the component instead:
 
 ```astro
 ---
 import Callout from "../components/Callout.astro";
 ---
-<Callout type="security" title="Handle with care">
-  This endpoint accepts unauthenticated requests in dev only.
-</Callout>
+<Callout type="security" title="Handle with care">Text here.</Callout>
 ```
 
-### Colours & the `--cc` knob
+To recolour one callout, pass a colour: `:::note{color=accent}` in markdown or `color="accent"` on
+the component. It accepts a daisyUI colour name or any CSS colour. To change a type everywhere,
+edit its `.callout-<type>` rule in `src/styles/global.css`. A new type needs an entry in
+`callouts.mjs` and a matching rule in the stylesheet.
 
-A callout's whole look is driven by **one CSS variable, `--cc`** — the tinted background, the
-border, the icon chip and the title are all `color-mix`es of it (see the `.callout` block in
-`src/styles/global.css`). You rarely touch `--cc-tint` / `--cc-border` directly; set `--cc` and the
-rest re-tints itself.
+## Resume and CV
 
-- **Recolour one callout** without editing CSS — pass a `color`: a daisyUI token
-  (`primary`, `accent`, `info`, `success`, `warning`, `error`, `secondary`, `base-content`) or any
-  CSS colour (`#e4b96b`, `tomato`, `oklch(...)`):
+`/resume` is generated from your content: roles from `src/content/experience`, certifications from
+`src/content/certifications`, projects that have `resume: true`, and skills, languages and
+education from `profile.ts` and `education.ts`. To replace a section by hand, fill the matching
+array in `src/data/resume.ts`; an empty array means the section is generated.
 
-  ```md
-  :::note{color=accent}
-  A neutral note, but tinted with the theme's accent instead.
-  :::
+The page links to a PDF CV, which is also generated on every build, so it cannot go out of date.
 
-  :::warning{color=#e4b96b}
-  A warning locked to a specific hex, regardless of theme.
-  :::
-  ```
+### The PDF
 
-  On a page: `<Callout type="note" color="accent">…</Callout>`.
+The PDF is built from two files in `src/data/cv/`:
 
-- **Change a type's colour everywhere** — edit its `.callout-<type> { --cc: … }` rule in
-  `src/styles/global.css`.
+- `cv.md` is the CV you write. Anything in it is printed as written, and `{{placeholders}}` pull in
+  live data from the site.
+- `cv.auto.md` is the fully automatic version, made only of placeholders.
 
-- **Add a new type** — add an entry (label + icon) to `src/data/callouts.mjs`, then a matching
-  `.callout-<type> { --cc: … }` colour rule. Aliases go in the `ALIASES` map. The transform that
-  turns the directive into markup is `src/plugins/remark-callouts.mjs`.
+The front matter of `cv.md` controls the build:
 
----
-
-## Experience ↔ projects linking
-
-**One role at a company (common case):** set a project's `org` to the **exact `company`** of an
-experience entry (case-insensitive). The role's page lists that project under **"Related
-projects"**, and the project links back with **"Part of my work at <company>"**.
-
-**Multiple roles at the same company** (e.g. QA intern → Software Engineer → AppSec, all at
-Checkmarx): give each role its own file with the **same `company`** but a different id
-(`checkmarx-qa.md`, `checkmarx-swe.md`, …), then **pin each project** to the right role(s):
-
-```md
-org: "Checkmarx"
-experience: "checkmarx-swe"                       # one role…
-# experience: ["checkmarx-swe", "checkmarx-appsec"]   # …or several
+```yaml
+use: manual      # which one is published: manual (cv.md) or auto (cv.auto.md)
+page: A4         # A4 or Letter
+font: 10         # starting size in points
+min-font: 8.5    # the smallest it may shrink to
+margin: 28
+fit: one-page    # shrink the font until it fits one page, or "flow" to allow more pages
 ```
 
-- A project with `experience` set appears **only** on those role page(s), linking back to the
-  specific role (or to `/experience` if it spans several).
-- A project with only `org` auto-attaches **when the company has a single role**. With multiple
-  roles, a bare `org` is ambiguous, so pin it — the role page tells you exactly that.
+Three files are built every time: `/resume/joaoguedes_cv.pdf` (the published one that the site
+links to), plus `joaoguedes_cv-manual.pdf` and `joaoguedes_cv-auto.pdf` so the two can be compared.
 
----
-
-## Résumé — fully auto, override anytime
-
-`/resume` builds itself from your content and data. Nothing to wire up:
-
-- **Identity + skills + soft skills + languages** come from `src/data/profile.ts`.
-- **Education** comes from `src/data/education.ts`.
-- **Experience, certifications and projects** are generated from your content collections —
-  experience newest-first, projects flagged `resume: true`, all non-draft certs.
-
-Every generated section can be **overridden verbatim** from `src/data/resume.ts` — fill an array
-and it replaces the auto version, leave it empty and the page builds it:
-
-```ts
-experience: []      // [] → from src/content/experience/*
-certifications: []  // [] → from src/content/certifications/*
-projects: []        // [] → every project with resume:true (or list ids to pick/order)
-```
-
-The page has **Formal CV** (the generated PDF below) and **Print** (with a clean print stylesheet).
-There's no on-page filtering — it's a clean, printable document.
-
-### The PDF CV — generated at build time
-
-The "Formal CV" PDF is built from `src/data/cv/` on every build, so it is never out of date. It is
-deliberately plain: Helvetica, black on white, one A4 page, no colour or icons.
-
-| File | What it is |
-| --- | --- |
-| `src/data/cv/cv.md` | **Your CV, in your words.** Write anything; drop in `{{placeholders}}` where you want live site data. |
-| `src/data/cv/cv.auto.md` | The fully automatic CV: nothing but placeholders. |
-
-The front matter of `cv.md` sets `use: manual` (publish `cv.md`) or `use: auto` (publish `cv.auto.md`),
-the page size, font size and margin, and `fit: one-page` (shrink the font, down to `min-font`, until it
-fits) or `fit: flow` (let it run onto more pages). Both versions are always built, whichever is published:
-
-- `/resume/joaoguedes_cv.pdf` — the published one (what the site links to)
-- `/resume/joaoguedes_cv-manual.pdf` and `/resume/joaoguedes_cv-auto.pdf` — to compare them
-
-**Syntax.** One line is one line (nothing merges). `# Name` is the centred title, `## Section` a heading
-with a rule, `- text` a bullet, `**bold**`, `[text](url)` (clickable, stays black). A line starting with
-`|` is an **aligned row**: first cell on the left, last on the right, the ones between centred
-(4 cells: left, left, centred, right), e.g. `| **Role** | **Company** | **2024 - 2026** | **Full Time** |`.
-A literal `|` inside a cell is written `\|`.
-Icons: `:name:` before text in a row draws a small vector icon (any name from the site's icon set, e.g. `:github:`,
-`:mail:`, `:phone:`); `{{contact}}` already uses them.
-
-**Placeholders** (anything else is yours):
+The format is a small dialect of markdown, and each line stays its own line. `# Name` is the
+centred title, `## Section` a heading with a rule, `- text` a bullet, and `**bold**` and
+`[text](url)` work inline (links stay black but are clickable). A line starting with `|` is a row
+with aligned cells: the first cell is left, the last is right, and the ones between are centred.
+With four cells the second is left aligned at a fixed column, which is what the job lines use.
+Write a literal `|` inside a cell as `\|`. `:name:` before text in a row draws a small icon from
+the site's icon set, for example `:github:` or `:mail:`.
 
 | Placeholder | Fills in |
 | --- | --- |
-| `{{name}}`, `{{title}}` | From `src/data/profile.ts` |
-| `{{contact}}` | The two contact rows, from `contact` in `src/data/resume.ts` |
-| `{{experience}}` | Every non-draft role, newest first, with its bullets |
-| `{{education}}` | From `src/data/education.ts` |
-| `{{certifications}}` / `{{certifications: all}}` | Featured certifications / all of them |
-| `{{skills}}` / `{{skills: Languages, Databases}}` | Every skill group / only those groups, in that order |
+| `{{name}}`, `{{title}}` | from `profile.ts` |
+| `{{contact}}` | the contact rows, from `contact` in `resume.ts` |
+| `{{experience}}` | every non-draft role, newest first, with its bullets |
+| `{{education}}` | from `education.ts` |
+| `{{certifications}}` | featured certifications; `{{certifications: all}}` for every one |
+| `{{skills}}` | every skill group; `{{skills: Languages, Databases}}` for those groups, in that order |
 
-**Per-role overrides** (optional `cv:` block in an experience file): `bullets` (short CV bullets; default is
-`highlights`), `role` (the title as it should read on the CV), `type` ("Full Time" by default) and `hide: true`
-to leave a role off the CV. To hand-write the whole experience section, just write the rows and bullets
-yourself instead of `{{experience}}`.
+An experience file can adjust how it appears in the CV with a `cv` block: `bullets` (short CV lines;
+the default is `highlights`), `role` (the title as it should read), `type` (Full Time by default)
+and `hide: true` to leave the role out. To write the experience section by hand, put your own rows
+and bullets in `cv.md` instead of `{{experience}}`.
 
----
+The generator is `src/utils/cv.ts` and the route is `src/pages/resume/[file].pdf.ts`. The PDF uses
+the standard Helvetica fonts, which only cover Latin-1 characters, so symbols outside that range are
+dropped.
 
-## The About page & `profile.ts`
+## Data files
 
-`src/data/profile.ts` is the single source for the personal bits shown in more than one place. The
-**About page** renders your **skills** (grouped chips), **soft skills**, and **interests** (an
-icon grid), laid out vertically under the intro and portrait; the **résumé** reuses the same
-skills/soft-skills/languages. Edit `profile.ts` once and both pages update.
+`src/data/site.ts` has the site name, role, description, canonical URL, navigation and social
+links, and the `href()` helper. Use `href()` for internal links so they respect the configured base
+path. Keep `url` in sync with `site` in `astro.config.mjs`; it feeds canonical URLs, the sitemap and
+the RSS feed.
 
-- Portrait: `public/guedes_profile.png` (swap the file; referenced from `about.astro`).
-- Interest icons must exist in `src/icons/index.ts` (e.g. `server`, `bike`, `heart`, `shield`,
-  `book-open`, `cpu`, `terminal`, `map-pin`).
+`src/data/profile.ts` is the single source for what appears on both the About page and the resume:
+name, title, location, tagline, summary, grouped skills, soft skills, interests and spoken
+languages. Interest icons must exist in `src/icons/index.ts`. The portrait is
+`public/guedes_profile.png`.
 
----
+## Themes and typefaces
 
-## Themes & typefaces
+There are eight themes: Ink (the default), Slate, Nord, Gruvbox, Rosé Pine, Tokyo Night, Paper and
+Solarized. There are seven typefaces: Geist (the default), Manrope, IBM Plex, Inter, System, Space
+Grotesk and JetBrains Mono. Both are chosen from the palette button in the header, saved in
+`localStorage`, and applied before the first paint so the page does not flash.
 
-**8 themes**: Ink (**default**, dark oil blue), Slate, Nord, Gruvbox, Rosé Pine, Tokyo Night, Paper, Solarized, and
-**7 typefaces**: Geist (default), Manrope, IBM Plex, Inter, System, Space Grotesk, JetBrains Mono. Switch them at runtime
-from the **palette button** in the header; the choice is saved in `localStorage` and restored
-before first paint (no flash).
-
-Themes are daisyUI theme tokens in `src/styles/global.css`. The dark ones are listed in the
-no-flash script in `BaseLayout.astro` **and** in `ThemePicker.astro` — keep those two lists in
-sync if you add or remove a dark theme. To change the default, edit the fallback in the
-`BaseLayout.astro` no-flash script (currently `"ink"`).
-
----
+Themes are daisyUI theme blocks in `src/styles/global.css`. Dark themes are listed in two places that
+must match, the inline script in `BaseLayout.astro` and `ThemePicker.astro`. The default theme and
+font are the fallbacks in that same script, and the `data-theme` and `data-font` attributes on the
+`<html>` tag. Typefaces are self-hosted from `public/fonts`.
 
 ## Icons
 
-Inline SVGs live in `src/icons/index.ts` as a `name → path` map, rendered by `<Icon name="…" />`.
-Add one by pasting its inner SVG paths under a new key (24×24, `stroke="currentColor"` style to
-match). Provider icons for certifications map through `iconForProvider()` in the same file.
+Icons come from `lucide-static`, plus a few custom ones in `src/icons/index.ts`. Use a lucide name
+directly. If lucide calls the icon something else, add an alias; if it does not have it, paste the
+inner SVG markup into the overrides in the same file. Icons for technologies are separate and live
+in `src/data/tech.ts`.
 
----
+## Branding files
 
-## Site config
+- `public/logo.svg`: the header mark
+- `public/guedes-vector.svg`: the home page illustration, shown by `FaceIllustration.astro`
+- `public/guedes_profile.png`: the portrait on the About page
+- `public/og-default.png`: the social card, 1200 by 630
 
-`src/data/site.ts` holds your **name, role, description, nav and social links**, plus the
-**`href()`** helper — use it for every internal link (`href("/projects")`) so the site also works
-when deployed under a sub-path. Social links each carry an `icon` key and stroke/fill hints.
+## Changelog and releases
 
----
+`/changelog` is built from `CHANGELOG.md`, which release-please writes, and the version number comes
+from `package.json`. Do not edit either by hand. How commits turn into releases is described in
+[commit_guide.md](commit_guide.md).
 
-## Branding (logo & hero)
+## Deployment
 
-- **`public/logo.svg`** — the header mark.
-- **`public/guedes-vector.svg`** — the homepage hero illustration (via `FaceIllustration.astro`;
-  swap the file, no code change).
-- **`public/guedes_profile.png`** — the real portrait on the About page.
-- **`public/og-default.png`** — the social share card (1200×630); regenerate if you rebrand.
+The site deploys to Cloudflare Pages. Publishing a GitHub release runs `.github/workflows/deploy.yaml`,
+which runs `npm run build` and uploads `dist`. Pull requests get a preview deployment from
+`preview.yaml`. See the commit guide for the release steps and the secrets the workflows need.
 
----
+The RSS feed is `/rss.xml` and the sitemap is generated during the build.
 
-## Deploying to GitHub Pages
+## Troubleshooting
 
-A workflow at `.github/workflows/deploy.yml` builds and publishes on push.
-
-- **User/organization site** (`you.github.io`): keep `site` in `astro.config.mjs` as your domain
-  and leave `base` unset.
-- **Project site** (`you.github.io/repo`): set `base: "/repo"` in `astro.config.mjs`. Because every
-  internal link uses `href()`, the whole site adapts automatically.
-
-Keep `site` in `astro.config.mjs` in sync with `url` in `src/data/site.ts` (used for canonical
-URLs, the sitemap and RSS).
-
----
-
-## A few notes
-
-- **Drafts:** set `draft: true` on any entry to hide it from lists, feeds and its own page.
-- **Reading time** and the **table of contents** are automatic on detail pages.
-- **The résumé** auto-builds from your content; fill the arrays in `resume.ts` only to override.
-  Skills/interests live in `profile.ts`; education in `education.ts`; paper PDFs in `public/papers/`.
-- **RSS** is at `/rss.xml`; the **sitemap** is generated on build.
-- **Search TODOs:** run a repo-wide search for `TODO` to find everything waiting on your real
-  details — profile skills, education, résumé location/level, and the example certifications and
-  papers (replace or delete them).
+- The build fails on a content file: the message names the field. Check it against the schema in
+  `src/content.config.ts`.
+- A snippet shows up in the wrong place: the section comes from `category` and the group from the
+  folder it is in. Check both.
+- An image does not load: the path must be relative to the markdown file and the file must exist, or
+  the build fails.
+- The theme or font does not change in the browser: the choice is stored in `localStorage` under
+  `guedes-theme` and `guedes-font`; clear them to go back to the defaults.
+- Styles seem stale in dev: restart `npm run dev`. Tailwind builds only the classes it finds in the
+  source, so a class that is written dynamically will not exist.

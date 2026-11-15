@@ -80,7 +80,7 @@ const blog = defineCollection({
       updatedDate: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]),
       // Pin to the featured block at the top of /blog (newest featured = the big hero).
-      // Featuring any part of a series features the whole series as ONE card (one of the 3 slots).
+      // Featuring any part of a series features the whole series as ONE card.
       featured: z.boolean().default(false),
       // Multi-part posts: `series` is a key from src/data/series.ts and `part` is
       // this post's number in it (1-based). Both are needed for the series UI.
