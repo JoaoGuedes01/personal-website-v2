@@ -22,10 +22,8 @@ const { Content, headings } = await render(entry);
 const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
 const hasToc = tocCount >= 2;
 
-// Projects linked to this role. A project pins itself with `experience: <id>`;
-// otherwise, as a zero-config convenience, a project whose `org` matches this
-// company is attached — but only when the company has a single role (so a bare
-// `org` isn't ambiguous across multiple stints at the same employer).
+// Projects linked to this role: pinned via `experience: <id>`, or matched by
+// `org` when the company has only one role (otherwise it's ambiguous).
 const allExperience = (await getCollection("experience")).filter((e) => !e.data.draft);
 const rolesAtCompany = allExperience.filter(
   (e) => e.data.company.toLowerCase() === company.toLowerCase(),

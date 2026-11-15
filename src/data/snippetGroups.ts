@@ -1,17 +1,7 @@
-// ---------------------------------------------------------------------------
-// SNIPPET GROUPS
-//
-// A topical layer BELOW category: group, and optionally subgroup within a
-// group. Unlike category, group/subgroup are never read from frontmatter —
-// they're derived from where a snippet's file lives on disk (see
-// snippetPath() in ./taxonomy). This map only supplies DISPLAY metadata
-// (label/icon/blurb) for group/subgroup slugs that are worth curating.
-//
-// A category absent from this map renders as a flat list (no group cards) —
-// same for a group with no `subgroups` entry. A group/subgroup slug that
-// exists on disk but isn't listed here still works fine: snippetGroupInfo()/
-// snippetSubgroupInfo() fall back to a title-cased label and a generic blurb.
-// ---------------------------------------------------------------------------
+// Optional display metadata (label/icon/blurb) for snippet groups and subgroups. Which group a
+// snippet is in comes from its folder (see snippetPath in ./taxonomy), not frontmatter.
+// A category missing here renders as a flat list, and groups missing here get a title-cased label
+// and a generic blurb.
 import type { Taxon } from "./taxonomy";
 import { titleizeSlug } from "./taxonomy";
 
@@ -97,12 +87,12 @@ export const SNIPPET_GROUPS: Record<string, SnippetGroup[]> = {
 
 const bySlug = (list: Taxon[], slug: string) => list.find((t) => t.slug === slug);
 
-/** Groups defined for a category slug (empty if the category renders flat). */
+// empty if the category renders flat
 export function snippetGroupsForCategory(categorySlug: string): SnippetGroup[] {
   return SNIPPET_GROUPS[categorySlug] ?? [];
 }
 
-/** A group's metadata, falling back to a synthesized one if not curated above. */
+// falls back to a generated entry if the group isn't curated above
 export function snippetGroupInfo(categorySlug: string, groupSlug: string): SnippetGroup {
   return (
     bySlug(snippetGroupsForCategory(categorySlug), groupSlug) ?? {
@@ -114,7 +104,7 @@ export function snippetGroupInfo(categorySlug: string, groupSlug: string): Snipp
   );
 }
 
-/** A subgroup's metadata within a group, with the same fallback behaviour. */
+// same fallback as snippetGroupInfo
 export function snippetSubgroupInfo(categorySlug: string, groupSlug: string, subgroupSlug: string): Taxon {
   const group = snippetGroupInfo(categorySlug, groupSlug);
   return (
@@ -127,11 +117,7 @@ export function snippetSubgroupInfo(categorySlug: string, groupSlug: string, sub
   );
 }
 
-/**
- * Sort helpers: curated groups/subgroups keep their declared order (curated
- * order expresses intentional priority — e.g. lead with the most-used one);
- * anything found on disk without curated metadata sorts after, alphabetically.
- */
+// Sort helpers: curated entries keep their declared order, anything else sorts after, alphabetically.
 export function curatedGroupIndex(categorySlug: string, groupSlug: string): number {
   const i = snippetGroupsForCategory(categorySlug).findIndex((g) => g.slug === groupSlug);
   return i === -1 ? Infinity : i;

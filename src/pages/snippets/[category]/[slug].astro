@@ -9,7 +9,7 @@ import { snippetCategorySlug, snippetCategoryByLabel, snippetPath } from "../../
 export async function getStaticPaths() {
   const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
   return snips
-    .filter((entry) => !snippetPath(entry).group) // grouped snippets are served by the deeper routes
+    .filter((entry) => !snippetPath(entry).group) // grouped ones use the deeper routes
     .map((entry) => ({
       params: { category: snippetCategorySlug(entry.data.category), slug: entry.id },
       props: { entry },

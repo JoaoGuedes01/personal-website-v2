@@ -1,13 +1,5 @@
 ---
-/**
- * Ramblings listing: header, an optional "Featured" block, a visible topic bar
- * (pills + search), then big cards. Filtering is client-side and self-contained
- * (the topic bar replaces the dropdown FilterBar so topics are always visible):
- * one topic at a time, stacked with search, mirrored to /blog?tag=<slug>. While
- * nothing is filtered, featured posts live in the Featured block and are lifted
- * out of the list; any filter hides the block and shows every match.
- * Without JS the pills are plain links and the full list still renders.
- */
+/** Blog listing. Filtering is client-side (one topic at a time plus search, mirrored to ?tag=). Without JS the pills are plain links. */
 import type { CollectionEntry } from "astro:content";
 import BlogPostCard from "./BlogPostCard.astro";
 import FeaturedSeriesCard from "./FeaturedSeriesCard.astro";
@@ -25,8 +17,7 @@ interface Props {
 }
 const { items, eyebrow, title, intro } = Astro.props;
 
-// Topics = tags, most-used first. The first VISIBLE show as pills; the rest sit
-// behind a "+N more" toggle so the bar never turns into a wall.
+// Topics are tags, most used first. Past VISIBLE_TOPICS they go behind "+N more".
 const VISIBLE_TOPICS = 7;
 const tagMap = new Map<string, { label: string; count: number }>();
 for (const p of items) {
@@ -43,10 +34,9 @@ const topics = [...tagMap.entries()]
 const shownTopics = topics.slice(0, VISIBLE_TOPICS);
 const moreTopics = topics.slice(VISIBLE_TOPICS);
 
-// Featured: up to 5 slots (one large lead, the rest in a two-column grid), shown above the list while unfiltered.
-// A featured series takes ONE slot for all its parts (see featuredSlots).
+// Up to 5 featured slots. A series takes one slot for all its parts (see featuredSlots).
 const featured = featuredSlots(items, 5);
-// Single featured posts are lifted out of the list below; a featured series is NOT, so every part still has its own card there.
+// Featured posts are removed from the list, but series parts stay so each part keeps its card.
 const featuredIds = new Set(featured.flatMap((s) => (s.kind === "series" ? [] : [s.entry.id])));
 
 const cards = items.map((entry) => ({
@@ -89,7 +79,6 @@ const pillClass = "topic-pill chip chip-lg";
   {
     items.length > 0 ? (
       <div class:list={[featured.length > 0 ? "mt-12" : "mt-8"]}>
-        <!-- Topic bar -->
         <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div class="flex min-w-0 flex-wrap gap-2" role="group" aria-label="Filter by topic">
             <a href={href("/blog")} data-topic="all" class={pillClass}>
@@ -301,7 +290,7 @@ const pillClass = "topic-pill chip chip-lg";
         apply();
       });
     });
-    // Column toggle (remembered per browser).
+    // Column toggle, remembered in localStorage.
     var grid = root.querySelector("[data-blog-grid]");
     var colBtns = [].slice.call(root.querySelectorAll("[data-cols-btn]"));
     function setCols(n, save) {

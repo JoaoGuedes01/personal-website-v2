@@ -9,7 +9,7 @@ import {
   type ResumeCertification,
 } from "../data/resume";
 
-// --- Experience: override (resume.ts) or auto from the experience collection ---
+// experience: resume.ts override, else the collection
 const expEntries = (await getCollection("experience"))
   .filter((e) => !e.data.draft)
   .sort((a, b) => b.data.order - a.data.order);
@@ -20,13 +20,13 @@ const autoExperience: ResumeExperience[] = expEntries.map((e) => ({
   end: e.data.end,
   location: e.data.location,
   summary: e.data.summary,
-  highlights: (e.data.highlights ?? []).slice(0, 3), // keep it brief
+  highlights: (e.data.highlights ?? []).slice(0, 3), // keep it short
 }));
 const experience = resume.experience.length
   ? resume.experience
   : autoExperience;
 
-// --- Certifications: override or auto ---
+// certifications: override or auto
 const certEntries = (await getCollection("certifications"))
   .filter((c) => !c.data.draft)
   .sort(
@@ -45,7 +45,7 @@ const certifications = resume.certifications.length
   ? resume.certifications
   : autoCerts;
 
-// --- Projects: chosen ids (resume.ts) or every project flagged `resume: true` ---
+// projects: ids from resume.ts, else all flagged `resume: true`
 const allProjects = (await getCollection("projects")).filter(
   (p) => !p.data.draft,
 );
@@ -69,7 +69,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
   description={`Resume of ${resume.name}, ${resume.title}.`}
 >
   <section class="mx-auto max-w-3xl px-4 pt-16 sm:px-6 sm:pt-20">
-    <!-- Header -->
     <div
       class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between"
     >
@@ -100,7 +99,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       {resume.summary}
     </p>
 
-    <!-- Experience -->
     <section
       aria-label="Experience"
       class="mt-12 border-t border-base-300 pt-10"
@@ -146,7 +144,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       }
     </section>
 
-    <!-- Selected projects -->
     {
       resumeProjects.length > 0 && (
         <section
@@ -188,7 +185,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       )
     }
 
-    <!-- Skills -->
     <section aria-label="Skills" class="mt-12 border-t border-base-300 pt-10">
       <h2 class="text-2xl">Skills</h2>
       <div class="mt-6 grid gap-5 sm:grid-cols-2">
@@ -241,7 +237,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       }
     </section>
 
-    <!-- Education -->
     <section
       aria-label="Education"
       class="mt-12 border-t border-base-300 pt-10"
@@ -272,7 +267,6 @@ const showOrg = (t: string) => t === "Professional" || t === "Academic";
       </div>
     </section>
 
-    <!-- Certifications -->
     {
       certifications.length > 0 && (
         <section

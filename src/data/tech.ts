@@ -1,28 +1,11 @@
-// ---------------------------------------------------------------------------
-// TECH REGISTRY
-//
-// The single source of truth for every technology that appears in a project's
-// `stack:` frontmatter. Freeform stack strings stay exactly as authored in the
-// markdown; this file gives each one an identity: a stable slug (for the filter
-// facet), a group (for the grouped stack on a project page), and a monochrome
-// icon.
-//
-// resolveTech("Node.js") -> { id, label, group, icon }
-//
-// ICONS — every chip gets one, resolved in this priority order:
-//   1. Your own SVG          — TECH_CUSTOM_ICONS below (always wins)
-//   2. Library logo          — simple-icons, drawn in a single ink colour
-//   3. Group fallback        — the group's line icon from src/icons, so a tech
-//                              with no logo still gets a sensible glyph
-// Everything renders in `currentColor` — no brand colours — so the stack stays
-// on-theme in light and dark.
-// ---------------------------------------------------------------------------
+// Registry for every tech in a project's `stack:` frontmatter. Stack strings stay as authored in the
+// markdown; this gives each one a slug (filter facet), a group (project page) and an icon.
+// Icon order: TECH_CUSTOM_ICONS, then simple-icons, then the group's line icon from src/icons.
+// All icons render in currentColor, no brand colours.
 import * as simpleIcons from "simple-icons";
 import { resolveSystemIcon } from "../icons";
 
-// slug -> path lookup from simple-icons, built once at build time. `import * as`
-// pulls the full set server-side only; the client receives just the paths we
-// actually render, so there's no client bundle cost.
+// slug -> path from simple-icons. Server-side only, the client just gets the paths we render.
 const BY_SLUG: Record<string, string> = {};
 for (const key in simpleIcons) {
   const ic = (simpleIcons as Record<string, unknown>)[key] as { slug?: string; path?: string } | undefined;
@@ -31,9 +14,7 @@ for (const key in simpleIcons) {
 
 export type TechGroup = "language" | "framework" | "data" | "infra" | "tool";
 
-// Display order + the group's own line icon (a key in src/icons). Used as the
-// group heading on the detail page AND as the icon fallback for techs in this
-// group that have no logo of their own.
+// Display order and line icon (key in src/icons) per group. Also the icon fallback for techs with no logo.
 export const TECH_GROUPS: { key: TechGroup; label: string; icon: string }[] = [
   { key: "language", label: "Languages", icon: "code" },
   { key: "framework", label: "Frameworks & Libraries", icon: "puzzle" },
@@ -45,8 +26,7 @@ const GROUP_ICON: Record<TechGroup, string> = Object.fromEntries(
   TECH_GROUPS.map((g) => [g.key, g.icon]),
 ) as Record<TechGroup, string>;
 
-// ── Group classification ────────────────────────────────────────────────────
-// Keyed by the lowercased stack string; case/label variants collapse together.
+// keyed by the lowercased stack string
 const REGISTRY: Record<string, TechGroup> = {
   javascript: "language", typescript: "language", jsx: "language", java: "language",
   "c#": "language", "c++": "language", python: "language", r: "language",
@@ -82,9 +62,7 @@ const REGISTRY: Record<string, TechGroup> = {
   arduino: "tool", esp32: "tool", bumpversion: "tool",
 };
 
-// ── Library logos ─────────────────────────────────────────────────────────
-// Maps a tech (lowercased) to its simple-icons slug. Only verified slugs; a
-// tech left out here falls through to a custom icon or the group fallback.
+// tech (lowercased) -> simple-icons slug. Anything missing falls back to the group icon.
 const LIB_ICON: Record<string, string> = {
   javascript: "javascript", typescript: "typescript", "c++": "cplusplus",
   python: "python", r: "r", perl: "perl", html: "html5", css: "css",
@@ -107,23 +85,18 @@ const LIB_ICON: Record<string, string> = {
   "twitter api": "x", arduino: "arduino", esp32: "espressif",
 };
 
-// ── Your own icons ──────────────────────────────────────────────────────────
-// Provide (or override) an icon for any tech here. Paste the INNER markup of an
-// SVG drawn on a `0 0 24 24` viewBox — the <path>/<g>/… elements, NOT the <svg>
-// wrapper. This beats the library logo. `mode` controls rendering:
-//   "fill"   — solid glyph, like a brand logo   (default)
-//   "stroke" — 2px line icon, like the site's own icons
-// Example:
-//   "mirth connect": { svg: '<path d="M4 12h16M12 4v16"/>', mode: "stroke" },
+// Custom icon per tech, wins over the library logo. Paste the inner markup of a 0 0 24 24 SVG
+// (no <svg> wrapper). mode is "fill" (default, brand-logo style) or "stroke" (2px line icon).
+// e.g. "mirth connect": { svg: '<path d="M4 12h16M12 4v16"/>', mode: "stroke" },
 export const TECH_CUSTOM_ICONS: Record<string, { svg: string; mode?: "fill" | "stroke" }> = {};
 
 export type IconMode = "fill" | "stroke";
 export interface TechIcon {
-  svg: string; // inner SVG markup, drawn on a 0 0 24 24 viewBox
+  svg: string; // inner markup, 0 0 24 24 viewBox
   mode: IconMode;
 }
 export interface ResolvedTech {
-  id: string; // stable slug for facets + data attributes
+  id: string; // slug for facets and data attributes
   label: string; // as authored
   group: TechGroup;
   icon: TechIcon;
@@ -131,8 +104,7 @@ export interface ResolvedTech {
 
 const norm = (raw: string) => raw.trim().toLowerCase();
 
-// Slug for filter values / data attributes. Collision-free:
-// "C++" -> "cplusplus", "C#" -> "csharp", "Node.js" -> "node-js".
+// "C++" -> "cplusplus", "C#" -> "csharp", "Node.js" -> "node-js"
 const slugify = (raw: string) =>
   raw
     .toLowerCase()
@@ -148,7 +120,6 @@ function resolveIcon(key: string, group: TechGroup): TechIcon {
   const path = LIB_ICON[key] ? BY_SLUG[LIB_ICON[key]] : undefined;
   if (path) return { svg: `<path d="${path}"/>`, mode: "fill" };
 
-  // Fallback: the group's own line icon.
   return { svg: resolveSystemIcon(GROUP_ICON[group]) ?? "", mode: "stroke" };
 }
 
@@ -158,8 +129,7 @@ export function resolveTech(raw: string): ResolvedTech {
   return { id: slugify(raw), label: raw.trim(), group, icon: resolveIcon(key, group) };
 }
 
-// Distinct technologies across a set of stacks, with usage counts. Sorted by
-// frequency (desc) then label. Same-slug variants ("Javascript"/"JavaScript") merge.
+// Distinct techs with usage counts, most used first. Same-slug variants ("Javascript"/"JavaScript") merge.
 export function collectTech(stacks: string[][]): (ResolvedTech & { count: number })[] {
   const map = new Map<string, ResolvedTech & { count: number }>();
   for (const stack of stacks) {

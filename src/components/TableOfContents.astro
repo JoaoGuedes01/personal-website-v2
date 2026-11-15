@@ -1,17 +1,5 @@
 ---
-/**
- * "On this page" outline from markdown headings (h2 + h3). Astro adds slug ids
- * to headings automatically, so the anchor links just work.
- *
- * variant:
- *   "desktop" → sticky sidebar list (hidden below lg)
- *   "mobile"  → a collapsible <details>, meant for the TOP of the article (hidden at lg+)
- *   "both"    → render both (default)
- *
- * Render the *mobile* variant near the top of the content flow and the *desktop*
- * variant inside the sidebar aside. The active-link script self-guards, so it
- * runs once even when both variants are present on the page.
- */
+/** Outline of h2/h3 headings. Use the mobile variant at the top of the content and the desktop one in the sidebar. */
 import type { MarkdownHeading } from "astro";
 
 interface Props {
@@ -92,7 +80,7 @@ const showDesktop = variant === "desktop" || variant === "both";
 <script is:inline>
   (function () {
     function initToc() {
-      if (window.__tocInit) return; // both variants share one init
+      if (window.__tocInit) return; // desktop and mobile variants share one init
       window.__tocInit = true;
 
       const links = Array.from(document.querySelectorAll(".toc-link"));
@@ -116,7 +104,7 @@ const showDesktop = variant === "desktop" || variant === "both";
       );
       targets.forEach((t) => obs.observe(t));
 
-      // Collapse the mobile panel after choosing a link.
+      // Close the mobile panel after picking a link.
       links.forEach((l) =>
         l.addEventListener("click", () => {
           const d = l.closest("details");
@@ -125,8 +113,7 @@ const showDesktop = variant === "desktop" || variant === "both";
       );
     }
 
-    // Defer until the DOM (headings + both TOC variants) exists, so the
-    // scroll-spy observes real targets even when the mobile TOC renders first.
+    // The mobile TOC renders before the headings, so wait for the DOM.
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initToc);
     } else {

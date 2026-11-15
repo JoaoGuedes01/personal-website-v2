@@ -1,24 +1,19 @@
 /**
- * CV generator: a tiny Markdown dialect -> a plain, text-based A4 PDF.
+ * CV generator: small markdown dialect in, plain Helvetica PDF out.
+ * One line is one line, nothing merges.
  *
- * Deliberately flavourless: Helvetica, black on white, no colour, no icons. The
- * dialect (one line = one line, nothing merges):
- *
- *   # Name                  centred title with a rule under it
- *   ## Section              bold heading with a rule under it
- *   | a | b | c |           one aligned row: first cell left, last right, the
- *                           ones in between centred (4 cells: left, left, centre, right)
- *   - bullet                bullet (wraps)
- *   anything else           a plain line (wraps)
- *   **bold**  [text](url)   inline; links stay black but are clickable
- *   :github:                a small icon (any site icon name; drawn as vector paths)
- *   {{placeholder}}         expanded from the site's content (see expandCv)
+ *   # Name              centred title with a rule
+ *   ## Section          bold heading with a rule
+ *   | a | b | c |       aligned row: first cell left, last right, the rest centred
+ *   - bullet            wraps
+ *   **bold** [t](url)   inline, links stay black but clickable
+ *   :github:            site icon, drawn as vector paths
+ *   {{placeholder}}     filled from site content (see expandCv)
  *
  * Front matter (all optional): use, page, font, min-font, margin, fit.
  */
 import PDFDocument from "pdfkit";
 
-// ---------------------------------------------------------------- front matter
 export interface CvMeta {
   use: "manual" | "auto";
   page: "A4" | "LETTER";
@@ -51,7 +46,6 @@ export function readMeta(raw: Record<string, string>): CvMeta {
   };
 }
 
-// ---------------------------------------------------------------- placeholders
 export interface CvContext {
   name: string;
   title: string;
@@ -62,7 +56,7 @@ export interface CvContext {
   skills: Record<string, string[]>;
 }
 
-// Site data goes into table rows, so a literal "|" in it must not start a new cell.
+// a literal "|" in site data must not start a new cell
 const esc = (s: string) => s.replace(/\|/g, "\\|");
 const link = ([label, url]: [string, string]) => `[${esc(label)}](${url})`;
 
@@ -104,16 +98,15 @@ export function expandCv(md: string, c: CvContext): string {
   });
 }
 
-// ---------------------------------------------------------------- parsing
 interface Tok {
   text: string;
   bold: boolean;
   link?: string;
-  icon?: string; // inner SVG markup (24x24 grid) when this token is an icon
-  filled?: boolean; // brand marks are filled shapes, the rest are stroked outlines
+  icon?: string; // inner SVG markup (24x24 grid)
+  filled?: boolean; // brand marks are filled, the rest stroked
 }
 
-/** Set by buildCvPdf: resolves an icon name to inner SVG markup, or undefined. */
+// set by buildCvPdf
 let resolveIcon: (name: string) => string | undefined = () => undefined;
 const FILLED_ICONS = new Set(["github", "linkedin"]);
 type Block =
@@ -124,7 +117,7 @@ type Block =
   | { t: "line"; text: string }
   | { t: "gap" };
 
-// The built-in PDF fonts speak WinAnsi: keep what it can encode, translate or drop the rest.
+// the built-in PDF fonts only support WinAnsi, so translate or drop anything else
 const WIN_EXTRA = new Set([0x2013, 0x2014, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2026, 0x20ac, 0x2122]);
 function clean(s: string): string {
   return [...s.replace(/→/g, "->").replace(/←/g, "<-").replace(/[   ]/g, " ").replace(/[‐‑−]/g, "-")]
@@ -143,7 +136,7 @@ function parseInline(s: string): Tok[] {
     else if (m[4] !== undefined) {
       const svg = resolveIcon(m[4]);
       if (svg) out.push({ text: "", bold: false, icon: svg, filled: FILLED_ICONS.has(m[4]) });
-      else out.push({ text: m[0], bold: false }); // not an icon name: keep the text as written
+      else out.push({ text: m[0], bold: false }); // not an icon, keep as written
     } else out.push({ text: m[2], bold: false, link: m[3] });
     last = re.lastIndex;
   }
@@ -160,7 +153,7 @@ function parseBlocks(body: string): Block[] {
     } else if (line.startsWith("## ")) blocks.push({ t: "h2", text: line.slice(3) });
     else if (line.startsWith("# ")) blocks.push({ t: "title", text: line.slice(2) });
     else if (line.startsWith("|")) {
-      if (/^\|[\s:|-]+\|?$/.test(line)) continue; // a markdown table separator row
+      if (/^\|[\s:|-]+\|?$/.test(line)) continue; // table separator row
       blocks.push({ t: "row", cells: line.replace(/^\||(?<!\\)\|$/g, "").split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|")) });
     } else if (/^[-*] /.test(line)) blocks.push({ t: "bullet", text: line.slice(2) });
     else blocks.push({ t: "line", text: line });
@@ -168,7 +161,6 @@ function parseBlocks(body: string): Block[] {
   return blocks;
 }
 
-// ---------------------------------------------------------------- drawing
 const REG = "Helvetica";
 const BOLD = "Helvetica-Bold";
 
@@ -189,7 +181,6 @@ function draw(doc: PDFKit.PDFDocument, blocks: Block[], fs: number, margin: numb
   const iconGap = fs * 0.4;
   const widthOf = (toks: Tok[]) => toks.reduce((n, t) => n + (t.icon ? iconSize + iconGap : font(t).widthOfString(t.text)), 0);
 
-  /** Draws a 24x24-grid icon (lucide-style outlines, or filled brand marks) at x, centred on the text line. */
   const drawIcon = (t: Tok, x: number) => {
     const iy = y + fs * 0.55 - iconSize / 2;
     doc.save().translate(x, iy).scale(iconSize / 24);
@@ -216,7 +207,6 @@ function draw(doc: PDFKit.PDFDocument, blocks: Block[], fs: number, margin: numb
     doc.restore();
   };
 
-  /** One unwrapped run of tokens starting at x. */
   const run = (toks: Tok[], x: number) => {
     for (const t of toks) {
       if (t.icon) {
@@ -230,10 +220,9 @@ function draw(doc: PDFKit.PDFDocument, blocks: Block[], fs: number, margin: numb
       x += w;
     }
   };
-  /** Wrapped tokens inside [x, x+width). Advances y. */
   const wrapped = (toks: Tok[], x: number, width: number) => {
     ensure(lh);
-    toks = toks.filter((t) => !t.icon); // icons are for aligned rows only
+    toks = toks.filter((t) => !t.icon); // icons only in aligned rows
     toks.forEach((t, i) => {
       font(t);
       doc.fillColor("black");
@@ -244,8 +233,7 @@ function draw(doc: PDFKit.PDFDocument, blocks: Block[], fs: number, margin: numb
     y = doc.y;
   };
 
-  // 3-cell rows (the contact block): the middle cells of consecutive rows share one left edge,
-  // so icons and text line up, with the widest of them centred on the page.
+  // contact block: middle cells of consecutive 3-cell rows share a left edge so icons line up
   const midLeft = new Map<Block, number>();
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
@@ -317,7 +305,7 @@ function make(blocks: Block[], fs: number, meta: CvMeta, info: { title: string; 
   });
 }
 
-/** Markdown (placeholders already expanded) -> PDF bytes. Shrinks the font to fit one page when asked to. */
+// shrinks the font in 0.25 steps until it fits one page
 export async function buildCvPdf(expanded: string, meta: CvMeta, info: { title: string; author: string }, icons: (name: string) => string | undefined = () => undefined): Promise<{ pdf: Buffer; fontSize: number; pages: number }> {
   resolveIcon = icons;
   const blocks = parseBlocks(expanded);

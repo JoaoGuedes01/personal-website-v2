@@ -20,8 +20,7 @@ const inCat = (await getCollection("snippets"))
   .filter((s) => !s.data.draft && s.data.category === category.label)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-// Group slugs actually present on disk for this category — curated order
-// first, then anything uncurated appended alphabetically (see snippetGroups.ts).
+// groups on disk: curated order first, then the rest alphabetically (see snippetGroups.ts)
 const groupSlugs = [...new Set(inCat.map((s) => snippetPath(s).group).filter((g): g is string => Boolean(g)))].sort(
   (a, b) => curatedGroupIndex(category.slug, a) - curatedGroupIndex(category.slug, b) || a.localeCompare(b),
 );

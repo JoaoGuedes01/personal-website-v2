@@ -1,21 +1,18 @@
-// Site metadata, navigation and social links
-
 export const site = {
   name: "João Guedes",
   shortName: "Guedes",
   role: "Backend Software Engineer",
-  // One-line description used for SEO / social cards.
+  // SEO / social cards
   description:
     "Backend software engineer at Uphold. Security Professional. I'm passionate about security, engineering and systems design",
-  // Absolute site URL — keep in sync with `site` in astro.config.mjs.
+  // keep in sync with `site` in astro.config.mjs
   url: "https://joaoguedes.net",
   locale: "en",
-  // Default social image (1200×630). Regenerate if you rebrand.
+  // 1200x630
   ogImage: "/og-default.png",
 };
 
-// Primary navigation. The logo links Home, so it's not repeated here.
-// Shown in the header (desktop ≥ lg) and the mobile menu.
+// Header and mobile menu. The logo links Home, so it's not listed.
 export const nav = [
   { label: "Projects", path: "/projects" },
   { label: "Experience", path: "/experience" },
@@ -34,9 +31,7 @@ export const socials = [
   { label: "Email", href: "mailto:joaoguedes.cjp@gmail.com", handle: "joaoguedes.cjp@gmail.com", icon: "mail", stroke: "currentColor", fill:"none" },
 ];
 
-/**
- * Build an internal href that respects `base` from astro.config.mjs.
- */
+// internal href that respects `base` from astro.config.mjs
 export function href(path = "/"): string {
   const base = import.meta.env.BASE_URL || "/";
   const prefix = base.endsWith("/") ? base.slice(0, -1) : base;

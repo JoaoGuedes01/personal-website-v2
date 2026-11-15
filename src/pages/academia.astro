@@ -15,7 +15,7 @@ const groups = [
   { label: "Papers", items: papers.filter((p) => p.data.kind !== "Thesis") },
 ].filter((g) => g.items.length > 0);
 
-// Resolve a paper's PDF path: pass external URLs through, base-prefix local ones.
+// external URLs pass through, local ones get the base prefix
 const asset = (p?: string) => (!p ? undefined : p.startsWith("http") ? p : href(p));
 
 const empty = education.length === 0 && groups.length === 0;

@@ -6,8 +6,8 @@ type Post = CollectionEntry<"blog">;
 export interface SeriesPart {
   part: number;
   title: string;
-  id?: string; // only when a post exists for this part
-  state: "current" | "published" | "upcoming"; // upcoming = not written yet, or still a draft
+  id?: string; // only when a post exists
+  state: "current" | "published" | "upcoming"; // upcoming = not written yet or still a draft
 }
 
 export interface SeriesInfo {
@@ -17,17 +17,15 @@ export interface SeriesInfo {
   total: number;
   current: number;
   parts: SeriesPart[];
-  prev?: SeriesPart; // nearest published part before this one
-  next?: SeriesPart; // the part right after this one (published or upcoming)
+  prev?: SeriesPart; // nearest published part before this
+  next?: SeriesPart; // the part right after, published or not
 }
 
-/** "Homelab · Part 3" for cards, or undefined for posts outside a series. */
 export function seriesLabel(data: Post["data"]): string | undefined {
   if (!data.series || !data.part) return undefined;
   return `${seriesDef(data.series)?.title ?? data.series} · Part ${data.part}`;
 }
 
-/** Everything the post page and the series box need, or undefined outside a series. */
 export function buildSeries(all: Post[], current: Post): SeriesInfo | undefined {
   const key = current.data.series;
   const currentPart = current.data.part;
@@ -64,7 +62,7 @@ export function buildSeries(all: Post[], current: Post): SeriesInfo | undefined 
   };
 }
 
-/** Newest first; posts with the same date in one series order by part (higher part = newer). */
+// newest first; same-date posts in a series order by part (higher = newer)
 export function compareBlog(a: Post, b: Post): number {
   const d = b.data.pubDate.getTime() - a.data.pubDate.getTime();
   if (d !== 0) return d;
@@ -72,16 +70,13 @@ export function compareBlog(a: Post, b: Post): number {
   return 0;
 }
 
-/** One slot in the Featured block: a single post, or a whole series standing in for all its parts. */
+// a Featured slot is one post, or a whole series standing in for its parts
 export type FeaturedSlot =
   | { kind: "post"; entry: Post }
   | { kind: "series"; key: string; title: string; blurb?: string; parts: Post[]; total: number };
 
-/**
- * Picks what the Featured block shows (newest first, at most `max` slots).
- * Featuring ANY part of a series features the whole series, as ONE slot, so a
- * five-part series never crowds out the other featured posts.
- */
+// featuring any part of a series features the whole series as one slot, so it
+// can't crowd out other featured posts
 export function featuredSlots(items: Post[], max = 3): FeaturedSlot[] {
   const inSeries = (p: Post) => !!(p.data.series && p.data.part);
   const featuredSeries = new Set(items.filter((p) => p.data.featured && inSeries(p)).map((p) => p.data.series!));

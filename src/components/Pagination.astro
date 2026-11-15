@@ -1,12 +1,4 @@
 ---
-/**
- * <Pagination /> — page navigation for any paginated list.
- *
- *   <Pagination base={href("/blog")} current={page.current} total={page.total} />
- *
- * Page 1 links to `base`; later pages link to `base/page/N` (see utils/paginate).
- * Renders nothing when there's only one page.
- */
 import SystemIcon from "./SystemIcon.astro";
 import { pageHref } from "../utils/paginate";
 
@@ -18,7 +10,7 @@ interface Props {
 }
 const { base, current, total, class: cls = "" } = Astro.props;
 
-// Compact page list with ellipses: always show first, last, and neighbours.
+// First, last and neighbours of the current page, with ellipses.
 function pages(cur: number, tot: number): (number | "…")[] {
   if (tot <= 7) return Array.from({ length: tot }, (_, i) => i + 1);
   const set = new Set<number>([1, tot, cur, cur - 1, cur + 1]);

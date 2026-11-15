@@ -1,10 +1,4 @@
-// ---------------------------------------------------------------------------
-// EDUCATION
-//
-// Your academic background — where you studied and what you earned. This is the
-// single place to edit it; it's shown on BOTH the /academia page (at the top)
-// and the /resume page. Add or remove entries freely; most recent first.
-// ---------------------------------------------------------------------------
+// Shown on both /academia and /resume. Most recent first.
 
 export interface EducationEntry {
   school: string;
@@ -12,8 +6,8 @@ export interface EducationEntry {
   start: string;
   end: string;
   location?: string;
-  detail?: string; // one line: thesis, focus, honours, …
-  url?: string; // optional link to the institution / programme
+  detail?: string; // one line: thesis, focus, honours
+  url?: string; // link to the programme
 }
 
 export const education: EducationEntry[] = [

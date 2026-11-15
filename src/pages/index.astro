@@ -9,13 +9,12 @@ import { href } from "../data/site";
 import { snippetUrl } from "../data/taxonomy";
 import { compareBlog } from "../utils/series";
 
-// Featured projects
 const featured = (await getCollection("projects"))
   .filter((p) => p.data.featured && !p.data.draft)
   .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
   .slice(0, 6);
 
-// Recent writing = the newest ramblings and the newest snippets, shown side by side
+// newest posts and newest snippets, side by side
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
   .sort(compareBlog)
@@ -51,7 +50,6 @@ const recentGroups = [
 ---
 
 <BaseLayout>
-  <!-- HERO -->
   <section class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-24">
     <div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
       <div class="reveal order-2 lg:order-1">
@@ -81,7 +79,6 @@ const recentGroups = [
     </div>
   </section>
 
-  <!-- FEATURED WORK -->
   <section class="mx-auto mt-24 max-w-5xl px-4 sm:px-6">
     <div class="mb-8 flex items-end justify-between gap-4">
       <div>
@@ -116,7 +113,6 @@ const recentGroups = [
     </a>
   </section>
 
-  <!-- RECENT WRITING -->
   {
     recentGroups.length > 0 && (
       <section class="mx-auto mt-20 max-w-5xl px-4 sm:px-6">

@@ -1,16 +1,5 @@
 ---
-/**
- * <SystemIcon /> — inline SVG icon that inherits the current text colour.
- * Resolves through src/icons/index.ts: your own override, then lucide-static.
- *
- *   <SystemIcon name="briefcase" />
- *   <SystemIcon name="github" size={18} class="text-primary" />
- *   <SystemIcon name="clock" title="Reading time" />   // adds an accessible label
- *
- * Pass `title` when the icon conveys meaning on its own; otherwise it's
- * marked decorative (aria-hidden). For a resolved tech/tool logo, use
- * <TechIcon /> instead (see src/components/TechIcon.astro).
- */
+/** Inline SVG icon resolved through src/icons/index.ts. Pass `title` if the icon carries meaning, otherwise it is aria-hidden. */
 import { resolveSystemIcon } from "../icons";
 
 interface Props {
@@ -23,7 +12,6 @@ interface Props {
   stroke?: string;
 }
 
-// Defaults
 const {
   name,
   size = 20,
@@ -36,7 +24,6 @@ const {
 
 const body = resolveSystemIcon(name);
 if (!body) {
-  // Fail loudly in dev, render nothing in prod, rather than a broken glyph.
   console.warn(`[SystemIcon] unknown icon "${name}"`);
 }
 const inner = (title ? `<title>${title}</title>` : "") + (body ?? "");

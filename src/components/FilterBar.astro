@@ -1,31 +1,5 @@
 ---
-/**
- * <FilterBar /> — the site-wide listing filter.
- *
- * A compact toolbar of dropdown facets + a search box. Options live inside the
- * dropdowns (so the bar's height never grows, no matter how many tags exist);
- * active choices show as removable pills (with the value's icon). Everything
- * filters the rendered cards live, client-side, and stacks: OR within a facet,
- * AND across facets, AND search.
- *
- * Facet counts are dynamic: each option shows how many results it would yield
- * given the OTHER active facets + search (standard faceted-search behaviour).
- *
- * State (selections, search, how many loaded) is saved to sessionStorage per
- * page, so returning via the back button restores your filters.
- *
- * Paging: every card stays in the DOM (so filters span the whole set), but only
- * `pageSize` matches are shown at once, with a "Load more" button that recomputes
- * against the filtered results. Pass pageSize={0} to show everything.
- *
- * The page supplies the grid via the default slot; each card must be wrapped in
- * an element carrying:
- *   • data-filter-item
- *   • data-search="<lowercased haystack>"
- *   • data-<facet.key>="<space-separated values this item has>"   (one per facet)
- *
- * Without JS you get every card — filters/paging are a progressive enhancement.
- */
+/** Dropdown facets, search box and pills for listing pages. Wrapped cards in the slot need data-filter-item, data-search and data-<facet.key>. */
 import SystemIcon from "./SystemIcon.astro";
 
 export interface FacetOption {
@@ -101,7 +75,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
                   aria-pressed="false"
                   class="facet-opt flex w-full items-center gap-2 rounded-field px-2.5 py-1.5 text-left text-sm transition-colors hover:bg-base-200"
                 >
-                  {/* icon holder — hidden here; cloned into the pill when selected */}
+                  {/* hidden, cloned into the pill when selected */}
                   <span data-opt-icon hidden>{o.icon && <SystemIcon name={o.icon} size={14} />}</span>
                   <span class="opt-check text-primary">
                     <SystemIcon name="check" size={14} />
@@ -193,7 +167,6 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
     color: var(--color-primary);
     font-weight: 600;
   }
-  /* Dim options that would yield nothing given the other active filters. */
   .facet-opt.is-empty:not([aria-pressed="true"]) {
     opacity: 0.4;
   }
@@ -245,7 +218,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       return (el.getAttribute("data-" + key) || "").split(/\s+/).filter(Boolean);
     }
 
-    // Passes all selected facets EXCEPT `exceptKey` (pass null for all), + search.
+    // exceptKey skips one facet (null checks all).
     function passes(el, exceptKey) {
       for (var i = 0; i < meta.length; i++) {
         var key = meta[i].key;
@@ -309,7 +282,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       pillsRow.hidden = !any;
     }
 
-    // Recompute each option's count against the OTHER active facets + search.
+    // Counts ignore the option's own facet.
     function updateCounts() {
       options.forEach(function (o) {
         var k = o.getAttribute("data-facet");
@@ -335,8 +308,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       } catch (e) {}
     }
 
-    // Read facet selections from the URL query (?stack=react,docker&type=…) so a
-    // link from elsewhere (e.g. a tech badge on a project page) lands pre-filtered.
+    // Read ?stack=react,docker&type=... so links from other pages land pre-filtered.
     function parseUrl() {
       var out = {};
       try {
@@ -349,8 +321,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       return out;
     }
 
-    // Mirror the active facet selections back into the URL (no history spam), so
-    // the current filters are shareable and survive a refresh.
+    // Keep the URL in sync (replaceState, no history entries) so filters are shareable.
     function syncUrl() {
       try {
         var params = new URLSearchParams(location.search);
@@ -404,7 +375,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       syncUrl();
     }
 
-    // Any filter/search change collapses back to the first page.
+    // Any change goes back to the first page.
     function refilter() {
       visible = pageSize > 0 ? pageSize : Infinity;
       apply();
@@ -505,9 +476,7 @@ const facetMeta = facets.map((f) => ({ key: f.key, multi: f.multi !== false }));
       if (e.key === "Escape") closeMenus(null);
     });
 
-    // Restore saved state, then render. A URL query is authoritative when
-    // present (shareable/deep-linked filters); otherwise fall back to the
-    // sessionStorage state (back-navigation / refresh within the tab).
+    // URL query wins over sessionStorage state when both exist.
     (function restore() {
       var fromUrl = parseUrl();
       if (Object.keys(fromUrl).length) {

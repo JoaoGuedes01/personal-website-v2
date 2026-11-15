@@ -14,11 +14,9 @@ const { entry } = Astro.props;
 const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, video } = entry.data;
 const url = href(`/projects/${entry.id}`);
 
-// Cover auto-detection
 const cover = projectCover(entry.id);
 
-// Keep the card balanced: show the first few technologies (authored order) and
-// fold the rest into a "+N more" hint — the full stack lives on the detail page.
+// Only the first few techs on the card, the rest become "+N more".
 const CARD_STACK_LIMIT = 4;
 const shownStack = stack.slice(0, CARD_STACK_LIMIT);
 const moreCount = stack.length - shownStack.length;

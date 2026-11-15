@@ -1,15 +1,5 @@
 ---
-/**
- * <Gallery /> — a responsive grid of optimized images with a lightbox.
- *
- * Used on project pages to keep screenshots the markdown body can't hold.
- * Pass images imported through the content schema (optimized ImageMetadata):
- *
- *   <Gallery images={entry.data.gallery} />
- *
- * Each item: { src: ImageMetadata, alt?: string, caption?: string }.
- * Thumbnails are cropped to a uniform tile; the lightbox shows the full image.
- */
+/** Thumbnail grid with a lightbox, for project page screenshots. */
 import { Image, getImage } from "astro:assets";
 
 interface GalleryImage {
@@ -22,8 +12,7 @@ interface Props {
 }
 const { images } = Astro.props;
 
-// Pre-generate a large optimized version per image for the lightbox, and pass
-// the resulting URLs (+ alt/caption) to the client script.
+// Full-size versions for the lightbox, passed to the client script.
 const full = await Promise.all(
   images.map((img) => getImage({ src: img.src, width: 1600, format: "webp" })),
 );
@@ -58,7 +47,6 @@ const slides = images.map((img, i) => ({
     }
   </ul>
 
-  <!-- Lightbox -->
   <div
     id="lightbox"
     class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 backdrop-blur-sm"

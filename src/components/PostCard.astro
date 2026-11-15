@@ -17,9 +17,9 @@ interface Props {
   source?: string;
   cover?: ImageMetadata;
   coverAlt?: string;
-  // e.g. "Homelab · Part 2" — shown as a small badge on series posts.
+  // e.g. "Homelab · Part 2"
   series?: string;
-  // Posts with no cover get a gradient tile tinted by their first tag.
+  // gradient tile tinted by the first tag when there is no cover
   placeholder?: boolean;
 }
 const {
@@ -55,7 +55,6 @@ const tile = tileGradient(seed);
 >
   {
     (cover || placeholder) && (
-      // Full-bleed 16:9 cover along the top edge of the card, no margins.
       <div class="relative aspect-[16/9] overflow-hidden bg-base-200" style={!cover ? `background:${tile}` : undefined}>
         {cover ? (
           <Image

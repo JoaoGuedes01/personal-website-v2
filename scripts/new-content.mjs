@@ -1,17 +1,6 @@
 #!/usr/bin/env node
-// ---------------------------------------------------------------------------
-// Content generator — scaffold a new content file from a per-type template.
-//
-//   node scripts/new-content.mjs <type> "<Title>"
-//   npm run new -- <type> "<Title>"
-//
-// Types: project | blog | snippet | experience | certification | paper
-// (plurals and a few aliases also work, e.g. "cert", "post", "thesis").
-//
-// It creates src/content/<collection>/<slug>.md with all the frontmatter that
-// type needs (mirroring src/content.config.ts), pre-fills the date where it
-// applies, and refuses to overwrite an existing file.
-// ---------------------------------------------------------------------------
+// Scaffolds a content file: npm run new -- <type> "<Title>" (see --help).
+// Frontmatter mirrors src/content.config.ts. Never overwrites an existing file.
 import { writeFileSync, existsSync, mkdirSync, readFileSync, copyFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -190,7 +179,6 @@ abstract: "The abstract or a short summary."
 `,
 };
 
-// --- parse args ---
 const argv = process.argv.slice(2);
 if (argv.includes("-h") || argv.includes("--help") || argv.length === 0) {
   usage(argv.length === 0 ? null : undefined);
@@ -244,7 +232,7 @@ if (!slug) {
   process.exit(1);
 }
 
-// Reserved slugs that would collide with list routes.
+// these would collide with list routes
 const RESERVED = { project: ["page", "type"], blog: ["page", "tag"] };
 if ((RESERVED[type] || []).includes(slug)) {
   usage(`"${slug}" is a reserved name for ${type}s (it collides with a list route). Pick another with --slug.`);
@@ -267,8 +255,7 @@ if (template && !(TEMPLATES_FOR[type] || []).includes(template)) {
 let body = TEMPLATES[type](title);
 const copied = [];
 if (type === "blog" && template === "showcase") {
-  // The showcase post uses co-located images; copy them into
-  // src/content/blog/img/<slug>/ (the same img/<id>/ convention as projects).
+  // the showcase post's images go in src/content/blog/img/<slug>/, same as projects
   const imgDir = path.join(TEMPLATE_DIR, "blog-showcase");
   const imgs = readdirSync(imgDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
   const destDir = path.join(dir, "img", slug);
@@ -289,7 +276,7 @@ if (type === "blog" && template === "showcase") {
     copied.push(path.relative(ROOT, targets[i]));
   });
 }
-// paper template references the slug for the pdf hint
+// the paper template uses the slug in its pdf hint
 body = body.replace(/\$\{slug\}/g, slug);
 
 mkdirSync(dir, { recursive: true });

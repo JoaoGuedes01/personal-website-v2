@@ -1,21 +1,8 @@
-/**
- * Callout / disclaimer roster — the single source of truth.
- * -------------------------------------------------------------------------
- * Used by BOTH the markdown transform (src/plugins/remark-callouts.mjs, which
- * turns `:::type[Title] … :::` directives into styled markup) and the
- * <Callout> component (src/components/Callout.astro, for .astro / .mdx pages).
- * Keep them in sync by editing here only.
- *
- * Each entry:
- *   label — default heading when the author omits `[Title]`
- *   icon  — inner markup of a 24×24 Lucide stroke icon (fill=none, currentColor)
- *
- * Colours are NOT set here — each type maps to a daisyUI semantic token in
- * global.css (`.callout-<type> { --cc: … }`), so every theme adapts for free.
- *
- * ADD A TYPE: add an entry below + a matching `.callout-<type>` colour rule in
- * global.css. ADD AN ALIAS: add it to ALIASES.
- */
+// Callout types, shared by src/plugins/remark-callouts.mjs and src/components/Callout.astro.
+// label: default heading when the author leaves out [Title].
+// icon: inner markup of a 24x24 lucide stroke icon.
+// Colours live in global.css as `.callout-<type> { --cc: ... }`.
+// To add a type: add an entry here and a matching colour rule there. For an alias, add it to ALIASES.
 export const CALLOUTS = {
   note: {
     label: "Note",
@@ -55,7 +42,7 @@ export const CALLOUTS = {
   },
 };
 
-/** Alternate spellings that resolve to a canonical type above. */
+// alternate spellings of the types above
 export const ALIASES = {
   caution: "danger",
   error: "danger",
@@ -66,7 +53,6 @@ export const ALIASES = {
   quotation: "quote",
 };
 
-/** Resolve a directive/prop name to a canonical callout type, or null. */
 export function resolveType(name) {
   if (!name) return null;
   const key = String(name).toLowerCase();
@@ -75,19 +61,14 @@ export function resolveType(name) {
   return null;
 }
 
-/** daisyUI semantic colours a callout may borrow via its `color` override. */
+// daisyUI colour tokens allowed in a callout's `color` override
 const TOKENS = new Set([
   "primary", "secondary", "accent", "neutral",
   "info", "success", "warning", "error", "base-content",
 ]);
 
-/**
- * Resolve a one-off `color` override into a value for the `--cc` variable —
- * everything else (tint, border, icon chip, title) is derived from it, so this
- * single knob recolours the whole callout. Accepts a daisyUI token name
- * ("accent", "warning", …) → `var(--color-…)`, or any raw CSS colour verbatim
- * ("#e4b96b", "tomato", "oklch(…)"). Returns null when nothing was given.
- */
+// `color` override for the --cc variable. Takes a daisyUI token name ("accent") or any raw CSS colour.
+// Returns null if nothing was given.
 export function resolveColor(value) {
   if (!value) return null;
   const v = String(value).trim();

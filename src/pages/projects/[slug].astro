@@ -22,17 +22,14 @@ interface Props {
 }
 const { entry } = Astro.props;
 const { title, summary, type, org, orgUrl, category, stack, year, repo, demo, video, gallery } = entry.data;
-// Cover auto-detection
 const cover = projectCover(entry.id);
 const { Content, headings } = await render(entry);
 const rt = readingTime(entry.body);
 const tocCount = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
 const hasToc = tocCount >= 2;
 
-// Resolve which Experience role(s) this project belongs to: explicit `experience`
-// pins take precedence; otherwise fall back to matching `org` to a role's company.
-// Link to the specific role when there's exactly one; if it spans several, link
-// to the Experience index instead.
+// Role(s) this project belongs to: explicit `experience` wins, else match `org`.
+// One role links to it directly, several link to the experience index.
 const allExperience = (await getCollection("experience")).filter((e) => !e.data.draft);
 const linkedRoles = entry.data.experience.length
   ? allExperience.filter((e) => entry.data.experience.includes(e.id))
@@ -44,8 +41,7 @@ const expCompany = org ?? linkedRoles[0]?.data.company;
 const expHref = primaryRole ? href(`/experience/${primaryRole.id}`) : href("/experience");
 const showExpLink = linkedRoles.length > 0;
 
-// Full stack, resolved and split into groups (taxonomy order). Each badge links
-// to the projects list pre-filtered to that technology.
+// stack split into groups; each badge links to the filtered projects list
 const resolvedStack = stack.map(resolveTech);
 const groupedStack = TECH_GROUPS.map((g) => ({
   label: g.label,

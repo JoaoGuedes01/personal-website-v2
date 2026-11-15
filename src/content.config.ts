@@ -27,7 +27,7 @@ const projects = defineCollection({
       type: z.enum(PROJECT_TYPES).default("Personal"),
       // For Professional projects: the employer, and an optional link to it.
       // NOTE: `org` also links a project to an Experience entry whose `company`
-      // matches — that's how /experience/<role> shows its related projects.
+      // matches, which is how /experience/<role> lists its related projects.
       org: z.string().optional(),
       orgUrl: z.string().url().optional(),
       // Pin this project to specific Experience entries by id (the filename
@@ -35,7 +35,7 @@ const projects = defineCollection({
       // experience: ["checkmarx-swe", "checkmarx-appsec"].
       // Use this when you have MULTIPLE roles at the same company so each
       // project attaches to the right one(s). With a single role at a company,
-      // matching `org` to that role's `company` is enough — no need to set this.
+      // matching `org` to that role's `company` is enough, no need to set this.
       // A string or an array both work; it's normalized to an array.
       experience: z
         .union([z.string(), z.array(z.string())])
@@ -86,11 +86,11 @@ const blog = defineCollection({
       // this post's number in it (1-based). Both are needed for the series UI.
       series: z.string().optional(),
       part: z.number().int().positive().optional(),
-      // Optional hero image (co-located, relative path) — optimized.
+      // Optional hero image (co-located, relative path), optimized.
       cover: image().optional(),
       coverAlt: z.string().default(""),
       // Optional image gallery (with a lightbox), co-located and referenced
-      // relatively — same shape as projects.
+      // relatively, same shape as projects.
       gallery: z
         .array(
           z.object({
@@ -123,16 +123,16 @@ const snippets = defineCollection({
       // Discipline this snippet belongs to (its "class" in the /snippets nav).
       // Must match a label in src/data/taxonomy.ts.
       category: z.enum(SNIPPET_CATEGORIES).default("Software Engineering"),
-      // Where this came from (a course, a CTF, work) — shown as a small badge.
+      // Where this came from (a course, a CTF, work), shown as a small badge.
       // Purely informational; group/subgroup nav is derived from folder nesting,
       // not from this field, so it never gates navigation.
       source: z.string().optional(),
-      // Primary language/tool — shown as a small label on the snippet.
+      // Primary language/tool, shown as a small label on the snippet.
       lang: z.string().default("shell"),
       // Tool tags, e.g. ["git"], ["docker", "compose"].
       tags: z.array(z.string()).default([]),
       // Optional image gallery (with a lightbox), co-located and referenced
-      // relatively — same shape as projects.
+      // relatively, same shape as projects.
       gallery: z
         .array(
           z.object({
@@ -158,10 +158,10 @@ const experience = defineCollection({
       tags: z.array(z.string()).default([]),
       // One-line summary shown on the /experience list card.
       summary: z.string().optional(),
-      // Bullet points — power both the role page and the auto /resume.
+      // Bullet points for the role page and the generated resume.
       highlights: z.array(z.string()).default([]),
       // Optional image gallery (with a lightbox), co-located and referenced
-      // relatively — same shape as projects.
+      // relatively, same shape as projects.
       gallery: z
         .array(
           z.object({
@@ -181,7 +181,7 @@ const experience = defineCollection({
           hide: z.boolean().default(false), // leave this role off the CV
         })
         .optional(),
-      // Sort order — most recent should have the highest number.
+      // Sort order: most recent gets the highest number.
       order: z.number().default(0),
       draft: z.boolean().default(false),
     }),
@@ -205,7 +205,7 @@ const papers = defineCollection({
   }),
 });
 
-// Certifications — grouped/filterable by provider on /certifications, and
+// Certifications, grouped by provider on /certifications and
 // pulled into the auto-generated /resume.
 const certifications = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/certifications" }),
@@ -214,14 +214,14 @@ const certifications = defineCollection({
     // The provider/issuer, e.g. "AWS", "INE", "Coursera", "Udemy",
     // "LinkedIn Learning". This is what the provider filter groups by.
     issuer: z.string(),
-    // When you earned it — freeform so "2024" or "Mar 2024" both work.
+    // When you earned it. Freeform, so "2024" or "Mar 2024" both work.
     issued: z.string(),
     // Optional expiry (leave off if it doesn't expire).
     expires: z.string().optional(),
     // Optional verification link + credential id.
     url: z.string().url().optional(),
     credentialId: z.string().optional(),
-    // Optional skills/topics the cert covers — shown as small tags.
+    // Optional skills/topics the cert covers, shown as small tags.
     skills: z.array(z.string()).default([]),
     // Feature it (sorts to the front); and manual sort within a provider.
     featured: z.boolean().default(false),

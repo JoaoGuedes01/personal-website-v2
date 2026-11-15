@@ -1,21 +1,5 @@
 ---
-/**
- * <ListSearch /> — a dependency-free fuzzy "find" box for a listing.
- *
- * It wraps a section's filter chips and its browse grid. The search input sits
- * top-right, across from the filters. Typing fuzzy-matches across ALL items in
- * the section (not just the current page/filter) and renders result cards;
- * clearing the box restores the normal browse view.
- *
- * Usage (in a listing page/component):
- *
- *   <ListSearch items={searchItems} placeholder="Search projects…">
- *     <Fragment slot="filters">…chips…</Fragment>
- *     …page info + grid + pagination…   ← default slot (the "browse" view)
- *   </ListSearch>
- *
- * `items`: { title, url?, description?, meta?, tags? }[] — the full dataset.
- */
+/** Fuzzy search box over a full dataset. Replaces the slotted browse view with result cards while there is a query. */
 import SystemIcon from "./SystemIcon.astro";
 
 export interface SearchItem {
@@ -43,7 +27,7 @@ const {
   variant = "default",
 } = Astro.props;
 
-// Embed the dataset as JSON. Escape "<" so a stray "</script>" can't break out.
+// Escape "<" so "</script>" in the data can't break out of the script tag.
 const dataJson = JSON.stringify(items).replace(/</g, "\\u003c");
 ---
 

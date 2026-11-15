@@ -1,20 +1,8 @@
-// ---------------------------------------------------------------------------
-// RESUME CONFIG
-//
-// The /resume page is FULLY auto-generated from the site's own data — and every
-// section can be overridden here whenever you want the résumé to differ from the
-// site.
-//
-//   Identity + skills + soft skills + languages → src/data/profile.ts
-//   Education                                    → src/data/education.ts
-//   Experience / Certifications / Projects       → your content collections,
-//                                                  overridable via the arrays
-//                                                  at the bottom of this file.
-//
-// So: touch nothing and the résumé builds itself. Fill an override array below
-// and that section uses your verbatim version instead. The CV PDF is generated
-// from src/data/cv/cv.md.
-// ---------------------------------------------------------------------------
+// Resume page config. Everything is generated from the site's own data unless overridden below.
+//   identity, skills, languages -> profile.ts
+//   education -> education.ts
+//   experience, certifications, projects -> content collections (override arrays at the bottom)
+// The CV PDF comes from src/data/cv/cv.md.
 
 import { profile } from "./profile";
 import { education } from "./education";
@@ -37,16 +25,15 @@ export interface ResumeCertification {
 }
 
 export const resume = {
-  // Identity + skills come from the shared profile (edit them there).
+  // identity and skills come from profile.ts
   ...profile,
-  // Education comes from its own file (shared with /academia).
+  // shared with /academia
   education,
 
-  // Where the "Formal CV" button points. The PDF is generated at build time from
-  // src/data/cv/ (see cv.md), so there is no file to drop in public/.
+  // "Formal CV" button target. The PDF is built from src/data/cv/cv.md, nothing to drop in public/.
   pdfPath: "/resume/joaoguedes_cv.pdf",
 
-  // Contact block of the generated CV: [label shown, link].
+  // contact block of the CV: [label shown, link]
   contact: {
     location: profile.location,
     website: ["Personal Website", "https://joaoguedes.net"] as [string, string],
@@ -57,9 +44,7 @@ export const resume = {
     email: "joaoguedes.cjp@gmail.com",
   },
 
-  // ----- OVERRIDES (leave empty to auto-generate) ----------------------------
-  // Fill any of these to override that section verbatim.
-
+  // Overrides: leave empty to auto-generate, fill to use that section verbatim.
   //   [] → pulled from src/content/experience/*  (most-recent first)
   experience: [] as ResumeExperience[],
   //   [] → pulled from src/content/certifications/*

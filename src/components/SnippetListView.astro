@@ -1,13 +1,5 @@
 ---
-/**
- * <SnippetListView /> — the leaf-level snippet listing, reused at every depth
- * that ends in a flat list: a category with no groups, a group with no
- * subgroups, or a subgroup itself. Filtering is the shared <FilterBar />: a
- * "Tag" facet + its built-in search box, both client-side (same pattern as
- * ProjectListView.astro). Every non-draft snippet in `items` is rendered (no
- * pagination) so filters span the whole set; FilterBar's "Load more" handles
- * paging into view.
- */
+// Leaf listing: a flat list of snippets at any depth. Renders everything, FilterBar handles "Load more".
 import type { CollectionEntry } from "astro:content";
 import SnippetCard from "./SnippetCard.astro";
 import FilterBar from "./FilterBar.astro";
@@ -28,7 +20,7 @@ interface Props {
 }
 const { icon, eyebrow, title, intro, items, backHref, backLabel } = Astro.props;
 
-// Distinct tags across this set → the Tag facet's options.
+// Options for the Tag facet.
 const tagCounts = new Map<string, { label: string; count: number }>();
 for (const s of items) {
   for (const t of s.data.tags) {

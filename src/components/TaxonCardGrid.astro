@@ -1,14 +1,4 @@
 ---
-/**
- * <TaxonCardGrid /> — a grid of drill-down cards (icon, label, blurb, count)
- * linking into a taxon (category/group/subgroup). Shared by the /snippets
- * landing page, a category page listing its groups, and a group page listing
- * its subgroups — same look at every level.
- *
- * Layout: icon tile on top, then title + blurb, then a quiet footer row with
- * the count on the left and an arrow on the right. The footer is pinned to the
- * bottom so cards in a row line up regardless of blurb length.
- */
 import SystemIcon from "./SystemIcon.astro";
 
 export interface TaxonCard {
@@ -23,7 +13,7 @@ interface Props {
   cards: TaxonCard[];
 }
 const { cards } = Astro.props;
-// 3 (or 5+) cards read best in three columns; 1, 2 or 4 pair up in two.
+// 3 or 5+ cards go three across, 1, 2 or 4 pair up
 const threeUp = cards.length === 3 || cards.length > 4;
 ---
 

@@ -1,21 +1,5 @@
 ---
-/**
- * <Callout /> — a disclaimer / admonition panel for .astro & .mdx pages.
- *
- *   <Callout type="warning">The live demo is currently down.</Callout>
- *   <Callout type="security" title="Handle with care">…</Callout>
- *
- * In markdown content, prefer the `:::type[Title] … :::` directive instead
- * (same look, no import needed) — see src/plugins/remark-callouts.mjs.
- *
- * `type` is any key/alias in src/data/callouts.mjs (note, info, tip, success,
- * warning, danger/caution, important, security, quote); unknown → "note".
- * Colours come from global.css (`.callout-<type>`), so it themes automatically.
- *
- * `color` recolours this one callout — a daisyUI token ("accent", "warning", …)
- * or any CSS colour ("#e4b96b") — by overriding the `--cc` variable everything
- * else derives from.
- */
+/** For .astro/.mdx pages. Markdown content should use the `:::type[Title]` directive instead (src/plugins/remark-callouts.mjs). `color` overrides the --cc variable. */
 import { CALLOUTS, resolveType, resolveColor } from "../data/callouts.mjs";
 
 interface Props {

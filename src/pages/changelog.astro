@@ -5,15 +5,15 @@ import { releases, version, formatReleaseDate, type ChangelogKind } from "../uti
 
 const repoUrl = "https://github.com/JoaoGuedes01/personal-website-v2";
 
-// Show the most recent releases here; older ones live on GitHub.
+// Only the latest releases; older ones are on GitHub.
 const MAX_RELEASES = 12;
 const shown = releases.slice(0, MAX_RELEASES);
 const hasOlder = releases.length > MAX_RELEASES;
 
-// Long groups (e.g. a dozen "add X snippets") fold behind a "show more".
+// Long groups get folded behind "show more".
 const VISIBLE_ITEMS = 6;
 
-// Group colour: a semantic daisyUI token per kind.
+// daisyUI color token per change kind
 const tone: Record<ChangelogKind, string> = {
   feature: "var(--color-primary)",
   fix: "var(--color-error)",
@@ -40,7 +40,6 @@ const tone: Record<ChangelogKind, string> = {
         <ol class="mt-12">
           {shown.map((r, i) => (
             <li class="grid gap-x-10 gap-y-4 border-t border-base-300 py-10 first:border-t-0 first:pt-2 md:grid-cols-[10rem_minmax(0,1fr)]">
-              <!-- Version, date -->
               <div class="md:sticky md:top-24 md:self-start">
                 <h2 class="font-display text-2xl">
                   {r.url ? (
@@ -68,7 +67,6 @@ const tone: Record<ChangelogKind, string> = {
                 </div>
               </div>
 
-              <!-- Changes -->
               <div class="min-w-0 space-y-7">
                 {r.groups.length > 0 ? (
                   r.groups.map((g) => {

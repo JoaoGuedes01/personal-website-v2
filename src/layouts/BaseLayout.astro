@@ -35,7 +35,6 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -46,7 +45,6 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- RSS -->
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -54,10 +52,7 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
       href="/rss.xml"
     />
 
-    <!-- Fonts: self-hosted variable woff2 (see @font-face in global.css), no
-         external requests. Preload the default (Geist) so first paint has it;
-         the other typefaces load on demand when their typeface is
-         picked. The "System" typeface loads nothing. -->
+    <!-- only the default font (Geist) is preloaded, others load on demand -->
     <link
       rel="preload"
       href="/fonts/geist-latin-wght-normal.woff2"
@@ -66,8 +61,7 @@ const ogImageUrl = new URL(image, Astro.site ?? site.url).toString();
       crossorigin
     />
 
-    <!-- No-flash init: restore theme + typeface before first paint.
-         Keep the DARK map in sync with src/components/ThemePicker.astro. -->
+    <!-- runs before paint to avoid a theme flash; keep DARK in sync with ThemePicker.astro -->
     <script is:inline>
       (function () {
         try {

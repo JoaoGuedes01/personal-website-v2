@@ -1,7 +1,4 @@
-/**
- * Fallback cover for posts without an image: a deterministic gradient tinted by
- * a seed (the first tag, else the title), so a topic always gets the same color.
- */
+// fallback cover: gradient seeded by the first tag or title, so a topic keeps its colour
 export function tileGradient(seed: string): string {
   let hue = 0;
   for (const ch of seed.toLowerCase()) hue = (hue * 31 + ch.charCodeAt(0)) % 360;

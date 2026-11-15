@@ -15,7 +15,7 @@ export async function getStaticPaths() {
   }[] = [];
   for (const entry of snips) {
     const { group, subgroup, slug } = snippetPath(entry);
-    if (!group || subgroup) continue; // only snippets directly in a subgroup-less group
+    if (!group || subgroup) continue; // skip nested subgroups
     paths.push({ params: { category: snippetCategorySlug(entry.data.category), group, slug }, props: { entry } });
   }
   return paths;

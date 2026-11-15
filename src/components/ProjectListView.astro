@@ -1,10 +1,5 @@
 ---
-/**
- * Projects listing. Filtering is the shared <FilterBar />: Type and Category are
- * dropdown facets that stack with the search box, all client-side, hiding/showing
- * the real cards in place. Every non-draft project is rendered (no pagination) so
- * the filters can span the whole set; without JS the full grid still shows.
- */
+// Everything is rendered (no pagination) so the filters cover the whole set.
 import type { CollectionEntry } from "astro:content";
 import ProjectCard from "./ProjectCard.astro";
 import FilterBar from "./FilterBar.astro";
@@ -26,7 +21,7 @@ interface Props {
 }
 const { items, eyebrow, title, intro } = Astro.props;
 
-// Facets — only values actually present, counts scoped to the set, taxonomy order.
+// Facets: only values that exist in the set, in taxonomy order.
 const facets: Facet[] = [
   {
     key: "type",
@@ -51,9 +46,7 @@ const facets: Facet[] = [
     })).filter((o) => o.count > 0),
   },
   {
-    // Every technology used across the set, most-used first. The list is long
-    // by design (no cap) so any tech linked from a project page resolves here;
-    // the dropdown scrolls and each option shows its live result count.
+    // No cap on purpose, so any tech linked from a project page resolves here.
     key: "stack",
     label: "Stack",
     icon: "cpu",
@@ -65,7 +58,7 @@ const facets: Facet[] = [
   },
 ];
 
-// Per-card metadata the FilterBar matches against (one data-<facet.key> each).
+// What FilterBar matches against (one data-<facet.key> per card).
 const cards = items.map((entry) => ({
   entry,
   type: projectTypeByLabel(entry.data.type)?.slug ?? "",

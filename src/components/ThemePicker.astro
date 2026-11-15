@@ -1,15 +1,5 @@
 ---
-/**
- * <ThemePicker /> — header control for switching theme + typeface at runtime.
- *
- * Themes set `data-theme` on <html> (daisyUI swaps every token) and toggle the
- * `.dark` class for dark palettes. Fonts set `data-font`. Both choices persist
- * in localStorage (`guedes-theme`, `guedes-font`) and are restored before paint
- * by the inline script in BaseLayout.astro — keep the DARK map in sync there.
- *
- * The swatches carry real hex values so they always show each palette's true
- * colours, regardless of which theme is currently active.
- */
+/** Theme and font switcher. Choices are restored before paint by the inline script in BaseLayout.astro, whose DARK map must match this one. Swatches use hex values so they look right under any active theme. */
 import SystemIcon from "./SystemIcon.astro";
 
 const themes = [
@@ -119,7 +109,7 @@ const fonts = [
   (function () {
     var STORE_THEME = "guedes-theme";
     var STORE_FONT = "guedes-font";
-    // Dark palettes → keep in sync with the no-flash script in BaseLayout.astro
+    // Keep in sync with the no-flash script in BaseLayout.astro
     var DARK = { ink: 1, slate: 1, nord: 1, gruvbox: 1, "rose-pine": 1, "tokyo-night": 1 };
 
     var root = document.documentElement;
@@ -183,7 +173,7 @@ const fonts = [
       if (e.key === "Escape") close();
     });
 
-    // Reflect whatever the no-flash script already put on <html>.
+    // Read back what the no-flash script set on <html>.
     applyTheme(root.getAttribute("data-theme") || "ink");
     applyFont(root.getAttribute("data-font") || "inter");
   })();

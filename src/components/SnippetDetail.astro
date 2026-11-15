@@ -1,10 +1,4 @@
 ---
-/**
- * <SnippetDetail /> — a single snippet's page body: breadcrumb trail, header,
- * content, tags, optional gallery/TOC. Shared by the three detail routes
- * (groupless, grouped, subgrouped) — only the breadcrumb chain and the
- * back/tag-filter target differ per depth.
- */
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import TableOfContents from "./TableOfContents.astro";
@@ -21,9 +15,9 @@ export interface Crumb {
 }
 interface Props {
   entry: CollectionEntry<"snippets">;
-  crumbs: Crumb[]; // category [, group [, subgroup]], in order
-  listHref: string; // immediate parent listing — back link + tag ?tag= target
-  backLabel?: string; // unused — breadcrumbs now carry the way back
+  crumbs: Crumb[]; // category, then group, then subgroup (when they exist)
+  listHref: string; // parent listing, used for the back link and ?tag= links
+  backLabel?: string; // unused, breadcrumbs cover it
 }
 const { entry, crumbs, listHref } = Astro.props;
 const { title, description, pubDate, lang, tags, gallery, source } = entry.data;

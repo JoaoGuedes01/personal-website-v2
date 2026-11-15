@@ -1,10 +1,4 @@
-/**
- * Blog series. A post joins a series with two frontmatter fields:
- * 
- *   series: "homelab"
- *   part: 3
- * 
- */
+// Blog series. A post joins one with frontmatter: series: "homelab" and part: 3
 export interface SeriesDef {
   title: string;
   blurb: string;

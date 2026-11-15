@@ -1,13 +1,4 @@
 ---
-/**
- * <TechIcon /> — bare icon for one technology, resolved via resolveTech()
- * (src/data/tech.ts): your own SVG override, then a simple-icons logo, then
- * a generic group-icon fallback. No label — for a labelled chip, see
- * <TechBadge />, which renders this plus the tech's name.
- *
- *   <TechIcon tech="React" />
- *   <TechIcon tech={resolved} size={16} />
- */
 import { resolveTech, type ResolvedTech } from "../data/tech";
 
 interface Props {

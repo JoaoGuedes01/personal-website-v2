@@ -1,12 +1,4 @@
-// ---------------------------------------------------------------------------
-// PAGINATION
-//
-// A tiny, framework-free paginator. Page 1 lives at the base URL (e.g. /blog);
-// pages 2..N live at <base>/page/2, /page/3, … The `pageHref` helper builds
-// those URLs so the <Pagination /> component and getStaticPaths agree.
-//
-// Change PAGE_SIZE to taste (or pass a custom size per call).
-// ---------------------------------------------------------------------------
+// Page 1 lives at the base URL (/blog), the rest at <base>/page/N.
 
 export const PAGE_SIZE = 9;
 
@@ -20,7 +12,6 @@ export interface Page<T> {
   hasNext: boolean;
 }
 
-/** Slice `items` for a given 1-based page number. */
 export function paginate<T>(items: T[], current: number, size = PAGE_SIZE): Page<T> {
   const count = items.length;
   const total = Math.max(1, Math.ceil(count / size));
@@ -37,7 +28,7 @@ export function paginate<T>(items: T[], current: number, size = PAGE_SIZE): Page
   };
 }
 
-/** Page numbers 2..total — feed to getStaticPaths for the /page/[page] route. */
+// 2..total, for getStaticPaths
 export function extraPageNumbers<T>(items: T[], size = PAGE_SIZE): number[] {
   const total = Math.max(1, Math.ceil(items.length / size));
   const out: number[] = [];
@@ -45,12 +36,7 @@ export function extraPageNumbers<T>(items: T[], size = PAGE_SIZE): number[] {
   return out;
 }
 
-/**
- * Build the href for a page within a list.
- *   pageHref("/blog", 1) → "/blog"
- *   pageHref("/blog", 3) → "/blog/page/3"
- * `base` should already be run through href() by the caller.
- */
+// pageHref("/blog", 3) -> "/blog/page/3". base should already go through href().
 export function pageHref(base: string, page: number): string {
   if (page <= 1) return base;
   const trimmed = base.endsWith("/") ? base.slice(0, -1) : base;

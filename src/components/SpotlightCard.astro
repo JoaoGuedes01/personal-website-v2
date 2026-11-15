@@ -1,9 +1,4 @@
 ---
-/**
- * <SpotlightCard /> — the "Featured" card. Deliberately unlike the list cards:
- * the cover is the whole card, with the text set on a dark gradient over it
- * (magazine-cover style). No cover → the topic-tinted gradient fills the card.
- */
 import { Image } from "astro:assets";
 import { slugify } from "../data/taxonomy";
 import { tileGradient } from "../utils/tile";
@@ -42,8 +37,6 @@ const dateStr = date.toLocaleDateString("en-US", { year: "numeric", month: "shor
       />
     )
   }
-  <!-- Scrim: a flat dim over the whole image plus a strong gradient under the text,
-       so white type stays readable on bright or busy covers. -->
   <div class="absolute inset-0 -z-10 bg-black/25"></div>
   <div class="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/65 to-transparent"></div>
 

@@ -1,11 +1,5 @@
 ---
-/**
- * A whole series as one Featured card (the series stands in for all its parts).
- * The card body opens part 1. A "Parts" tab at the top right (closed by default,
- * plain <details>, no JS) slides open a panel listing every part; unpublished
- * parts show greyed out. Opening slides the panel in (CSS transition, honours
- * reduced motion); Escape, tapping the dimmed card, or swiping right closes it.
- */
+/** One Featured card for a whole series. A checkbox (not <details>, which can't animate closing) toggles the parts panel; the script only adds Escape and swipe-to-close. */
 import SpotlightCard from "./SpotlightCard.astro";
 import { readingTime } from "../utils/reading";
 import { href } from "../data/site";
@@ -24,7 +18,7 @@ const minutes = parts.reduce((sum, p) => sum + readingTime(p.body).minutes, 0);
 const newest = parts.reduce((a, b) => (b.data.pubDate > a.data.pubDate ? b : a));
 const withCover = parts.find((p) => p.data.cover);
 
-// Most-used tags across the parts, so the card reads like the series, not one post.
+// Top tags across all parts.
 const counts = new Map<string, number>();
 for (const p of parts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
 const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 4).map(([t]) => t);
@@ -55,8 +49,6 @@ const chips = Array.from({ length: item.total }, (_, i) => {
   large={large}
 >
   <div slot="aside" class="parts-card group">
-    <!-- Checkbox + labels: opens/closes with no JS, and both directions animate with plain CSS transitions.
-         (A <details> element can't animate closing.) The tiny script below only adds Escape and swipe-to-close. -->
     <input type="checkbox" id={panelId} class="peer sr-only" aria-label={`Show the parts of the ${item.title} series`} />
 
     <label
@@ -70,7 +62,6 @@ const chips = Array.from({ length: item.total }, (_, i) => {
       </svg>
     </label>
 
-    <!-- Scrim: tapping the dimmed card closes the panel instead of following the card's link. -->
     <label
       for={panelId}
       aria-hidden="true"

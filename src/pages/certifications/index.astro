@@ -15,7 +15,7 @@ const certs = (await getCollection("certifications"))
       a.data.name.localeCompare(b.data.name),
   );
 
-// Providers present, in first-seen order, with counts.
+// providers in first-seen order, with counts
 const providers: string[] = [];
 for (const c of certs) if (!providers.includes(c.data.issuer)) providers.push(c.data.issuer);
 const counts = Object.fromEntries(

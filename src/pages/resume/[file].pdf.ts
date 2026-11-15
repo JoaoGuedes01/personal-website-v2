@@ -1,10 +1,5 @@
-/**
- * The generated CV. Three PDFs are built from src/data/cv/:
- *
- *   /resume/joaoguedes_cv.pdf         the one the site links to (cv.md's `use:` picks manual or auto)
- *   /resume/joaoguedes_cv-manual.pdf  cv.md   (your words; {{placeholders}} pull live site data)
- *   /resume/joaoguedes_cv-auto.pdf    cv.auto.md (nothing but placeholders)
- */
+// Builds three PDFs from src/data/cv/: the default (cv.md's `use:` picks manual or auto),
+// -manual (cv.md) and -auto (cv.auto.md)
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
 import manualSrc from "../../data/cv/cv.md?raw";

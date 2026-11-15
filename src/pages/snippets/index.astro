@@ -11,7 +11,7 @@ import { snippetGroupInfo, snippetSubgroupInfo } from "../../data/snippetGroups"
 const snips = (await getCollection("snippets")).filter((s) => !s.data.draft);
 const total = snips.length;
 
-// Categories that actually have snippets, in taxonomy order.
+// only categories that have snippets
 const categories = SNIPPET_CATEGORIES.map((cat) => ({
   href: href(`/snippets/${cat.slug}`),
   icon: cat.icon,
@@ -20,11 +20,11 @@ const categories = SNIPPET_CATEGORIES.map((cat) => ({
   count: snips.filter((s) => s.data.category === cat.label).length,
 })).filter((c) => c.count > 0);
 
-// Global fuzzy-search across every snippet, regardless of class/group.
+// fuzzy search over all snippets
 const searchItems = snips.map((s) => {
   const { group, subgroup } = snippetPath(s);
   const cat = snippetCategorySlug(s.data.category);
-  // Human labels for the path line (search still matches on them too).
+  // labels for the path line, also searchable
   const path = [
     s.data.category,
     group && snippetGroupInfo(cat, group).label,
