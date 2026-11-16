@@ -11,9 +11,9 @@ cover: ./img/keeping-it-alive/cover.webp
 coverAlt: "The Proxmox Backup Server logo: an orange and black X mark next to the words Proxmox Backup Server."
 gallery:
   - { src: ./img/keeping-it-alive/status-page.webp, alt: "The public status page showing Jellyfin, Navidrome, Seerr and Pi-hole DNS all at 100 percent.", caption: "The public status page." }
-  - { src: ./img/keeping-it-alive/telegram-jarvis.webp, alt: "A Telegram chat with the Jarvis bot showing a setup confirmation and a daily digest of disk, ZFS and host health.", caption: "Jarvis and the daily digest." }
-  - { src: ./img/keeping-it-alive/install.webp, alt: "Terminal output of the monitoring script's install and verification steps, all marked OK, ending with 65 OK and 0 failures.", caption: "The end of an --apply run: install, verify, and a test message to Telegram." }
-  - { src: ./img/keeping-it-alive/verify.webp, alt: "Terminal output of the monitoring script's verify mode with 19 checks passing.", caption: "--verify on its own: 19 OK, 0 failures." }
+  - { src: ./img/keeping-it-alive/discord-digest.webp, alt: "A Discord channel with three cards from the Jarvis app: a monitoring installed confirmation, a Proxmox test notification and a daily digest of disks, ZFS, CPU, containers and memory.", caption: "Jarvis in Discord: the setup confirmation, a Proxmox test and the daily digest." }
+  - { src: ./img/keeping-it-alive/discord-recovered.webp, alt: "A red critical card saying a container is not running, with a next step to start it, followed by a green card saying it recovered.", caption: "A critical alert and its recovery. I stopped a container on purpose to test it." }
+  - { src: ./img/keeping-it-alive/apply.webp, alt: "Terminal output of the monitoring script's install and verification steps, all marked OK, ending with 62 OK and 0 failures.", caption: "The end of an --apply run: install, verification and test messages to Discord." }
   - { src: ./img/keeping-it-alive/smart-sata.webp, alt: "SMART values of a SATA drive with zero error counters.", caption: "SMART values for one of the data drives." }
   - { src: ./img/keeping-it-alive/smart-nvme.webp, alt: "SMART health information of the NVMe system drive.", caption: "The NVMe system drive, 1% worn." }
   - { src: ./img/keeping-it-alive/zfs-pool.webp, alt: "ZFS pool status with a healthy mirror and a clean scrub.", caption: "The ZFS pool after the last scrub." }
@@ -94,11 +94,13 @@ On the media pool, ZFS keeps its own watch. A monthly **scrub** reads every bloc
 Two habits are worth having:
 
 - **Run a short test often and a long one less often.** The quick test catches sudden problems and the long surface scan catches the slow ones. Weekly and monthly is a good rhythm, and a daily quick test is cheap if you want to tighten it.
-- **Get told when something's wrong.** A health check you don't read is useless, so make sure a warning reaches your phone. Mine arrive on Telegram.
+- **Get told when something's wrong.** A health check you don't read is useless, so make sure a warning reaches your phone. Mine arrive on Discord.
 
 ## Monitoring
 
-I don't run a heavy monitoring stack, and I don't think a lab like mine needs one, at least for now. I have three monitoring layers that report back to me through my Telegram bot **Jarvis**.
+I don't run a heavy monitoring stack, and I don't think a lab like mine needs one, at least for now. I have three monitoring layers that report back to me in a Discord channel, through a webhook I named **Jarvis**.
+
+I use Discord because I like it a lot as a developer and because a webhook doesn't need a bot to maintain. It also supports rich messages, which is what makes the alerts below easy to read. I used a Telegram bot before, and moving over is part of why the scripts are written the way they are, more on that at the end.
 
 | Layer | Purpose |
 | --- | --- |
@@ -110,7 +112,7 @@ Proxmox's own graphs are still the first place I look when something feels slow,
 
 ### Uptime Kuma
 
-Uptime Kuma checks every service once a minute and retries twice before it believes something is down. It uses the check that fits each service: a ping for a machine, a health endpoint for a web app, an open-port test for something with no web page, and a real DNS lookup through Pi-hole to prove that name resolution works, not just that the container is up. If any of these checks fail I'll get a notification through Jarvis.
+Uptime Kuma checks every service once a minute and retries twice before it concludes that something is down. It uses the check that fits each service: a ping for a machine, a health endpoint for a web app, an open-port test for something with no web page, and a real DNS lookup through Pi-hole to prove that name resolution works, not just that the container is up. If any of these checks fail, a message lands in that same Discord channel.
 
 Kuma can also publish **status pages**, and I use two. The **public** one shows only the handful of services other people use, in three groups: Streaming, Requests and Network. The **internal** one shows everything and is reachable only from inside the house. Each page lists its monitors by name, so nothing appears publicly by accident.
 
@@ -122,11 +124,11 @@ Kuma can also publish **status pages**, and I use two. The **public** one shows 
 
 Uptime Kuma can tell me a service is down but it can't tell me a disk is slowly dying, a pool is getting full or a scrub has been skipped. For that I have one script, run on the Proxmox host, that sets everything up in one go:
 
-- **`smartd`** is configured from the live list of disks, with the quick and long tests described above, and its alerts go to Telegram.
+- **`smartd`** is configured from the live list of disks, with the quick and long tests described above, and its alerts go to Discord.
 - **A ZFS event hook** forwards the events that matter, like scrubs starting and finishing, state changes and I/O failures.
 - **A health check every 10 minutes** looks at the things in the table below.
 - **A daily digest at 08:00** sends one summary message, so I see the lab's vitals every day.
-- **A Proxmox notification target** sends Proxmox's own notifications, such as a failed backup job, to the same bot through a webhook.
+- **A Proxmox notification target** sends Proxmox's own notifications, such as a failed backup job, to the same channel through a webhook target.
 
 | Area | What it watches |
 | --- | --- |
@@ -136,11 +138,17 @@ Uptime Kuma can tell me a service is down but it can't tell me a disk is slowly 
 | Host | CPU temperature, full thin pool or root filesystem, swap, low memory |
 | Services | Containers that aren't running, failed system services, `smartd` or the ZFS event service not running |
 
-The health check is built not to nag. It tells me **once** when a problem appears, reminds me **every 24 hours** while it's still broken and tells me when it **recovers**.
+Every alert is a Discord card with a coloured bar for its severity: red for critical, orange for warning, green for ok and blue for information. The top line gives the severity and the area (such as `CRITICAL · HOST HEALTH`) then comes a title, a short subtitle, a few fields (any percentage gets a small bar) and, when there is any action to be taken, a **Next step** line with the command to run.
 
-![A Telegram chat with the Jarvis bot: a confirmation that monitoring setup finished, followed by a daily digest showing the ZFS pool, the drives' health, temperatures and wear, the thin pool, CPU temperature and the containers running.](./img/keeping-it-alive/telegram-jarvis.webp)
+![A red critical card saying a container is not running, with a next step to start it, followed by a green card saying it recovered.](./img/keeping-it-alive/discord-recovered.webp)
 
-*The daily digest. Everything I'd want to know on a good day.*
+*A critical alert and its recovery. I stopped Jellyfin on purpose to test it.*
+
+The health check is built not to nag. It tells me **once** when a problem appears, reminds me **every 24 hours** while it's still broken, as "Still broken", and sends a green card when it **recovers**, with how long it was down. The 0 minutes above is because I started the container again straight away.
+
+![A Discord channel with three cards from the Jarvis app, a monitoring installed confirmation, a Proxmox test notification and a daily digest of disks, ZFS, CPU, containers and memory.](./img/keeping-it-alive/discord-digest.webp)
+
+*Jarvis in Discord: the setup confirmation, a Proxmox test and the daily digest. Everything I'd want to know on a good day.*
 
 ### Who watches the watchmen?
 
@@ -150,15 +158,16 @@ That covers the script dying, but it has the same limit as everything else here 
 
 ### Setting it up, and setting it up again
 
-The scripts are what let me rebuild all of this without remembering how. The Telegram token never goes on a command line: the host script reads it from a protected file and the Kuma script takes it from the environment. All three scripts **do nothing unless told to**:
+The scripts are what let me rebuild all of this without remembering how. The Discord webhook URL is a secret, because anyone who has it can post in my channel. It lives in a file only root can read, and the scripts never put it on a command line. The host script reads it from that file and the Kuma script takes it from the environment. There are five scripts, and every one of them **does nothing unless told to**:
 
-- **The host script** runs a **dry run** by default. It checks the system, the Telegram bot and its generated files, shows its plan and says READY or NOT READY. Adding `--apply` backs up the old setup, installs the new one, verifies it and **rolls back** if anything fails. Re-running it at any time recreates the same setup, `--verify` checks an existing install and `--uninstall` removes everything it added.
-- **The Kuma script** also dry-runs first, then creates the Telegram notification, the monitors and the heartbeat monitors, and prints the heartbeat addresses to put in the host script's settings.
+- **The host script** runs a **dry run** by default. It checks the system, the Discord webhook (with a read-only request) and its generated files, shows the plan and says READY or NOT READY. Adding `--apply` backs up the old setup, installs the new one, verifies it and **rolls back** if anything fails. Re-running it at any time recreates the same setup, `--verify` checks an existing install and `--uninstall` removes everything it added.
+- **The host cleanup script** exists because I moved from Telegram to Discord. It finds everything the earlier versions installed, backs it up, removes it and moves the webhook into the new settings file, so the setup script always starts from a clean host. On a host that is already clean it says so and does nothing.
+- **The Kuma script** also dry-runs first, then creates the Discord notification, the monitors and the heartbeat monitors, and prints the heartbeat addresses to put in the host script's settings. A small companion script removes the old Telegram notification from Kuma.
 - **The status page script** creates the two pages from lists of monitor names.
 
-![The verification output of the monitoring script: 19 checks, all OK, with zero warnings and zero failures.](./img/keeping-it-alive/verify.webp)
+![Terminal output of the end of an apply run: the install steps and the verification checks all marked OK, ending with 62 OK, 0 warnings and 0 failures.](./img/keeping-it-alive/apply.webp)
 
-*`--verify`: every file, service and connection checked, 19 OK and 0 failures.*
+*The end of an `--apply` run: install, verification and the test messages to Discord, 62 OK and 0 failures.*
 
 :::tip[Write down what your scripts do]
 If you automate something, put the *why* next to it. A year from now, "what does this script do and what happens if I run it twice?" should have an answer you wrote down. I wrote it here, in the post, for exactly that reason.
