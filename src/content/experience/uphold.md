@@ -18,8 +18,8 @@ highlights:
 cv:
   type: "Full Time"
   bullets:
-    - "Own the GraphQL API behind Manager Tool, the internal platform account agents use to monitor and manage client accounts, shipping new account features end to end."
-    - "Design role-based access control and audit logging for sensitive agent actions, and extend shared backend services over gRPC when the data isn't exposed."
+    - "Own the GraphQL API behind Manager Tool, the internal platform account agents use to monitor and manage client accounts, and ship its new account features."
+    - "Design role-based access control and audit logging for sensitive agent actions, and extend shared backend services over gRPC when the data is not exposed."
     - "Work across a microservices stack of JavaScript, GraphQL and gRPC with PostgreSQL, NSQ and Temporal, running on Kubernetes."
     - "Act as the team's security point of contact: triage security reports on our applications, fix code gaps and harden agent permissions."
     - "Built internal developer tooling: a port-forward manager that keeps 10+ Kubernetes forwards alive, an environment synchronizer and a code generator for repetitive code."

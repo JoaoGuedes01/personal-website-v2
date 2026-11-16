@@ -18,8 +18,8 @@ cv:
   bullets:
     - "Ensured quality and reliability of the company's SAST engine through testing and developing internal tools."
     - "Built full-stack applications and platforms (Node.js, Go, Python, React) to visualize test coverage and source code diffs."
-    - "Maintained large code bases and existing projects in Java Spring and C# .Net"
-    - "Automated CI/CD pipelines in Jenkins and GitHub Actions to streamline validation and deployment."
+    - "Maintained large code bases and existing projects in Java Spring and C# .Net."
+    - "Automated CI/CD pipelines in Jenkins and GitHub Actions for validation and deployment."
     - "Authored end-to-end tests in Cypress and standardized QA workflows for engineering teams."
     - "Designed Power BI dashboards for visibility into test metrics and performance trends."
 

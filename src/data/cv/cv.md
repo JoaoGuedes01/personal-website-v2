@@ -15,11 +15,11 @@ fit: one-page      # one-page = shrink the font until it fits, flow = let it run
 
 ## Technical Experience
 - Full-Stack Development: 6+ years building production-grade systems using Node.js, Express, Go (Gin), Python (Flask), Java (Spring Boot), and React.
-- Security: Practical experience in AppSec, SAST, vulnerability analysis, pentesting and security breakdown. Familiar with OWASP methodologies and offensive tools (Burp Suite, ZAP, Nmap, Metasploit).
+- Security: Practical experience in AppSec, SAST, vulnerability analysis, pentesting and threat modeling. Familiar with OWASP methodologies and offensive tools (Burp Suite, ZAP, Nmap, Metasploit).
 - APIs & Protocols: 6+ years building REST, GraphQL, gRPC APIs, experience with WebSockets, and low-level networking protocols (HTTP, TCP/UDP, DNS, SSH, SMB, RDP).
 - DevOps & Infrastructure: Experienced with Docker, Docker Compose, Nginx, Traefik, Jenkins, GitHub Actions, and Linux-based production environments.
-- Databases: MongoDB, PostgreSQL, MySQL, DynamoDB — with experience designing indexes, aggregation pipelines, and caching strategies.
-- Automation & Data Analysis: Extensive use of Python, Power BI, and Excel for reporting, analytics, and operational intelligence.
+- Databases: MongoDB, PostgreSQL, MySQL, DynamoDB, with experience designing indexes, aggregation pipelines, and caching strategies.
+- Automation & Data Analysis: Extensive use of Python, Power BI, and Excel for reporting and data analysis.
 - System Administration: Self-hosted infrastructure (Home Server) with Proxmox as hypervisor, a NAS, Docker containers for apps, Nginx for reverse proxy, DNS server for resolving internal hostnames and VPN for remote access.
 - Version Control: 6+ years of Git experience across GitHub, GitLab, and enterprise CI/CD integrations.
 - Secure Coding Practices: Knowledge of authentication, access control, encryption, and secure data handling.
@@ -35,7 +35,7 @@ fit: one-page      # one-page = shrink the font until it fits, flow = let it run
 **Frameworks/Libraries:** Express, Koa, Apollo GraphQL, React, Flask, Django, Spring Boot, Gin, ASP.NET, Pandas, Jupyter, Matplotlib
 **Databases:** MongoDB, PostgreSQL, MySQL, DynamoDB, Redis, SQLite, Elasticsearch
 **DevOps & Tools:** Docker, Kubernetes, Nginx, Traefik, Jenkins, GitHub Actions, Linux, PowerShell, Bash, Proxmox, Azure DevOps, RabbitMQ
-**Security:** SAST, DAST, IAC, SCA, AppSec, Pentesting (Burp, ZAP, Nmap, Metasploit), Secure Coding, OWASP Top 10
+**Security:** SAST, DAST, IaC, SCA, AppSec, Pentesting (Burp, ZAP, Nmap, Metasploit), Secure Coding, OWASP Top 10
 **Networking:** TCP/IP, VPNs (OpenVPN, Tailscale), DNS, Reverse Proxies, Load Balancing, Firewalls
 **Other:** REST, GraphQL, gRPC, NSQ, Temporal, WebSockets, Git, Power BI, Excel Automation, AWS
 **Spoken Languages:** Portuguese (Native), English (Fluent)
