@@ -14,7 +14,7 @@ import { href, site } from "../../data/site";
 import { resolveTech, TECH_GROUPS } from "../../data/tech";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const projects = (await getCollection("projects")).filter((p) => !p.data.draft);
   return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 

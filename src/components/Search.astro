@@ -66,16 +66,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     const els = items();
     if (!els.length) return;
     active = (i + els.length) % els.length;
-    els.forEach((el, n) => el.parentElement!.toggleAttribute("data-active", n === active));
+    els.forEach((el, n) => {
+      el.parentElement!.toggleAttribute("data-active", n === active);
+      el.parentElement!.setAttribute("aria-selected", String(n === active));
+    });
+    input.setAttribute("aria-activedescendant", els[active].parentElement!.id);
     els[active].scrollIntoView({ block: "nearest" });
   }
 
   function render(rows: { url: string; title: string; type: string; excerpt: string }[]) {
     list.replaceChildren();
     active = -1;
+    input.removeAttribute("aria-activedescendant");
     for (const r of rows) {
       const li = document.createElement("li");
       li.setAttribute("role", "option");
+      li.id = `search-opt-${list.children.length}`;
       const a = document.createElement("a");
       a.href = r.url;
       a.className = "search-hit";

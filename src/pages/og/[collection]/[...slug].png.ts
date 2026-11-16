@@ -19,7 +19,7 @@ export const getStaticPaths = (async () => {
         props: { title: e.data.title, kicker: ["Ramblings", e.data.tags[0]].filter(Boolean).join(" · "), subtitle: e.data.description },
       })),
     ...projects
-      .filter((e) => !projectCover(e.id))
+      .filter((e) => !e.data.draft && !projectCover(e.id))
       .map((e) => ({
         params: { collection: "projects", slug: e.id },
         props: { title: e.data.title, kicker: ["Project", e.data.category].filter(Boolean).join(" · "), subtitle: e.data.summary },
