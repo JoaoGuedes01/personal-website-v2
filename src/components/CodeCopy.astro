@@ -1,0 +1,61 @@
+---
+// Adds a "Copy" button to every code block inside .prose. Wrapping happens in the browser
+// so the markdown pipeline stays untouched; the wrapper has no box of its own, so there is no layout shift.
+---
+
+<script>
+  const COPY =
+    '<svg class="code-copy__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+  const CHECK =
+    '<svg class="code-copy__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+  function setState(btn: HTMLButtonElement, state: "idle" | "copied" | "failed") {
+    const label = state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : "Copy";
+    btn.dataset.state = state;
+    btn.innerHTML = (state === "copied" ? CHECK : COPY) + `<span class="code-copy__label">${label}</span>`;
+  }
+
+  async function copyText(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // clipboard API blocked (insecure context, permissions): fall back to a hidden textarea
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  document.querySelectorAll<HTMLPreElement>(".prose pre").forEach((pre) => {
+    if (pre.parentElement?.classList.contains("code-block")) return;
+    const wrap = document.createElement("div");
+    wrap.className = "code-block";
+    pre.replaceWith(wrap);
+    wrap.appendChild(pre);
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "code-copy";
+    btn.setAttribute("aria-label", "Copy code to clipboard");
+    setState(btn, "idle");
+    wrap.appendChild(btn);
+
+    let timer: number | undefined;
+    btn.addEventListener("click", async () => {
+      const text = (pre.querySelector("code") ?? pre).textContent?.replace(/\n$/, "") ?? "";
+      setState(btn, (await copyText(text)) ? "copied" : "failed");
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setState(btn, "idle"), 1800);
+    });
+  });
+</script>

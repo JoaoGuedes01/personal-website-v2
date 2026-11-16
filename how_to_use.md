@@ -15,6 +15,7 @@ and navigation. Everything else is generated from those two at build time.
 - [Projects and roles](#projects-and-roles)
 - [Lists, filters and search](#lists-filters-and-search)
 - [Images and galleries](#images-and-galleries)
+- [Code blocks](#code-blocks)
 - [Callouts](#callouts)
 - [Resume and CV](#resume-and-cv)
 - [Data files](#data-files)
@@ -335,6 +336,17 @@ gallery:
 It renders as a grid with a lightbox that opens on click, moves with the arrow keys or a swipe, and
 closes with Escape. Files that are not content, like the favicon or the social card, go in `public/`
 and are referenced by absolute path.
+
+## Code blocks
+
+Fenced code in any markdown body is highlighted at build time (Shiki, with a light and a dark
+palette that follow the theme). Every block also gets a Copy button in its top-right corner. It
+shows on hover and on keyboard focus, and is always visible on touch screens. It copies the code
+exactly as written, with no line numbers or prompt characters added. Set the language after the
+opening fence, as in ` ```bash `, to get highlighting.
+
+The button comes from `src/components/CodeCopy.astro`, which wraps each `pre` inside `.prose` in the
+browser, so nothing in the markdown needs to change.
 
 ## Callouts
 

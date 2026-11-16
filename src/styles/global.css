@@ -701,3 +701,54 @@ button.chip:hover {
   border-color: var(--color-primary);
   background: color-mix(in oklch, var(--color-primary) 10%, transparent);
 }
+
+/* copy button on code blocks (see CodeCopy.astro) */
+.code-block {
+  position: relative;
+}
+.code-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid color-mix(in oklch, var(--color-base-content) 24%, transparent);
+  border-radius: var(--radius-selector);
+  background: color-mix(in oklch, var(--color-base-100) 90%, transparent);
+  color: color-mix(in oklch, var(--color-base-content) 82%, transparent);
+  font: 500 0.75rem/1 var(--font-sans);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.code-block:hover .code-copy,
+.code-block:focus-within .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+@media (hover: none) {
+  .code-copy {
+    opacity: 1;
+  }
+}
+.code-copy:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.code-copy[data-state="copied"] {
+  opacity: 1;
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+.code-copy[data-state="failed"] {
+  opacity: 1;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+@media print {
+  .code-copy {
+    display: none;
+  }
+}
