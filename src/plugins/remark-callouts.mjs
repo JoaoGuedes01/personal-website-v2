@@ -1,16 +1,31 @@
 // Turns `:::type[Title]` container directives (parsed by remark-directive) into
 // <aside class="callout callout-<type>">. Types live in src/data/callouts.mjs.
 // No [Title] falls back to the type's default label.
-import { visit } from "unist-util-visit";
+import { visit, SKIP } from "unist-util-visit";
 import { toString } from "mdast-util-to-string";
 import { CALLOUTS, resolveType, resolveColor } from "../data/callouts.mjs";
 
 const ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
 const escapeHtml = (s) => s.replace(/[&<>"]/g, (c) => ESCAPES[c]);
 
+// remark-directive also reads stray `:word` as a text directive (the ":00" in 08:00 or "10:30"
+// vanishes) and `::word` as a leaf directive. Only `:::` containers are callouts, so write
+// anything else back as the text it was.
+function directiveSource(node) {
+  const marker = node.type === "textDirective" ? ":" : "::";
+  const label = node.children && node.children.length ? `[${toString(node)}]` : "";
+  const attrs = Object.entries(node.attributes || {}).map(([k, v]) => (v === "" ? k : `${k}=${v}`));
+  return marker + node.name + label + (attrs.length ? `{${attrs.join(" ")}}` : "");
+}
+
 export default function remarkCallouts() {
   return (tree) => {
-    visit(tree, (node) => {
+    visit(tree, (node, index, parent) => {
+      if ((node.type === "textDirective" || node.type === "leafDirective") && parent && index != null) {
+        const text = { type: "text", value: directiveSource(node) };
+        parent.children[index] = node.type === "leafDirective" ? { type: "paragraph", children: [text] } : text;
+        return [SKIP, index + 1];
+      }
       if (node.type !== "containerDirective") return;
 
       const type = resolveType(node.name);
