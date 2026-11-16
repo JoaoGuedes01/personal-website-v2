@@ -17,6 +17,7 @@ and navigation. Everything else is generated from those two at build time.
 - [Images and galleries](#images-and-galleries)
 - [Code blocks](#code-blocks)
 - [Callouts](#callouts)
+- [Share previews](#share-previews)
 - [Resume and CV](#resume-and-cv)
 - [Data files](#data-files)
 - [Themes and typefaces](#themes-and-typefaces)
@@ -376,6 +377,25 @@ To recolour one callout, pass a colour: `:::note{color=accent}` in markdown or `
 the component. It accepts a daisyUI colour name or any CSS colour. To change a type everywhere,
 edit its `.callout-<type>` rule in `src/styles/global.css`. A new type needs an entry in
 `callouts.mjs` and a matching rule in the stylesheet.
+
+## Share previews
+
+Every page sets Open Graph and Twitter tags, so links look right in chats and social posts. Which
+image is used:
+
+- Blog posts and projects with a `cover` use it, cropped to 1200 by 630 and saved as JPEG.
+- Blog posts and projects without a cover, and every snippet, get a generated card with the title,
+  a small label and the description. These are drawn at build time by `src/utils/og.ts` and served at
+  `/og/<blog|projects|snippets>/<id>.png`.
+- Every other page uses `public/og-default.png`.
+
+Blog posts also emit `article` tags (dates, tags) and BlogPosting data; projects, snippets and the
+home page emit their own structured data (JSON-LD). Pass `image`, `imageAlt`, `type`, `published`,
+`modified`, `tags` or `jsonLd` to `BaseLayout` to control this for a new page type.
+
+The card text is turned into vector paths with opentype.js from the Geist files in
+`src/assets/fonts` (SIL OFL, licence included), so it does not depend on fonts installed on the
+build machine. To change the look, edit the colours and layout in `src/utils/og.ts`.
 
 ## Resume and CV
 

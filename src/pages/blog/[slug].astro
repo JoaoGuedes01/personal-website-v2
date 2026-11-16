@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
@@ -11,7 +11,7 @@ import SeriesBox from "../../components/SeriesBox.astro";
 import { buildSeries } from "../../utils/series";
 import { slugify } from "../../data/taxonomy";
 import { readingTime } from "../../utils/reading";
-import { href } from "../../data/site";
+import { href, site } from "../../data/site";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -46,9 +46,36 @@ const series = buildSeries(all, entry);
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+// Share image: the cover cropped to 1200x630, else a generated card.
+const shareImage = cover
+  ? (await getImage({ src: cover, width: 1200, height: 630, fit: "cover", format: "jpg", quality: 82 })).src
+  : `/og/blog/${entry.id}.png`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  image: new URL(shareImage, site.url).toString(),
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  keywords: tags.join(", "),
+  mainEntityOfPage: new URL(href(`/blog/${entry.id}`), site.url).toString(),
+  author: { "@type": "Person", name: site.name, url: site.url },
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  image={shareImage}
+  imageAlt={cover ? coverAlt || title : undefined}
+  published={pubDate}
+  modified={updatedDate ?? pubDate}
+  tags={tags}
+  jsonLd={jsonLd}
+>
   <div id="read-progress" aria-hidden="true" class="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 origin-left scale-x-0 bg-primary"></div>
   <div class:list={["mx-auto px-4 pt-14 sm:px-6 sm:pt-20", hasToc ? "max-w-5xl" : "max-w-3xl"]}>
     <a href={href("/blog")} class="inline-flex items-center gap-1 text-sm text-base-content/64 transition-colors hover:text-primary">

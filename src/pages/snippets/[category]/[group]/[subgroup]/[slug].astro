@@ -35,7 +35,18 @@ const groupHref = href(`/snippets/${catSlug}/${groupSlug}`);
 const listHref = href(`/snippets/${catSlug}/${groupSlug}/${subgroupSlug}`);
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  image={`/og/snippets/${entry.id}.png`}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: entry.data.title,
+    description: entry.data.description,
+    author: { "@type": "Person", name: "João Guedes" },
+  }}
+>
   <SnippetDetail
     entry={entry}
     crumbs={[
