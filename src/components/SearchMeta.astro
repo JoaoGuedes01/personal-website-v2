@@ -1,0 +1,12 @@
+---
+// Marks the wrapping element as the searchable body of a page and tells the search index its
+// type and title. Place it as the first child of the element that holds the entry's content.
+interface Props {
+  title: string;
+  type: "Ramblings" | "Project" | "Snippet";
+}
+const { title, type } = Astro.props;
+---
+
+<span hidden data-pagefind-meta={`title:${title}`}></span>
+<span hidden data-pagefind-meta={`type:${type}`}></span>

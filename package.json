@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
@@ -28,6 +28,7 @@
     "daisyui": "^5.0.0",
     "lucide-static": "^1.28.0",
     "opentype.js": "^1.3.4",
+    "pagefind": "^1.4.0",
     "pdfkit": "^0.20.2",
     "remark-directive": "^4.0.0",
     "sanitize-html": "^2.18.2",

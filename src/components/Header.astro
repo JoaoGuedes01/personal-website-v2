@@ -2,6 +2,7 @@
 import { nav, site, href } from "../data/site";
 import ThemePicker from "./ThemePicker.astro";
 import SystemIcon from "./SystemIcon.astro";
+import Search from "./Search.astro";
 
 const path = Astro.url.pathname;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -53,6 +54,7 @@ function isActive(itemPath: string) {
     </nav>
 
     <div class="flex items-center gap-1">
+      <Search />
       <ThemePicker />
 
       <div class="dropdown dropdown-end lg:hidden">

@@ -3,6 +3,7 @@ import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import TableOfContents from "./TableOfContents.astro";
 import Gallery from "./Gallery.astro";
+import SearchMeta from "./SearchMeta.astro";
 import SystemIcon from "./SystemIcon.astro";
 import { readingTime } from "../utils/reading";
 import { slugify } from "../data/taxonomy";
@@ -81,7 +82,8 @@ const dateStr = pubDate.toLocaleDateString("en-US", { year: "numeric", month: "s
       {hasToc && <TableOfContents headings={headings} variant="mobile" class="mt-6" />}
 
       <div class="mt-8 border-t border-base-300 pt-8">
-        <div class="prose">
+        <div class="prose" data-pagefind-body>
+          <SearchMeta title={entry.data.title} type="Snippet" />
           <Content />
         </div>
       </div>

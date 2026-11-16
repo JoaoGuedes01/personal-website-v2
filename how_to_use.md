@@ -17,6 +17,7 @@ and navigation. Everything else is generated from those two at build time.
 - [Images and galleries](#images-and-galleries)
 - [Code blocks](#code-blocks)
 - [Callouts](#callouts)
+- [Search](#search)
 - [Share previews](#share-previews)
 - [Resume and CV](#resume-and-cv)
 - [Data files](#data-files)
@@ -377,6 +378,23 @@ To recolour one callout, pass a colour: `:::note{color=accent}` in markdown or `
 the component. It accepts a daisyUI colour name or any CSS colour. To change a type everywhere,
 edit its `.callout-<type>` rule in `src/styles/global.css`. A new type needs an entry in
 `callouts.mjs` and a matching rule in the stylesheet.
+
+## Search
+
+The magnifier in the header (or Ctrl+K, Cmd+K on a Mac) opens a search overlay over the full text of
+projects, snippets and ramblings. Arrow keys move through the results, Enter opens one, Esc closes.
+
+It is [Pagefind](https://pagefind.app): `npm run build` runs `astro build` and then
+`pagefind --site dist`, which writes a small index to `dist/pagefind`. The browser loads the index
+only when the overlay is first opened, in chunks, so nothing is downloaded on a normal page view.
+There is no server and no external service. It does not work under `npm run dev`, because the index
+only exists after a build; use `npm run build && npm run preview` to try it.
+
+What gets indexed is decided in the page templates. Only an element marked `data-pagefind-body` is
+searched, and the blog, project and snippet templates mark the markdown body. Listing pages, the
+resume and the about page are left out on purpose. A page type is added by putting
+`<SearchMeta title=... type=... />` inside such an element, which sets the title and the label
+shown next to each result.
 
 ## Share previews
 

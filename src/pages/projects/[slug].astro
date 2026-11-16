@@ -6,6 +6,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Gallery from "../../components/Gallery.astro";
 import SystemIcon from "../../components/SystemIcon.astro";
+import SearchMeta from "../../components/SearchMeta.astro";
 import TechBadge from "../../components/TechBadge.astro";
 import { readingTime } from "../../utils/reading";
 import { projectCover } from "../../utils/covers";
@@ -172,7 +173,8 @@ const jsonLd = {
         {hasToc && <TableOfContents headings={headings} variant="mobile" class="mt-6" />}
 
         <div class="mt-8 border-t border-base-300 pt-8">
-          <div class="prose">
+          <div class="prose" data-pagefind-body>
+            <SearchMeta title={title} type="Project" />
             <Content />
           </div>
         </div>
