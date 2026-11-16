@@ -9,7 +9,7 @@ summary: "During my summer internship at Checkmarx, I joined the QA development 
 highlights:
   - "Monitoring and maintaining automation pipelines"
   - "Quality partner of SAST engine teams reviewing work items and their regressions"
-  - "Maintain and iterate leagacy regression detection software"
+  - "Maintain and iterate legacy regression detection software"
   - "Building new automation software and workflows for the QA department"
 cv:
   type: "Internship"

@@ -15,7 +15,7 @@ year: 2023
 gallery:
   - { src: ./img/doppelganger/dash.png, alt: "Dashboard Image", caption: "The dashboard." }
   - { src: ./img/doppelganger/config.png, alt: "Config Image", caption: "Configuring the engine." }
-  - { src: ./img/doppelganger/config-project.png, alt: "Config per project Image", caption: "The engine can also be ocnfigured per projects instead of gloablly." }
+  - { src: ./img/doppelganger/config-project.png, alt: "Config per project Image", caption: "The engine can also be configured per projects instead of globally." }
   - { src: ./img/doppelganger/project.png, alt: "Project Image", caption: "The project overview with all project scan information." }
   - { src: ./img/doppelganger/results.png, alt: "Results Image", caption: "The project scan results." }
   - { src: ./img/doppelganger/history.png, alt: "History Image", caption: "The project scan history." }

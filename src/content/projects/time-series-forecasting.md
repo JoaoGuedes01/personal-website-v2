@@ -15,8 +15,8 @@ demo: "https://guedes.shinyapps.io/shiny/"
 video: "https://www.youtube.com/watch?v=5QNv2cpboyg&t=132s"
 year: 2022
 gallery:
-  - { src: ./img/time-series-forecasting/dash.png, alt: "Dashboard Image", caption: "The shiny app homepage and dashboard where users can test and see the results of the forecast and optimiazation." }
-  - { src: ./img/time-series-forecasting/prediction.png, alt: "Preditcion Image", caption: "The prediction tab displays the crude predictions of how many people will visit the mall in the target week." }
+  - { src: ./img/time-series-forecasting/dash.png, alt: "Dashboard Image", caption: "The shiny app homepage and dashboard where users can test and see the results of the forecast and optimization." }
+  - { src: ./img/time-series-forecasting/prediction.png, alt: "Prediction Image", caption: "The prediction tab displays the crude predictions of how many people will visit the mall in the target week." }
   - { src: ./img/time-series-forecasting/forecast.png, alt: "Forecast Image", caption: "This tab plot the forecast." }
   - { src: ./img/time-series-forecasting/data.png, alt: "Data Image", caption: "This tab displays all the data we were given and allows users to explore it." }
   - { src: ./img/time-series-forecasting/eda.png, alt: "EDA Image", caption: "The EDA tab contains all our EDA process, results and insights." }

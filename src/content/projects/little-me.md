@@ -26,13 +26,13 @@ gallery:
 **Little Me** started as an ambitious standalone indie game intended for a commercial release on Steam. As development progressed, the scope and direction evolved, and it ultimately found a much more meaningful purpose as it was completely repurposed and customized as a unique, playable birthday gift for a close friend.
 
 ## The Original Vision
-The game was supposed to be a reflection on how a child sees the world full of wonder and mysterie but also full of scary things and danger. This would allow me to experiment a lot with the design and look of the game as well as the enimies and settings. It was supposed to be a 2d platformer explorer akin to Thomas Brush's incredible [Pinstripe](https://store.steampowered.com/app/331480/Pinstripe/) where the player could explore around and slowly uncover the mysteries underneath.
+The game was supposed to be a reflection on how a child sees the world full of wonder and mystery but also full of scary things and danger. This would allow me to experiment a lot with the design and look of the game as well as the enemies and settings. It was supposed to be a 2d platformer explorer akin to Thomas Brush's incredible [Pinstripe](https://store.steampowered.com/app/331480/Pinstripe/) where the player could explore around and slowly uncover the mysterys underneath.
 
 When I set out to build the game for Steam, the main technical focus was on:
 *   Building a robust player controller.
 *   Designing scalable level architecture.
 *   Implementing save states and progression systems.
-*   Develop a compeling story and game structure
+*   Develop a compelling story and game structure
 
 ## Hurdles and Pivoting
 As I was developing everything I saw myself drifting away from the original vision and focusing more on technical matters such as render distance and camera controls on the technical side or even Inverse Kinematics and character/scenery design which are all very interesting but they really took me out of the Little Me development mindset. I still was very interested in this project but the interest started shifting from Little Me itself and more to the engineering part of developing a video game. I started to think that this would be too ambitious a project as my first big video game project so slowly I started losing interest and stopped development altogether.
@@ -43,7 +43,7 @@ Transforming a commercial project into a personal gift required stripping out ge
 
 ### Key Customizations:
 1. **The Protagonist:** Re-sprited the main character to resemble my friend.
-2. **Inside Jokes as Mechanics:** The main goal of the game shifted to shooting gamer enimies with rubik's cubes out of a bazooka
+2. **Inside Jokes as Mechanics:** The main goal of the game shifted to shooting gamer enemies with rubik's cubes out of a bazooka
 3. **The Final Level:** Designed a specific ending sequence that delivered the actual birthday message.
 
 ## Technical Implementation

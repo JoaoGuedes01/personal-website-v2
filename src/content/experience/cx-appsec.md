@@ -5,11 +5,11 @@ start: "2024"
 end: "2026"
 location: "Braga, Portugal"
 tags: ["Application Security", "Security", "Pentesting", "Research", "Static Analysis", "Data Science", "Reporting", "Software Engineering", "Automation"]
-summary: "I joined the AppSec department where I was responsible for conducting assessments and analysis on vairous engines and perform research work on new queries and vulnerability detection methods. I also pioneered and led the internal tools and platforms effort in this department thanks to my experience in software development and systme design"
+summary: "I joined the AppSec department where I was responsible for conducting assessments and analysis on various engines and perform research work on new queries and vulnerability detection methods. I also pioneered and led the internal tools and platforms effort in this department thanks to my experience in software development and system design"
 highlights:
   - "Performed a lot of security analysis work on static code and engine results"
   - "Research on new vulnerabilities for new queries and detection methods"
-  - "Started development on intneral tools and software for the AppSec department"
+  - "Started development on internal tools and software for the AppSec department"
   - "Designed, developed and delivered result comparison project C-LAB"
 cv:
   type: "Full Time"

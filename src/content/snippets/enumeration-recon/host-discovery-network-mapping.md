@@ -1,6 +1,6 @@
 ---
 title: "Host discovery & network mapping workflow"
-description: "The recon sequence that is in the beggining of any penetration test."
+description: "The recon sequence that is in the beginning of any penetration test."
 pubDate: 2026-08-01
 category: "Cybersecurity"
 source: "INE Certification"

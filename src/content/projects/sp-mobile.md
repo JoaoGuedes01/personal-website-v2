@@ -20,7 +20,7 @@ gallery:
   - { src: ./img/sp-mobile/admin.png, alt: "Admin Image", caption: "The admin panel with track listings." }
   - { src: ./img/sp-mobile/race.png, alt: "Race Image", caption: "Creating a new race." }
   - { src: ./img/sp-mobile/race-approval.png, alt: "Race Approval Image", caption: "Approving a newly created race on the Federation side." }
-  - { src: ./img/sp-mobile/promotings.png, alt: "Promotings Image", caption: "Listing of event promotions by Webcelos." }
+  - { src: ./img/sp-mobile/promotings.png, alt: "Promotions Image", caption: "Listing of event promotions by Webcelos." }
   - { src: ./img/sp-mobile/championships.png, alt: "Championships Image", caption: "Listing of championships." }
   - { src: ./img/sp-mobile/sp-championships.png, alt: "SP Championships Image", caption: "Listing of championships on SP Mobile platform." }
   - { src: ./img/sp-mobile/social-media-automation.png, alt: "Social Media Automation Image", caption: "Promoting a race automatically on social media." }

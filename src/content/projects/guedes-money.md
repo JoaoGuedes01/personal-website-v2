@@ -16,7 +16,7 @@ gallery:
   - { src: ./img/guedes-money/version.png, alt: "Package Version Image", caption: "Printing out the currently installed version of GuedesMoney." }
   - { src: ./img/guedes-money/help.png, alt: "Package Help Image", caption: "Listing all features of GuedesMoney with --help command flag." }
   - { src: ./img/guedes-money/config.png, alt: "Config Image", caption: "Printing out non-sensitive config information (omitting password)." }
-  - { src: ./img/guedes-money/login.png, alt: "Login Image", caption: "Log in to your Portal das Financas account based on GuedesMoney config." }
+  - { src: ./img/guedes-money/login.png, alt: "Login Image", caption: "Log in to your Portal das Finanças account based on GuedesMoney config." }
   - { src: ./img/guedes-money/email.png, alt: "Email Image", caption: "Getting emails with run outcomes after running GuedesMoney." }
   - { src: ./img/guedes-money/fiscal.png, alt: "Fiscal Situation Image", caption: "Fiscal situation portion of the report email." }
   - { src: ./img/guedes-money/attachments.png, alt: "Attachments Image", caption: "Attachments on the report e-mail are prints of every section the scrapper visited during session." }

@@ -17,6 +17,7 @@ and navigation. Everything else is generated from those two at build time.
 - [Images and galleries](#images-and-galleries)
 - [Code blocks](#code-blocks)
 - [Callouts](#callouts)
+- [Spelling](#spelling)
 - [Search](#search)
 - [Share previews](#share-previews)
 - [Resume and CV](#resume-and-cv)
@@ -378,6 +379,18 @@ To recolour one callout, pass a colour: `:::note{color=accent}` in markdown or `
 the component. It accepts a daisyUI colour name or any CSS colour. To change a type everywhere,
 edit its `.callout-<type>` rule in `src/styles/global.css`. A new type needs an entry in
 `callouts.mjs` and a matching rule in the stylesheet.
+
+## Spelling
+
+`npm run spell` checks the prose of the content, pages, components and docs with
+[cspell](https://cspell.org), accepting both US and UK spellings. Code blocks, inline code and URLs
+are skipped. It runs on every pull request in the preview workflow, so a typo shows up before a
+release, but it does not block a deploy.
+
+Names and jargon that cspell does not know go in `project-words.txt`, one per line (tools, people,
+places, Portuguese words). Add to it only for words that are really spelled that way; fix the text
+otherwise. Settings and the list of checked folders are in `cspell.json`. Editors with the cspell
+extension use the same files.
 
 ## Search
 

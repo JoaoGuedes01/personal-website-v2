@@ -21,7 +21,7 @@ gallery:                    # optional image gallery (co-located, with lightbox)
     - { src: ./img/worldwide-bi/more-details.png, alt: "More Model Details Image", caption: "More model details." }
     - { src: ./img/worldwide-bi/etl-metrics.png, alt: "ETL Metrics Image", caption: "The ETL metrics." }
     - { src: ./img/worldwide-bi/etl-env-org.png, alt: "ETL Environment and Organization Image", caption: "The ETL work environment and organization." }
-    - { src: ./img/worldwide-bi/fact-earthquakes.png, alt: "Fact Earthquakes Image", caption: "Fact table on earthquake occurences." }
+    - { src: ./img/worldwide-bi/fact-earthquakes.png, alt: "Fact Earthquakes Image", caption: "Fact table on earthquake occurrences." }
     - { src: ./img/worldwide-bi/dashboards.png, alt: "Dashboards Image", caption: "Our BI Dashboards final result." }
 ---
 

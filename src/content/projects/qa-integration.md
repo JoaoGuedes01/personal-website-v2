@@ -13,7 +13,7 @@ orgUrl: "https://checkmarx.com/"
 experience: "cx-qa-dev"
 year: 2023
 gallery:
-  - { src: ./img/qa-integration/login.png, alt: "Login Image", caption: "The sessions configuration page where a use rmust provide the API tokens for the integrations." }
+  - { src: ./img/qa-integration/login.png, alt: "Login Image", caption: "The sessions configuration page where a user must provide the API tokens for the integrations." }
   - { src: ./img/qa-integration/dash.png, alt: "Dash Image", caption: "The dashboard where users can migrate items from Azure to Jira by query lookup." }
   - { src: ./img/qa-integration/query.png, alt: "Query Image", caption: "The result of query lookup and already imported work items validation." }
   - { src: ./img/qa-integration/saved-queries.png, alt: "Saved Queries", caption: "The queries are id based so there's a feature for saving them." }
@@ -21,7 +21,7 @@ gallery:
   - { src: ./img/qa-integration/work-item-details.png, alt: "Work Item Details Queries", caption: "The details of a work item for QA analysis." }
   - { src: ./img/qa-integration/qa-checklist.png, alt: "QA Checklist Queries", caption: "The work item details also have a checklist for the QA engineer go through while performing the quality analysis." }
   - { src: ./img/qa-integration/qa-notes.png, alt: "QA Notes Queries", caption: "QA Notes textarea fields for free writing on work items." }
-  - { src: ./img/qa-integration/knowledge.png, alt: "Knowledge Queries", caption: "Knowledge Sharing snippts for sharing with the team on interesting findings or work items." }
+  - { src: ./img/qa-integration/knowledge.png, alt: "Knowledge Queries", caption: "Knowledge Sharing snippets for sharing with the team on interesting findings or work items." }
   - { src: ./img/qa-integration/learning.png, alt: "Learning Queries", caption: "QA Learning shift rotation cycle." }
 ---
 
