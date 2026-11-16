@@ -490,7 +490,19 @@ The site deploys to Cloudflare Pages. Publishing a GitHub release runs `.github/
 which runs `npm run build` and uploads `dist`. Pull requests get a preview deployment from
 `preview.yaml`. See the commit guide for the release steps and the secrets the workflows need.
 
-The RSS feed is `/rss.xml` and the sitemap is generated during the build.
+The sitemap is generated during the build.
+
+### RSS feed
+
+The blog feed is `/rss.xml` and carries the full text of every published post, not just a summary,
+so readers can read it without leaving their feed app. Each item has the cover image first, then
+the post, then its gallery images and captions. The HTML is rendered from the same markdown as the
+site, with callouts and code blocks intact, then cleaned for feed readers: links and images are made
+absolute, and styles, scripts and classes are removed. Highlighting colours do not survive that
+cleaning, so code appears as plain monospace text in a reader.
+
+The feed is built by `src/pages/rss.xml.js`, using Astro's container renderer and `sanitize-html`.
+Drafts are left out.
 
 ## Troubleshooting
 
