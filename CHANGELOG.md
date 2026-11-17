@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.11.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.10.0...guedes-site-v0.11.0) (2026-11-17)
+
+
+### ✨ Features
+
+* **markdown:** add a copy button to code blocks ([f1a4b34](https://github.com/JoaoGuedes01/personal-website-v2/commit/f1a4b34ad7ecc91802804ec969a6f983a0a93b85))
+* **rss:** add a feed link to the footer ([9283d92](https://github.com/JoaoGuedes01/personal-website-v2/commit/9283d929b441801df256ba812ae85448259ea171))
+* **rss:** publish the full text of each post in the feed ([53919c8](https://github.com/JoaoGuedes01/personal-website-v2/commit/53919c82b557ee5c40d04e958e5db392235d1709))
+* **search:** add full text site search ([01b07b9](https://github.com/JoaoGuedes01/personal-website-v2/commit/01b07b9992677453762dca3ac92b8bea19d9d2a5))
+* **seo:** add per-page share previews and structured data ([39500f6](https://github.com/JoaoGuedes01/personal-website-v2/commit/39500f6095d024c1ace117593e667b1177fbb7de))
+
+
+### 🐛 Bug Fixes
+
+* **blog:** stop passing an unused variant prop to PostCard ([a07ed10](https://github.com/JoaoGuedes01/personal-website-v2/commit/a07ed1003854ff8a521e773ef34de9ddc4ef0117))
+* **markdown:** keep stray :word text instead of treating it as a directive ([3cf2c82](https://github.com/JoaoGuedes01/personal-website-v2/commit/3cf2c828e65699e8cb0f0c7e90b59f477a7299ce))
+* **search:** hide draft projects and announce the active result ([122df6f](https://github.com/JoaoGuedes01/personal-website-v2/commit/122df6f2ad9d255fcc0dfb31842095bad22578fd))
+
+
+### 📝 Content
+
+* **blog:** update Keeping It Alive for the Discord alerts ([1082860](https://github.com/JoaoGuedes01/personal-website-v2/commit/10828608d3ec7d56178c1a56442475f2f4a030a7))
+* **experience:** rewrite the Uphold role and refine the CV stack ([2bcb758](https://github.com/JoaoGuedes01/personal-website-v2/commit/2bcb758e65b9ba419fde64745c6ee957cc640554))
+* **resume:** tidy CV wording ([55a9e9e](https://github.com/JoaoGuedes01/personal-website-v2/commit/55a9e9e0f71ff13806a7ccc344d2318ef54de3c0))
+
 ## [0.10.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.9.0...guedes-site-v0.10.0) (2026-11-14)
 
 
