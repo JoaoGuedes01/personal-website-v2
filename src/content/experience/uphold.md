@@ -7,7 +7,7 @@ location: "Braga, Portugal"
 tags: ["Backend Development", "Microservices", "Event-Driven", "Kubernetes", "gRPC", "GraphQL", "Node.js", "PostgreSQL", "Application Security", "Developer Tooling", "Crypto", "Fintech"]
 summary: "I'm a backend engineer on the team behind Manager Tool, the internal platform Uphold's account agents use to monitor and manage client accounts. I own the GraphQL API behind it, act as my team's security point of contact and build the internal tooling that keeps us fast."
 highlights:
-  - "Own the backend API behind Manager Tool and ship new account features end to end"
+  - "Ownership of the backend API behind Manager Tool and ship new account features end to end"
   - "Put role-based access control and audit logging behind every sensitive agent action"
   - "Extend shared backend services over gRPC when the data a feature needs isn't exposed yet"
   - "Work with event-driven services (NSQ, Temporal) and PostgreSQL across a microservices stack on Kubernetes"
@@ -18,11 +18,11 @@ highlights:
 cv:
   type: "Full Time"
   bullets:
-    - "Own the GraphQL API behind Manager Tool, the internal platform account agents use to monitor and manage client accounts, and ship its new account features."
-    - "Design role-based access control and audit logging for sensitive agent actions, and extend shared backend services over gRPC when the data is not exposed."
+    - "Ownership of the GraphQL API behind Manager Tool, the internal platform account agents use to monitor and manage client accounts, shipping new features end to end."
+    - "Design role-based access control and audit logging for sensitive agent actions, and iterate on shared backend services."
     - "Work across a microservices stack of JavaScript, GraphQL and gRPC with PostgreSQL, NSQ and Temporal, running on Kubernetes."
-    - "Act as the team's security point of contact: triage security reports on our applications, fix code gaps and harden agent permissions."
-    - "Built internal developer tooling: a port-forward manager that keeps 10+ Kubernetes forwards alive, an environment synchronizer and a code generator for repetitive code."
+    - "Act as the team's security point of contact, triaging security reports on our apps, fixing code gaps and hardening agent permissions."
+    - "Built internal developer tooling: a port-forward manager that keeps Kubernetes forwards alive, an environment synchronizer and a code generator for repetitive code."
 
 order: 5
 draft: false

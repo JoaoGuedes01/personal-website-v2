@@ -4,7 +4,7 @@ role: "Application Security Engineer"
 start: "2024"
 end: "2026"
 location: "Braga, Portugal"
-tags: ["Application Security", "Security", "Pentesting", "Research", "Static Analysis", "Data Science", "Reporting", "Software Engineering", "Automation"]
+tags: ["Application Security", "Security", "Pentesting", "Research", "Static Analysis", "Data Science", "Reporting", "Software Engineering", "Automation", "AWS", "Azure DevOps"]
 summary: "I joined the AppSec department where I was responsible for conducting assessments and analysis on various engines and perform research work on new queries and vulnerability detection methods. I also pioneered and led the internal tools and platforms effort in this department thanks to my experience in software development and system design"
 highlights:
   - "Performed a lot of security analysis work on static code and engine results"
@@ -14,12 +14,12 @@ highlights:
 cv:
   type: "Full Time"
   bullets:
-    - "Analyze and triage complex vulnerabilities across multiple languages within large-scale codebases."
-    - "Conduct vulnerability research and exploit replication to validate and contextualize findings."
-    - "Develop and maintain internal tooling to automate security analysis and reporting."
-    - "Design, deploy, and maintain internal AppSec infrastructure with Docker, Nginx, and Traefik on Linux environments."
-    - "Build Python-based automations and Power BI dashboards for large-scale data analysis and reporting."
-    - "Participate in offensive security initiatives (e.g., CVE hunts) using tools like Burp Suite, Nmap, and Metasploit."
+    - "Analyzed and triaged complex vulnerabilities across multiple languages within large-scale codebases."
+    - "Conducted vulnerability research and exploit replication to validate and contextualize findings."
+    - "Developed and maintained internal tooling to automate security analysis and reporting."
+    - "Designed and built the full infrastructure behind the department's internal platforms on AWS, with Azure DevOps for CI/CD and Docker, Nginx, and Traefik on Linux."
+    - "Built Python-based automations and Power BI dashboards for large-scale data analysis and reporting."
+    - "Participated in offensive security initiatives (e.g., CVE hunts) using tools like Burp Suite, Nmap, and Metasploit."
 
 order: 4
 draft: false
