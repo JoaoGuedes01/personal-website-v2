@@ -21,29 +21,29 @@ what I am interested in. Everything below is judged against that.
 
 ## Order of work
 
-| # | Feature | Effort | Why now |
+| # | Feature | Effort | Why |
 | - | --- | --- | --- |
 | 1 | [Custom email address](custom-email.md) | 30 min, no code | Visitors and recruiters see a Gmail address today |
-| 2 | [Security headers](security-headers.md) | 1 hour | Free hardening, no downside |
-| 3 | [Broken link check](link-check.md) | 1 hour | Content is about to grow, links rot |
-| 4 | [Privacy friendly analytics](analytics.md) | 30 min | To learn which writing lands |
-| 5 | [Start here page and navigation](start-here.md) | half a day | The first thing a new visitor needs |
-| 6 | [Now and Uses pages](now-and-uses.md) | half a day | Personal, cheap, gives people a reason to come back |
-| 7 | [Reading list](reading-list.md) | half a day | Fits the "my interests" goal, pure markdown |
-| 8 | [Quality gates in CI](quality-gates.md) | 1 day | Keeps speed and accessibility from decaying |
-| 9 | [Search upgrades](search-upgrades.md) | half a day | Only once there is enough content to need it |
-| 10 | [Comments and reactions](comments-and-reactions.md) | half a day | Only if I want comments, not likes |
-| 11 | [Like button](like-button.md) | half a day | Approved in principle: Cloudflare Functions plus D1, hard capped on the Free plan |
+| 2 | [Start here page](start-here.md) | half a day | The first thing a new visitor needs |
+| 3 | [Now and Uses pages](now-and-uses.md) | half a day | Personal, cheap, a reason to come back |
+| 4 | [Security headers](security-headers.md) | 1 hour | Free hardening, no downside |
+| 5 | [Broken link check](link-check.md) | 1 hour | Links rot as content grows |
+| 6 | [Analytics](analytics.md) | 30 min | To learn which writing lands |
+| 7 | [Reading list](reading-list.md) | half a day | Fits "my interests", pure markdown |
+| 8 | [Like button](like-button.md) | half a day | Cloudflare Functions plus D1, hard capped on the Free plan |
 
-Items 1 to 4 are chores that pay off immediately. Items 5 to 7 are the ones that change how the site
-feels. Items 8 to 10 can wait.
+Content comes first. None of this blocks writing.
 
-## Not planned
+## Considered, not now
 
-- A newsletter, because it needs an email service.
-- A contact form. It needs a function and spam protection for little gain over a mailto link.
-- Translations. Worth revisiting only if I write in Portuguese on purpose.
-- A CMS. Markdown in the repo is the whole point.
+- **Comments and reactions (giscus):** needs a GitHub login and a third-party iframe. Revisit if
+  readers ask to reply.
+- **Search upgrades** (filters, recent searches, weighting): wait until there are hundreds of
+  entries.
+- **Quality gates in CI** (Lighthouse, axe): worth it once the site stops changing weekly.
+- **A newsletter:** needs an email service.
+- **A contact form:** a mailto link on a domain address does the job.
+- **Translations and a CMS:** not wanted.
 
 ## Writing a spec
 

@@ -34,7 +34,7 @@ content and the search keep working.
 ## Alternative: giscus
 
 giscus is not a like button. It needs a GitHub login to react, it loads a third-party iframe and it
-adds a block under the post. See [comments-and-reactions.md](comments-and-reactions.md). It suits
+adds a block under the post. See the notes in [README.md](README.md). It suits
 comments, not likes. For likes, the design below is the better fit.
 
 The design notes follow unchanged.
