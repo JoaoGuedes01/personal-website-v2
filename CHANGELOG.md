@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.11.0...guedes-site-v0.11.1) (2026-11-17)
+
+
+### 🐛 Bug Fixes
+
+* **search:** load the search index from a plain script ([fcdd6d5](https://github.com/JoaoGuedes01/personal-website-v2/commit/fcdd6d59c5f879efdfde18fc051e194db80ae198))
+
 ## [0.11.0](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.10.0...guedes-site-v0.11.0) (2026-11-17)
 
 
