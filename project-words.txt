@@ -44,6 +44,7 @@ dirb
 dirb's
 dirbuster
 dissertacao
+DMARC
 dnsenum
 dnsmasq
 dnsrecon
@@ -67,6 +68,7 @@ fping
 Frankenlab
 Frankenlab's
 frontmatter
+giscus
 githubactions
 githubpages
 gobuster
@@ -86,6 +88,7 @@ hashdump
 haveibeenpwned
 Heartbleed
 Homelab
+homelabs
 HSTS
 hyperparameters
 Immich

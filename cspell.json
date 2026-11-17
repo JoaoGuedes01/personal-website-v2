@@ -1,9 +1,34 @@
 {
   "version": "0.2",
   "language": "en,en-GB",
-  "dictionaries": ["project-words"],
-  "dictionaryDefinitions": [{ "name": "project-words", "path": "./project-words.txt", "addWords": true }],
-  "files": ["src/content/**/*.{md,mdx}", "src/data/**/*.{ts,md}", "src/pages/**/*.astro", "src/components/**/*.astro", "README.md", "how_to_use.md", "commit_guide.md"],
-  "ignorePaths": ["node_modules", "dist"],
-  "ignoreRegExpList": ["/```[\\s\\S]*?```/gm", "/`[^`\\n]+`/g", "/https?:\\/\\/\\S+/g", "/\\b[0-9a-f]{7,}\\b/gi"]
+  "dictionaries": [
+    "project-words"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "project-words",
+      "path": "./project-words.txt",
+      "addWords": true
+    }
+  ],
+  "files": [
+    "src/content/**/*.{md,mdx}",
+    "src/data/**/*.{ts,md}",
+    "src/pages/**/*.astro",
+    "src/components/**/*.astro",
+    "README.md",
+    "how_to_use.md",
+    "commit_guide.md",
+    "docs/**/*.md"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    "dist"
+  ],
+  "ignoreRegExpList": [
+    "/```[\\s\\S]*?```/gm",
+    "/`[^`\\n]+`/g",
+    "/https?:\\/\\/\\S+/g",
+    "/\\b[0-9a-f]{7,}\\b/gi"
+  ]
 }

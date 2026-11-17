@@ -85,7 +85,7 @@ src/styles/       global.css (Tailwind, daisyUI themes)
 src/utils/        build-time helpers (CV generator, changelog parser, series, reading time)
 scripts/          the content generator
 public/           static files served as they are
-docs/             screenshots and design notes
+docs/             screenshots and the roadmap of planned features
 ```
 
 ## Documentation
@@ -93,6 +93,7 @@ docs/             screenshots and design notes
 - [how_to_use.md](how_to_use.md): adding content, frontmatter for each collection, and how the
   generated pages work.
 - [commit_guide.md](commit_guide.md): commit message format and how releases are made.
+- [docs/roadmap](docs/roadmap/README.md): specs for planned features, one file each.
 
 ## Deployment
 

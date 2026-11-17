@@ -1,6 +1,19 @@
-# Like button: design notes
+# Like button
 
-Status: not built. These are notes for when I pick it up. Last updated 2026-07-29.
+Status: **parked, conflicts with the static-only rule.** Last reviewed 2026-11-17.
+
+The rule for the site is now "static files only, no server code of mine, no cost besides the domain".
+A shared like count needs somewhere to store the number, and every option for that is server side.
+The design below (Cloudflare Pages Function plus D1) stays inside the free tier, but it is still a
+backend that has to be maintained, so it does not fit the rule. It is kept here in case the rule
+is ever relaxed.
+
+If likes are still wanted, the only approach that stays static is a third-party widget. See
+[comments-and-reactions.md](comments-and-reactions.md), which covers giscus. Otherwise the
+recommendation is to skip likes: at this traffic level a count of 3 does nothing for a visitor, and
+the effort is better spent on content.
+
+The original notes follow unchanged.
 
 The idea is a like button on blog posts, snippets and projects. Visitors are anonymous, the count is
 shared by everyone, and it survives between visits. No accounts, no comments, no notifications.
