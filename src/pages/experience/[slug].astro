@@ -125,43 +125,24 @@ const related = (await getCollection("projects"))
       }
     </div>
 
-    <section aria-label="Related projects" class="mt-12 border-t border-base-300 pt-10">
-      <div class="flex items-end justify-between gap-4">
-        <div>
-          <p class="eyebrow">From this role</p>
-          <h2 class="mt-2 text-2xl">Related projects</h2>
-        </div>
-        <span class="shrink-0 text-sm text-base-content/64">{related.length}</span>
-      </div>
+    {
+      related.length > 0 && (
+        <section aria-label="Related projects" class="mt-12 border-t border-base-300 pt-10">
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <p class="eyebrow">From this role</p>
+              <h2 class="mt-2 text-2xl">Related projects</h2>
+            </div>
+            <span class="shrink-0 text-sm text-base-content/64">{related.length}</span>
+          </div>
 
-      {
-        related.length > 0 ? (
           <div class="mt-6 grid gap-5 sm:grid-cols-2">
             {related.map((p) => (
               <ProjectCard entry={p} />
             ))}
           </div>
-        ) : (
-          <p class="mt-4 text-sm text-base-content/64">
-            {
-              singleRoleAtCompany ? (
-                <>
-                  No projects linked yet. Set a project's{" "}
-                  <code class="rounded bg-base-200 px-1.5 py-0.5 text-[12px]">org</code> to{" "}
-                  <span class="font-medium">"{company}"</span> to have it appear here automatically.
-                </>
-              ) : (
-                <>
-                  No projects linked yet. You have more than one role at {company}, so pin a project
-                  to <span class="font-medium">this</span> one with{" "}
-                  <code class="rounded bg-base-200 px-1.5 py-0.5 text-[12px]">experience: "{entry.id}"</code>{" "}
-                  in its frontmatter.
-                </>
-              )
-            }
-          </p>
-        )
-      }
-    </section>
+        </section>
+      )
+    }
   </div>
 </BaseLayout>
