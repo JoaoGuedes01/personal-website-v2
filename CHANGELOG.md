@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.11.2](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.11.1...guedes-site-v0.11.2) (2026-11-17)
+
+
+### 🐛 Bug Fixes
+
+* **cv:** add AWS and Azure DevOps, fix tenses and dedupe technical experience ([a37824f](https://github.com/JoaoGuedes01/personal-website-v2/commit/a37824f6ffad3dbf24aa2b71ea6b10b8f05ec087))
+* **experience:** hide related projects section when a role has none ([469ed1b](https://github.com/JoaoGuedes01/personal-website-v2/commit/469ed1b164e0236515e8427aa879131fce927d98))
+* **search:** keep results when typing during the first index load ([7e881f4](https://github.com/JoaoGuedes01/personal-website-v2/commit/7e881f4421cd640fef8b0cca9474030d16b8573d))
+
 ## [0.11.1](https://github.com/JoaoGuedes01/personal-website-v2/compare/guedes-site-v0.11.0...guedes-site-v0.11.1) (2026-11-17)
 
 
