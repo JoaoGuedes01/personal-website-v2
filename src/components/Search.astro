@@ -38,22 +38,23 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   </div>
 </dialog>
 
-<script>
-  const dialog = document.getElementById("search-dialog") as HTMLDialogElement;
-  const input = document.getElementById("search-input") as HTMLInputElement;
-  const list = document.getElementById("search-results") as HTMLUListElement;
-  const status = document.getElementById("search-status") as HTMLElement;
+<script is:inline>
+  // Plain JS on purpose: bundled, Vite rewrites the dynamic import of the Pagefind file and leaves a
+  // broken placeholder in production builds. This file has no imports, so it can stay as it is.
+  const dialog = document.getElementById("search-dialog");
+  const input = document.getElementById("search-input");
+  const list = document.getElementById("search-results");
+  const status = document.getElementById("search-status");
   const kbd = document.getElementById("search-kbd");
   const base = dialog.dataset.base ?? "";
 
   if (kbd && /Mac|iPhone|iPad/.test(navigator.platform)) kbd.textContent = "⌘ K";
 
-  type PF = { debouncedSearch: (q: string, o?: object, ms?: number) => Promise<{ results: { data: () => Promise<any> }[] } | null> };
-  let pf: PF | null | undefined;
-  async function load(): Promise<PF | null> {
+  let pf;
+  async function load() {
     if (pf !== undefined) return pf;
     try {
-      pf = (await import(/* @vite-ignore */ `${base}/pagefind/pagefind.js`)) as PF;
+      pf = await import(`${base}/pagefind/pagefind.js`);
     } catch {
       pf = null;
     }
@@ -61,20 +62,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   }
 
   let active = -1;
-  const items = () => Array.from(list.querySelectorAll<HTMLAnchorElement>("a"));
-  function setActive(i: number) {
+  const items = () => Array.from(list.querySelectorAll("a"));
+  function setActive(i) {
     const els = items();
     if (!els.length) return;
     active = (i + els.length) % els.length;
     els.forEach((el, n) => {
-      el.parentElement!.toggleAttribute("data-active", n === active);
-      el.parentElement!.setAttribute("aria-selected", String(n === active));
+      el.parentElement.toggleAttribute("data-active", n === active);
+      el.parentElement.setAttribute("aria-selected", String(n === active));
     });
-    input.setAttribute("aria-activedescendant", els[active].parentElement!.id);
+    input.setAttribute("aria-activedescendant", els[active].parentElement.id);
     els[active].scrollIntoView({ block: "nearest" });
   }
 
-  function render(rows: { url: string; title: string; type: string; excerpt: string }[]) {
+  function render(rows) {
     list.replaceChildren();
     active = -1;
     input.removeAttribute("aria-activedescendant");
@@ -105,7 +106,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   }
 
   let seq = 0;
-  async function run(q: string) {
+  async function run(q) {
     const mine = ++seq;
     if (!q.trim()) {
       render([]);
