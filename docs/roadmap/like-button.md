@@ -1,19 +1,43 @@
 # Like button
 
-Status: **parked, conflicts with the static-only rule.** Last reviewed 2026-11-17.
+Status: **approved in principle, not built.** Last reviewed 2026-11-17.
 
-The rule for the site is now "static files only, no server code of mine, no cost besides the domain".
-A shared like count needs somewhere to store the number, and every option for that is server side.
-The design below (Cloudflare Pages Function plus D1) stays inside the free tier, but it is still a
-backend that has to be maintained, so it does not fit the rule. It is kept here in case the rule
-is ever relaxed.
+The rule for the site is "no cost and no surprise bill", not "no server code at all". A like count
+needs somewhere to store the number, and Cloudflare D1 behind a Pages Function can do that without
+risk of a bill, as long as the account stays on the Free plan.
 
-If likes are still wanted, the only approach that stays static is a third-party widget. See
-[comments-and-reactions.md](comments-and-reactions.md), which covers giscus. Otherwise the
-recommendation is to skip likes: at this traffic level a count of 3 does nothing for a visitor, and
-the effort is better spent on content.
+## Why it cannot produce a bill
 
-The original notes follow unchanged.
+From Cloudflare's documentation (checked 2026-11-17):
+
+- D1 Free allows 5 million rows read and 100,000 rows written per day, with 5 GB of storage.
+  When the daily limit is hit, "you will not be able to run queries against D1" and the API returns
+  errors. Counters reset at 00:00 UTC.
+- Pages Functions share the Workers Free allowance of 100,000 requests a day. Past it, Cloudflare
+  returns errors for those requests.
+- Charges exist only on the Workers Paid plan. Nothing on the Free plan bills for overage.
+- Static page requests are free and unlimited, so a spike that exhausts the function quota cannot
+  take the pages themselves down.
+
+So the worst case is that the like button stops working for the rest of the day. The page, the
+content and the search keep working.
+
+## Conditions that keep it free
+
+- Never subscribe to Workers Paid, and do not add a payment method to the Cloudflare account for
+  this. Upgrading is what removes the caps.
+- Limit the function to `/api/*` with a `_routes.json` file, so ordinary page views never invoke it
+  and never count against the 100,000.
+- Keep the button failing quietly: if the call errors, show the button without a count.
+- Check the numbers again before building, since these limits can change.
+
+## Alternative: giscus
+
+giscus is not a like button. It needs a GitHub login to react, it loads a third-party iframe and it
+adds a block under the post. See [comments-and-reactions.md](comments-and-reactions.md). It suits
+comments, not likes. For likes, the design below is the better fit.
+
+The design notes follow unchanged.
 
 The idea is a like button on blog posts, snippets and projects. Visitors are anonymous, the count is
 shared by everyone, and it survives between visits. No accounts, no comments, no notifications.

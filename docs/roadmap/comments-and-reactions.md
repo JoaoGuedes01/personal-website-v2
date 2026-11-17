@@ -1,11 +1,11 @@
 # Comments and reactions
 
-Status: undecided. This is the only static way to get likes or comments.
+Status: undecided. This is for comments. For likes, see [like-button.md](like-button.md).
 
 ## Why
 
-I might want feedback on posts, and a way to see that something helped. A like counter needs a
-backend (see [like-button.md](like-button.md)). A GitHub based widget does not.
+I might want comments on posts. A like counter is a different thing and has its own spec
+([like-button.md](like-button.md)). giscus is a GitHub based widget that needs no server of mine.
 
 ## Option: giscus
 

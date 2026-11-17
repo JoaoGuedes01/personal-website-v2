@@ -7,10 +7,12 @@ what I am interested in. Everything below is judged against that.
 
 ## Ground rules
 
-- **Static only.** The site is plain files served by Cloudflare Pages. No server code of mine, no
-  database, no accounts. Anything needing a backend is parked, not built.
-- **No running cost** beyond the domain name. Free tiers of third parties are acceptable only when
-  they are optional and the page still works without them.
+- **Mostly static.** The site is plain files served by Cloudflare Pages. Server code is allowed only
+  when it runs on a free tier with a hard cap, so going over makes the feature fail, never bills me.
+  Pages stay static and work without it.
+- **No running cost and no surprise bill** beyond the domain name. Never add a paid plan or a card
+  for a feature. Free tiers of third parties are acceptable only when they are optional and the page
+  still works without them.
 - **Light and fast.** No client framework, nothing that blocks first paint, no heavy third-party
   script on every page.
 - **Nothing about my lab's weak spots or anything sensitive.** The homelab writing stays at the level
@@ -30,8 +32,8 @@ what I am interested in. Everything below is judged against that.
 | 7 | [Reading list](reading-list.md) | half a day | Fits the "my interests" goal, pure markdown |
 | 8 | [Quality gates in CI](quality-gates.md) | 1 day | Keeps speed and accessibility from decaying |
 | 9 | [Search upgrades](search-upgrades.md) | half a day | Only once there is enough content to need it |
-| 10 | [Comments and reactions](comments-and-reactions.md) | half a day | Only if I want feedback on posts |
-| - | [Like button](like-button.md) | parked | Needs a backend |
+| 10 | [Comments and reactions](comments-and-reactions.md) | half a day | Only if I want comments, not likes |
+| 11 | [Like button](like-button.md) | half a day | Approved in principle: Cloudflare Functions plus D1, hard capped on the Free plan |
 
 Items 1 to 4 are chores that pay off immediately. Items 5 to 7 are the ones that change how the site
 feels. Items 8 to 10 can wait.
@@ -39,7 +41,7 @@ feels. Items 8 to 10 can wait.
 ## Not planned
 
 - A newsletter, because it needs an email service.
-- A contact form, because it needs a backend. A mailto link on a domain address does the job.
+- A contact form. It needs a function and spam protection for little gain over a mailto link.
 - Translations. Worth revisiting only if I write in Portuguese on purpose.
 - A CMS. Markdown in the repo is the whole point.
 
